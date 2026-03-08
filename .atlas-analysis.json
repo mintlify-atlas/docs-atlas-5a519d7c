@@ -1,0 +1,147 @@
+{
+  "projectType": "sdk-library",
+  "projectName": "Impeccable",
+  "projectDescription": "A design language system that provides skills and commands to guide AI development tools toward better frontend design.",
+  "theme": "willow",
+  "primaryColor": "#848483",
+  "lightColor": "#1e1e1e",
+  "darkColor": "#b8b7b5",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction",
+              "quickstart",
+              "installation"
+            ]
+          },
+          {
+            "group": "Core Concepts",
+            "pages": [
+              "concepts/design-principles",
+              "concepts/anti-patterns",
+              "concepts/skill-system"
+            ]
+          },
+          {
+            "group": "Integration Guides",
+            "pages": [
+              "guides/cursor",
+              "guides/claude-code",
+              "guides/gemini-cli",
+              "guides/codex-cli"
+            ]
+          },
+          {
+            "group": "Usage",
+            "pages": [
+              "usage/commands-overview",
+              "usage/customization",
+              "usage/best-practices"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Skills Reference",
+        "groups": [
+          {
+            "group": "Frontend Design",
+            "pages": [
+              "skills/frontend-design/overview",
+              "skills/frontend-design/typography",
+              "skills/frontend-design/color-and-contrast",
+              "skills/frontend-design/spatial-design",
+              "skills/frontend-design/motion-design",
+              "skills/frontend-design/interaction-design",
+              "skills/frontend-design/responsive-design",
+              "skills/frontend-design/ux-writing"
+            ]
+          },
+          {
+            "group": "Quality & Refinement",
+            "pages": [
+              "skills/audit",
+              "skills/critique",
+              "skills/normalize",
+              "skills/polish",
+              "skills/optimize",
+              "skills/harden"
+            ]
+          },
+          {
+            "group": "Enhancement",
+            "pages": [
+              "skills/animate",
+              "skills/colorize",
+              "skills/bolder",
+              "skills/quieter",
+              "skills/delight"
+            ]
+          },
+          {
+            "group": "Structure & Flow",
+            "pages": [
+              "skills/distill",
+              "skills/clarify",
+              "skills/extract",
+              "skills/adapt",
+              "skills/onboard"
+            ]
+          },
+          {
+            "group": "Setup",
+            "pages": [
+              "skills/teach-impeccable"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Contributing",
+        "groups": [
+          {
+            "group": "Development",
+            "pages": [
+              "contributing/overview",
+              "contributing/architecture",
+              "contributing/adding-content",
+              "contributing/build-system"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "Comprehensive frontend-design skill with 7 domain-specific references",
+    "17 specialized design commands for auditing, refining, and enhancing UI",
+    "Curated anti-patterns to prevent generic AI aesthetics",
+    "Cross-provider compatibility (Cursor, Claude Code, Gemini CLI, Codex CLI)",
+    "Build system that transforms rich source format to provider-specific distributions"
+  ],
+  "publicApiSurface": [
+    "/audit - Run comprehensive quality checks",
+    "/critique - UX design review",
+    "/normalize - Align with design system",
+    "/polish - Final refinement pass",
+    "/distill - Strip to essence",
+    "/clarify - Improve UX copy",
+    "/optimize - Performance improvements",
+    "/harden - Error handling and edge cases",
+    "/animate - Add purposeful motion",
+    "/colorize - Strategic color introduction",
+    "/bolder - Amplify design impact",
+    "/quieter - Tone down bold designs",
+    "/delight - Add moments of joy",
+    "/extract - Create reusable components",
+    "/adapt - Responsive adaptation",
+    "/onboard - Design onboarding flows",
+    "/teach-impeccable - Setup and context gathering",
+    "frontend-design skill - Comprehensive design guidance"
+  ]
+}
