@@ -1,0 +1,406 @@
+---
+title: Harden
+description: Improve interface resilience through better error handling, i18n support, text overflow handling, and edge case management
+---
+
+The **harden** skill strengthens interfaces against edge cases, errors, internationalization issues, and real-world usage scenarios that break idealized designs. It makes interfaces robust and production-ready.
+
+## When to Use
+
+Use the harden skill when you need to:
+
+- Handle edge cases and extreme inputs
+- Improve error handling and recovery
+- Add internationalization (i18n) support
+- Fix text overflow and wrapping issues
+- Prepare an interface for production
+- Handle network failures and slow connections
+- Support RTL languages and different character sets
+- Make the interface resilient to real-world usage
+
+## Parameters
+
+<ParamField path="target" type="string" optional>
+  The specific feature or area to harden. If not specified, hardens the entire interface.
+</ParamField>
+
+## Important Principle
+
+<Warning>
+  Designs that only work with perfect data aren't production-ready. Harden against reality.
+</Warning>
+
+## Workflow
+
+The harden skill follows a systematic approach:
+
+<Steps>
+  <Step title="Assess Hardening Needs">
+    Identify weaknesses and edge cases:
+    
+    **Test with extreme inputs**:
+    - Very long text (names, descriptions, titles)
+    - Very short text (empty, single character)
+    - Special characters (emoji, RTL text, accents)
+    - Large numbers (millions, billions)
+    - Many items (1000+ list items, 50+ options)
+    - No data (empty states)
+    
+    **Test error scenarios**:
+    - Network failures (offline, slow, timeout)
+    - API errors (400, 401, 403, 404, 500)
+    - Validation errors
+    - Permission errors
+    - Rate limiting
+    - Concurrent operations
+    
+    **Test internationalization**:
+    - Long translations (German is often 30% longer than English)
+    - RTL languages (Arabic, Hebrew)
+    - Character sets (Chinese, Japanese, Korean, emoji)
+    - Date/time formats
+    - Number formats (1,000 vs 1.000)
+    - Currency symbols
+  </Step>
+  
+  <Step title="Apply Hardening Systematically">
+    Improve resilience across all relevant dimensions (see below).
+  </Step>
+  
+  <Step title="Verify Hardening">
+    Test thoroughly with edge cases:
+    - Try names with 100+ characters
+    - Use emoji in all text fields
+    - Test with Arabic or Hebrew (RTL)
+    - Test with Chinese/Japanese/Korean (CJK)
+    - Disable internet, throttle connection
+    - Test with 1000+ items
+    - Click submit 10 times rapidly
+    - Force API errors, test all error states
+    - Remove all data, test empty states
+  </Step>
+</Steps>
+
+## Hardening Dimensions
+
+### Text Overflow & Wrapping
+
+#### Long Text Handling
+
+```css
+/* Single line with ellipsis */
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Multi-line with clamp */
+.line-clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Allow wrapping */
+.wrap {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+```
+
+#### Flex/Grid Overflow
+
+```css
+/* Prevent flex items from overflowing */
+.flex-item {
+  min-width: 0; /* Allow shrinking below content size */
+  overflow: hidden;
+}
+
+/* Prevent grid items from overflowing */
+.grid-item {
+  min-width: 0;
+  min-height: 0;
+}
+```
+
+#### Responsive Text Sizing
+
+- Use `clamp()` for fluid typography
+- Set minimum readable sizes (14px on mobile)
+- Test text scaling (zoom to 200%)
+- Ensure containers expand with text
+
+### Internationalization (i18n)
+
+#### Text Expansion
+
+- Add 30-40% space budget for translations
+- Use flexbox/grid that adapts to content
+- Test with longest language (usually German)
+- Avoid fixed widths on text containers
+
+```jsx
+// ❌ Bad: Assumes short English text
+<button className="w-24">Submit</button>
+
+// ✅ Good: Adapts to content
+<button className="px-4 py-2">Submit</button>
+```
+
+#### RTL (Right-to-Left) Support
+
+```css
+/* Use logical properties */
+margin-inline-start: 1rem; /* Not margin-left */
+padding-inline: 1rem; /* Not padding-left/right */
+border-inline-end: 1px solid; /* Not border-right */
+
+/* Or use dir attribute */
+[dir="rtl"] .arrow { transform: scaleX(-1); }
+```
+
+#### Character Set Support
+
+- Use UTF-8 encoding everywhere
+- Test with Chinese/Japanese/Korean (CJK) characters
+- Test with emoji (they can be 2-4 bytes)
+- Handle different scripts (Latin, Cyrillic, Arabic, etc.)
+
+#### Date/Time Formatting
+
+```javascript
+// ✅ Use Intl API for proper formatting
+new Intl.DateTimeFormat('en-US').format(date); // 1/15/2024
+new Intl.DateTimeFormat('de-DE').format(date); // 15.1.2024
+
+new Intl.NumberFormat('en-US', { 
+  style: 'currency', 
+  currency: 'USD' 
+}).format(1234.56); // $1,234.56
+```
+
+#### Pluralization
+
+```javascript
+// ❌ Bad: Assumes English pluralization
+`${count} item${count !== 1 ? 's' : ''}`
+
+// ✅ Good: Use proper i18n library
+t('items', { count }) // Handles complex plural rules
+```
+
+### Error Handling
+
+#### Network Errors
+
+- Show clear error messages
+- Provide retry button
+- Explain what happened
+- Offer offline mode (if applicable)
+- Handle timeout scenarios
+
+```jsx
+// Error states with recovery
+{error && (
+  <ErrorMessage>
+    <p>Failed to load data. {error.message}</p>
+    <button onClick={retry}>Try again</button>
+  </ErrorMessage>
+)}
+```
+
+#### Form Validation Errors
+
+- Inline errors near fields
+- Clear, specific messages
+- Suggest corrections
+- Don't block submission unnecessarily
+- Preserve user input on error
+
+#### API Errors
+
+Handle each status code appropriately:
+
+- **400**: Show validation errors
+- **401**: Redirect to login
+- **403**: Show permission error
+- **404**: Show not found state
+- **429**: Show rate limit message
+- **500**: Show generic error, offer support
+
+#### Graceful Degradation
+
+- Core functionality works without JavaScript
+- Images have alt text
+- Progressive enhancement
+- Fallbacks for unsupported features
+
+### Edge Cases & Boundary Conditions
+
+#### Empty States
+
+- No items in list
+- No search results
+- No notifications
+- No data to display
+- Provide clear next action
+
+#### Loading States
+
+- Initial load
+- Pagination load
+- Refresh
+- Show what's loading ("Loading your projects...")
+- Time estimates for long operations
+
+#### Large Datasets
+
+- Pagination or virtual scrolling
+- Search/filter capabilities
+- Performance optimization
+- Don't load all 10,000 items at once
+
+#### Concurrent Operations
+
+- Prevent double-submission (disable button while loading)
+- Handle race conditions
+- Optimistic updates with rollback
+- Conflict resolution
+
+#### Permission States
+
+- No permission to view
+- No permission to edit
+- Read-only mode
+- Clear explanation of why
+
+### Input Validation & Sanitization
+
+#### Client-side Validation
+
+- Required fields
+- Format validation (email, phone, URL)
+- Length limits
+- Pattern matching
+- Custom validation rules
+
+#### Server-side Validation (Always)
+
+- Never trust client-side only
+- Validate and sanitize all inputs
+- Protect against injection attacks
+- Rate limiting
+
+#### Constraint Handling
+
+```html
+<!-- Set clear constraints -->
+<input 
+  type="text"
+  maxlength="100"
+  pattern="[A-Za-z0-9]+"
+  required
+  aria-describedby="username-hint"
+/>
+<small id="username-hint">
+  Letters and numbers only, up to 100 characters
+</small>
+```
+
+### Accessibility Resilience
+
+#### Keyboard Navigation
+
+- All functionality accessible via keyboard
+- Logical tab order
+- Focus management in modals
+- Skip links for long content
+
+#### Screen Reader Support
+
+- Proper ARIA labels
+- Announce dynamic changes (live regions)
+- Descriptive alt text
+- Semantic HTML
+
+#### Motion Sensitivity
+
+```css
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+```
+
+### Performance Resilience
+
+#### Slow Connections
+
+- Progressive image loading
+- Skeleton screens
+- Optimistic UI updates
+- Offline support (service workers)
+
+#### Memory Leaks
+
+- Clean up event listeners
+- Cancel subscriptions
+- Clear timers/intervals
+- Abort pending requests on unmount
+
+#### Throttling & Debouncing
+
+```javascript
+// Debounce search input
+const debouncedSearch = debounce(handleSearch, 300);
+
+// Throttle scroll handler
+const throttledScroll = throttle(handleScroll, 100);
+```
+
+## Usage Example
+
+```bash
+# Harden entire interface
+/harden
+
+# Harden specific feature
+/harden target="user profile"
+```
+
+## Best Practices
+
+**DO**:
+- Test with extreme inputs (very long, very short, empty)
+- Test in different languages and RTL
+- Test offline and with slow connections
+- Handle all error scenarios gracefully
+- Validate both client-side and server-side
+- Use UTF-8 encoding everywhere
+
+**NEVER**:
+- Assume perfect input (validate everything)
+- Ignore internationalization (design for global)
+- Leave error messages generic ("Error occurred")
+- Forget offline scenarios
+- Trust client-side validation alone
+- Use fixed widths for text
+- Assume English-length text
+- Block entire interface when one component errors
+
+## Important Notes
+
+<Tip>
+  Hardening is about expecting the unexpected. Real users will do things you never imagined. Build resilience into every component.
+</Tip>
+
+<Info>
+  You're hardening for production reality, not demo perfection. Expect users to input weird data, lose connection mid-flow, and use your product in unexpected ways.
+</Info>

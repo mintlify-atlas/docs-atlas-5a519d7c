@@ -1,0 +1,269 @@
+---
+title: Delight
+description: Add moments of joy, personality, and unexpected touches that make interfaces memorable and enjoyable to use. Elevates functional to delightful.
+---
+
+The **delight** skill identifies opportunities to add moments of joy, personality, and unexpected polish that transform functional interfaces into delightful experiences.
+
+## When to Use
+
+Use this skill when:
+- Interface is functional but lacks personality
+- Missing opportunities for positive user emotions
+- Success states feel flat
+- Empty or loading states are boring
+- Need to create memorable moments
+
+## Parameters
+
+<ParamField path="target" type="string" optional>
+  The feature or area to add delight to (optional)
+</ParamField>
+
+## How It Works
+
+### 1. Context Gathering (Mandatory)
+
+The skill requires understanding:
+- **Target audience** (critical)
+- **Desired use-cases** (critical)
+- **Brand personality** (playful vs professional vs quirky vs elegant)
+- **Domain appropriateness**
+
+<Warning>
+The skill will ask clarifying questions if context cannot be inferred. Delight that's wrong for the context is worse than no delight at all.
+</Warning>
+
+### 2. Delight Opportunities
+
+Identifies natural delight moments:
+
+- **Success states**: Completed actions (save, send, publish)
+- **Empty states**: First-time experiences, onboarding
+- **Loading states**: Waiting periods that could be entertaining
+- **Achievements**: Milestones, streaks, completions
+- **Interactions**: Hover states, clicks, drags
+- **Errors**: Softening frustrating moments
+- **Easter eggs**: Hidden discoveries for curious users
+
+### 3. Delight Strategy Types
+
+- **Subtle sophistication**: Refined micro-interactions (luxury brands)
+- **Playful personality**: Whimsical illustrations and copy (consumer apps)
+- **Helpful surprises**: Anticipating needs before users ask (productivity tools)
+- **Sensory richness**: Satisfying sounds, smooth animations (creative tools)
+
+<Note>
+Delight should enhance usability, never obscure it. If users notice the delight more than accomplishing their goal, you've gone too far.
+</Note>
+
+## Delight Principles
+
+### Core Guidelines
+
+<CardGroup cols={2}>
+  <Card title="Delight Amplifies, Never Blocks" icon="bolt">
+    - Keep moments quick (< 1 second)
+    - Never delay core functionality
+    - Make delight skippable or subtle
+    - Respect user's time and task focus
+  </Card>
+
+  <Card title="Surprise and Discovery" icon="sparkles">
+    - Hide delightful details to discover
+    - Reward exploration and curiosity
+    - Don't announce every moment
+    - Let users share discoveries
+  </Card>
+
+  <Card title="Appropriate to Context" icon="bullseye">
+    - Match delight to emotional moment
+    - Respect user's state (don't be playful during critical errors)
+    - Match brand personality and audience
+    - Cultural sensitivity matters
+  </Card>
+
+  <Card title="Compound Over Time" icon="chart-line">
+    - Delight should remain fresh with repeated use
+    - Vary responses (not same animation every time)
+    - Reveal deeper layers with continued use
+    - Build anticipation through patterns
+  </Card>
+</CardGroup>
+
+## Delight Techniques
+
+<AccordionGroup>
+  <Accordion title="Micro-interactions & Animation">
+    **Button delight**:
+    - Satisfying button press (transform, shadow)
+    - Ripple effect on click
+    - Smooth lift on hover
+
+    **Loading delight**:
+    - Playful loading animations (not just spinners)
+    - Personality in messages ("Herding pixels...")
+    - Progress with encouraging messages
+    - Skeleton screens with subtle animations
+
+    **Success animations**:
+    - Checkmark draw animation
+    - Confetti burst for major achievements
+    - Gentle scale + fade confirmations
+    - Subtle sound effects
+
+    **Hover surprises**:
+    - Icons that animate on hover
+    - Color shifts or glow effects
+    - Tooltip reveals with personality
+    - Custom cursors for branded experiences
+  </Accordion>
+
+  <Accordion title="Personality in Copy">
+    **Playful error messages**:
+    ```
+    "Error 404"
+    "This page is playing hide and seek. (And winning)"
+    ```
+
+    **Encouraging empty states**:
+    ```
+    "No projects"
+    "Your canvas awaits. Create something amazing."
+    ```
+
+    **Playful labels**:
+    ```
+    "Delete" → "Send to void" (for playful brands)
+    "Help" → "Rescue me" (tooltip)
+    ```
+
+    <Warning>
+    Match copy personality to brand. Banks shouldn't be wacky, but they can be warm.
+    </Warning>
+  </Accordion>
+
+  <Accordion title="Illustrations & Visual Personality">
+    - **Custom illustrations**: Empty states, error states, loading states
+    - **Icon personality**: Animated icons, illustrative styles
+    - **Background effects**: Particle effects, gradient mesh, geometric patterns
+    - **Time-based themes**: Morning vs night variations
+  </Accordion>
+
+  <Accordion title="Satisfying Interactions">
+    - **Drag and drop**: Lift effect, snap animation, placement sound
+    - **Toggle switches**: Smooth slide with spring physics, color transition
+    - **Progress & achievements**: Streak counters, celebratory milestones
+    - **Form interactions**: Animated focus, bouncing checkboxes, auto-grow textareas
+  </Accordion>
+
+  <Accordion title="Sound Design">
+    **Subtle audio cues** (when appropriate):
+    - Notification sounds (distinctive but not annoying)
+    - Success sounds (satisfying "ding")
+    - Error sounds (empathetic, not harsh)
+    - Typing sounds for chat/messaging
+
+    <Warning>
+    **IMPORTANT**:
+    - Respect system sound settings
+    - Provide mute option
+    - Keep volumes quiet
+    - Don't play on every interaction (sound fatigue is real)
+    </Warning>
+  </Accordion>
+
+  <Accordion title="Easter Eggs & Hidden Delights">
+    - Konami code unlocks special theme
+    - Hidden keyboard shortcuts
+    - Hover reveals on logos
+    - Alt text jokes (for screen reader users too!)
+    - Console messages ("Like what you see? We're hiring!")
+  </Accordion>
+
+  <Accordion title="Seasonal Touches">
+    - Holiday themes (subtle, tasteful)
+    - Seasonal color shifts
+    - Weather-based variations
+    - Time-based changes
+  </Accordion>
+
+  <Accordion title="Loading & Waiting States">
+    Make waiting engaging:
+    ```
+    Loading messages rotation:
+    - "Waking up the servers..."
+    - "Teaching robots to dance..."
+    - "Consulting the magic 8-ball..."
+    - "Counting backwards from infinity..."
+    ```
+  </Accordion>
+
+  <Accordion title="Celebration Moments">
+    - Confetti for major milestones
+    - Animated checkmarks for completions
+    - Progress bar celebrations at 100%
+    - "Achievement unlocked" notifications
+    - Personalized messages ("You published your 10th article!")
+  </Accordion>
+</AccordionGroup>
+
+## Implementation Tools
+
+**Animation libraries**:
+- Framer Motion (React)
+- GSAP (universal)
+- Lottie (After Effects animations)
+- Canvas confetti (party effects)
+
+**Sound libraries**:
+- Howler.js (audio management)
+- use-sound (React hook)
+
+**Physics libraries**:
+- React Spring (spring physics)
+- Popmotion (animation primitives)
+
+<Note>
+File size matters. Compress images, optimize animations, lazy load delight features.
+</Note>
+
+## Critical Don'ts
+
+<Warning>
+- **NEVER** delay core functionality for delight
+- **NEVER** force users through delightful moments (make skippable)
+- **NEVER** use delight to hide poor UX
+- **NEVER** overdo it (less is more)
+- **NEVER** ignore accessibility (animate responsibly, provide alternatives)
+- **NEVER** make every interaction delightful (special moments should be special)
+- **NEVER** sacrifice performance for delight
+- **NEVER** be inappropriate for context (read the room)
+</Warning>
+
+## Quality Verification
+
+The skill verifies that delight:
+- **User reactions**: Do users smile? Share screenshots?
+- **Doesn't annoy**: Still pleasant after 100th time?
+- **Doesn't block**: Can users opt out or skip?
+- **Performant**: No jank, no slowdown
+- **Appropriate**: Matches brand and context
+- **Accessible**: Works with reduced motion, screen readers
+
+## Example Usage
+
+```bash
+# Add delight to specific feature
+/delight target="checkout flow"
+
+# Add delight to success states
+/delight target="form submission"
+
+# General delight review
+/delight
+```
+
+<Info>
+Remember: Delight is the difference between a tool and an experience. Add personality, surprise users positively, and create moments worth sharing. But always respect usability - delight should enhance, never obstruct.
+</Info>

@@ -1,0 +1,326 @@
+---
+title: "Adding Content"
+description: "How to add new skills and commands to Impeccable"
+---
+
+## Overview
+
+Adding content to Impeccable involves creating source files, building, testing, and committing. The build system automatically transforms your content into formats for all 4 providers (Cursor, Claude Code, Gemini CLI, Codex CLI).
+
+## Adding a Skill
+
+Skills are reusable instruction sets that teach the AI how to perform specific tasks.
+
+### 1. Create the Source File
+
+```bash
+touch source/skills/myskill.md
+```
+
+### 2. Add Frontmatter and Content
+
+Skills follow the [Agent Skills specification](https://agentskills.io/specification):
+
+```yaml
+---
+name: myskill
+description: Clear description of what this skill provides (1-1024 chars)
+license: Optional license or attribution info
+compatibility: Optional environment requirements
+---
+
+Your skill instructions for the LLM here.
+
+## Guidelines
+
+- Be specific about what to do
+- Include examples where helpful
+- State constraints clearly
+- Define success criteria
+```
+
+### 3. Field Requirements
+
+**Required Fields**:
+- `name`: Skill identifier (1-64 chars, lowercase, numbers, hyphens only)
+- `description`: What the skill provides (1-1024 chars)
+
+**Optional Fields**:
+- `license`: License or attribution information
+- `compatibility`: Environment requirements (1-500 chars)
+- `metadata`: Arbitrary key-value pairs
+- `allowed-tools` (experimental): Pre-approved tools list
+
+### 4. Writing Skill Instructions
+
+Good skill instructions:
+
+- **Focus on one domain**: Don't try to do too much
+- **Be explicit**: State what to do AND what NOT to do
+- **Include context**: Explain why certain approaches are preferred
+- **Provide examples**: Show concrete use cases
+- **Define success**: Make clear what "done" looks like
+
+**Example**:
+
+```markdown
+Analyze component accessibility and suggest improvements.
+
+## Checks to Perform
+
+1. **Keyboard Navigation**
+   - All interactive elements accessible via Tab
+   - Focus indicators visible and clear
+   - Logical tab order
+
+2. **ARIA Attributes**
+   - Appropriate roles for custom components
+   - Labels for form inputs
+   - Live regions for dynamic content
+
+3. **Color Contrast**
+   - WCAG AA minimum (4.5:1 for text)
+   - AAA preferred where possible (7:1 for text)
+
+## What NOT to Do
+
+- Don't just list issues without solutions
+- Don't suggest ARIA when semantic HTML works
+- Don't assume everyone uses a mouse
+```
+
+### 5. Build and Test
+
+```bash
+bun run build
+```
+
+Test with at least one provider:
+
+1. Copy the relevant `dist/` output to a test project
+2. Invoke the skill
+3. Verify it works as expected
+4. Test edge cases
+
+### 6. Commit
+
+Commit both source and generated files:
+
+```bash
+git add source/skills/myskill.md dist/
+git commit -m "Add myskill skill"
+```
+
+## Adding a Command
+
+Commands are quick prompts users can invoke directly.
+
+### 1. Create the Source File
+
+```bash
+touch source/commands/mycommand.md
+```
+
+### 2. Add Frontmatter and Content
+
+```yaml
+---
+name: mycommand
+description: Clear description of what this command does
+args:
+  - name: target
+    description: What to target (e.g. component name)
+    required: false
+  - name: style
+    description: Style preference (minimal, bold, etc.)
+    required: false
+---
+
+Your command prompt here.
+
+Use {{target}} and {{style}} placeholders for arguments.
+The prompt should work even if arguments aren't substituted (for Cursor compatibility).
+```
+
+### 3. Field Requirements
+
+**Required Fields**:
+- `name`: Command identifier
+- `description`: What the command does
+
+**Optional Fields**:
+- `args`: Array of argument objects
+  - `name`: Argument identifier
+  - `description`: What it's for
+  - `required`: Boolean (defaults to false)
+
+### 4. Writing Command Prompts
+
+Good command prompts:
+
+- **Work without substitution**: Cursor doesn't support arguments, so write prompts that work by appending user input
+- **Use clear placeholders**: `{{argname}}` gets transformed to provider-specific syntax
+- **Provide context**: Explain the task clearly
+- **Be concise**: Commands should be quick to invoke
+
+**Example**:
+
+```markdown
+---
+name: audit
+description: Audit component for accessibility, performance, and best practices
+args:
+  - name: component
+    description: Component name or path to audit
+    required: false
+---
+
+Audit the {{component}} component for:
+
+1. **Accessibility**: Keyboard navigation, ARIA, color contrast
+2. **Performance**: Bundle size, render optimization, lazy loading
+3. **Best Practices**: Semantic HTML, responsive design, error handling
+
+Provide specific recommendations with code examples.
+If {{component}} is not specified, audit the currently selected code.
+```
+
+### 5. Argument Transformation
+
+Placeholders are transformed for each provider:
+
+- **Cursor**: No transformation (arguments appended to prompt)
+- **Claude Code**: `{{argname}}` kept as-is
+- **Gemini**: `{{argname}}` → `{{args}}` (single args string)
+- **Codex**: `{{argname}}` → `$ARGNAME` (uppercase)
+
+### 6. Build and Test
+
+```bash
+bun run build
+```
+
+Test with multiple providers if possible:
+
+1. Copy outputs to test projects
+2. Try with and without arguments
+3. Verify output quality
+4. Test edge cases (missing args, unusual inputs)
+
+### 7. Commit
+
+Commit both source and generated files:
+
+```bash
+git add source/commands/mycommand.md dist/
+git commit -m "Add mycommand command"
+```
+
+## Testing Checklist
+
+- [ ] Source file has valid YAML frontmatter
+- [ ] Description is clear and concise
+- [ ] Build completes without errors
+- [ ] Works in at least one provider
+- [ ] Prompt works without argument substitution (for Cursor)
+- [ ] Examples are accurate and helpful
+- [ ] Edge cases handled gracefully
+
+## Common Mistakes
+
+### YAML Formatting Errors
+
+```yaml
+# ❌ Wrong: No space after colon
+name:myskill
+
+# ✓ Correct: Space after colon
+name: myskill
+```
+
+```yaml
+# ❌ Wrong: Inconsistent indentation
+args:
+  - name: target
+  description: Target component
+
+# ✓ Correct: Consistent indentation
+args:
+  - name: target
+    description: Target component
+```
+
+### Frontmatter Delimiters
+
+```yaml
+# ❌ Wrong: Delimiter not on its own line
+--- name: myskill
+
+# ✓ Correct: Delimiters on separate lines
+---
+name: myskill
+---
+```
+
+### Description Length
+
+```yaml
+# ❌ Wrong: Too vague
+description: Does stuff
+
+# ✓ Correct: Specific and informative
+description: Analyzes component accessibility and suggests WCAG-compliant improvements
+```
+
+## Build Troubleshooting
+
+### YAML Parsing Errors
+
+- Check frontmatter indentation (YAML is indent-sensitive)
+- Ensure `---` delimiters are on their own lines
+- Verify colons have spaces after them (`key: value`)
+
+### Output Doesn't Match Expectations
+
+- Check the transformer function for your provider in `scripts/lib/transformers/`
+- Verify source file has correct frontmatter structure
+- Run `bun run rebuild` to ensure clean build
+
+### Provider Doesn't Recognize Files
+
+- Check installation path for your provider
+- Verify file naming matches provider requirements
+- Consult provider's documentation
+
+## Best Practices
+
+### Skill Best Practices
+
+1. **One domain, one skill**: Don't combine unrelated concerns
+2. **Clear instructions**: Write for clarity, not cleverness
+3. **Examples over explanation**: Show, don't just tell
+4. **State constraints**: What NOT to do is as important as what to do
+5. **Test thoroughly**: Try edge cases and unusual inputs
+
+### Command Best Practices
+
+1. **Clear purpose**: User should know exactly what it does
+2. **Flexible design**: Work with or without arguments
+3. **Concise prompts**: Commands should be quick to invoke
+4. **Good defaults**: Provide sensible behavior when args are missing
+5. **Cross-provider testing**: Verify works in multiple tools
+
+## Getting Help
+
+Need help adding content?
+
+- Check [Architecture](/contributing/architecture) for system design
+- See [Build System](/contributing/build-system) for build details
+- Review existing skills/commands in `source/` for examples
+- Open an issue on GitHub for specific questions
+
+## Related
+
+- [Contributing Overview](/contributing/overview) - Getting started guide
+- [Architecture](/contributing/architecture) - System architecture
+- [Build System](/contributing/build-system) - Build system internals

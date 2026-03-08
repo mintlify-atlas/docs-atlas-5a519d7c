@@ -1,0 +1,299 @@
+---
+title: Clarify
+description: Improve unclear UX copy, error messages, microcopy, labels, and instructions
+---
+
+The **clarify** skill identifies and improves unclear, confusing, or poorly written interface text to make products easier to understand and use. Clear copy helps users succeed; unclear copy creates frustration, errors, and support tickets.
+
+## Purpose
+
+Clarify focuses on improving all forms of interface text:
+- Error messages and validation feedback
+- Form labels and instructions
+- Button and CTA text
+- Help text and tooltips
+- Empty states
+- Success messages
+- Loading states
+- Confirmation dialogs
+- Navigation labels
+
+## Parameters
+
+<ParamField path="target" type="string" optional>
+  The feature or component with unclear copy. When omitted, analyzes the entire interface for clarity issues.
+</ParamField>
+
+## When to Use
+
+Use the clarify skill when:
+- Users report confusion about interface text
+- Error messages are unhelpful or technical
+- Form labels are ambiguous
+- Buttons don't clearly indicate their action
+- Copy uses jargon or technical terms
+- Instructions are too long or too brief
+- Text tone doesn't match the context
+
+## Workflow
+
+### 1. Assess Current Copy
+
+Identifies clarity problems:
+- **Jargon**: Technical terms users won't understand
+- **Ambiguity**: Multiple interpretations possible
+- **Passive voice**: "Your file has been uploaded" vs "We uploaded your file"
+- **Length**: Too wordy or too terse
+- **Assumptions**: Assuming knowledge users don't have
+- **Missing context**: Users don't know what to do or why
+- **Tone mismatch**: Too formal, casual, or inappropriate
+
+Understands the context:
+- Who's the audience? (Technical? General? First-time users?)
+- What's the user's mental state? (Stressed during error? Confident during success?)
+- What's the action? (What do we want users to do?)
+- What's the constraint? (Character limits? Space limitations?)
+
+### 2. Plan Copy Improvements
+
+Creates a strategy:
+- **Primary message**: The ONE thing users need to know
+- **Action needed**: What should users do next?
+- **Tone**: How should this feel? (Helpful? Apologetic? Encouraging?)
+- **Constraints**: Length limits, brand voice, localization
+
+### 3. Improve Copy Systematically
+
+#### Error Messages
+
+**Before:**
+```
+Error 403: Forbidden
+```
+
+**After:**
+```
+You don't have permission to view this page. 
+Contact your admin for access.
+```
+
+**Principles:**
+- Explain what went wrong in plain language
+- Suggest how to fix it
+- Don't blame the user
+- Include examples when helpful
+- Link to help/support if applicable
+
+#### Form Labels & Instructions
+
+**Before:**
+```
+DOB (MM/DD/YYYY)
+```
+
+**After:**
+```
+Date of birth
+(placeholder shows format: 12/31/1990)
+```
+
+**Principles:**
+- Use clear, specific labels
+- Show format expectations with examples
+- Explain why you're asking (when not obvious)
+- Put instructions before the field
+- Keep required field indicators clear
+
+#### Button & CTA Text
+
+**Before:**
+```
+Click here | Submit | OK
+```
+
+**After:**
+```
+Create account | Save changes | Got it, thanks
+```
+
+**Principles:**
+- Describe the action specifically
+- Use active voice (verb + noun)
+- Match user's mental model
+- Be specific
+
+#### Help Text & Tooltips
+
+**Before:**
+```
+This is the username field
+```
+
+**After:**
+```
+Choose a username. You can change this later in Settings.
+```
+
+**Principles:**
+- Add value (don't repeat the label)
+- Answer the implicit question
+- Keep it brief but complete
+- Link to detailed docs if needed
+
+#### Empty States
+
+**Before:**
+```
+No items
+```
+
+**After:**
+```
+No projects yet. Create your first project to get started.
+```
+
+**Principles:**
+- Explain why it's empty
+- Show next action clearly
+- Make it welcoming, not a dead-end
+
+#### Success Messages
+
+**Before:**
+```
+Success
+```
+
+**After:**
+```
+Settings saved! Your changes will take effect immediately.
+```
+
+**Principles:**
+- Confirm what happened
+- Explain what happens next
+- Be brief but complete
+- Match the emotional moment
+
+#### Loading States
+
+**Before:**
+```
+Loading... (for 30+ seconds)
+```
+
+**After:**
+```
+Analyzing your data... this usually takes 30-60 seconds
+```
+
+**Principles:**
+- Set expectations (how long?)
+- Explain what's happening
+- Show progress when possible
+- Offer escape hatch ("Cancel")
+
+#### Confirmation Dialogs
+
+**Before:**
+```
+Are you sure?
+```
+
+**After:**
+```
+Delete 'Project Alpha'? This can't be undone.
+```
+
+**Principles:**
+- State the specific action
+- Explain consequences
+- Use clear button labels ("Delete project" not "Yes")
+- Don't overuse confirmations
+
+#### Navigation & Wayfinding
+
+**Before:**
+```
+Items | Things | Stuff
+```
+
+**After:**
+```
+Your projects | Team members | Settings
+```
+
+**Principles:**
+- Be specific and descriptive
+- Use language users understand
+- Make hierarchy clear
+- Consider information scent
+
+### 4. Apply Clarity Principles
+
+Every piece of copy should:
+1. **Be specific**: "Enter email" not "Enter value"
+2. **Be concise**: Cut unnecessary words (but don't sacrifice clarity)
+3. **Be active**: "Save changes" not "Changes will be saved"
+4. **Be human**: "Oops, something went wrong" not "System error encountered"
+5. **Be helpful**: Tell users what to do, not just what happened
+6. **Be consistent**: Use same terms throughout
+
+### 5. Verify Improvements
+
+Tests effectiveness:
+- **Comprehension**: Can users understand without context?
+- **Actionability**: Do users know what to do next?
+- **Brevity**: Is it as short as possible while remaining clear?
+- **Consistency**: Does it match terminology elsewhere?
+- **Tone**: Is it appropriate for the situation?
+
+## Key Principles
+
+<Warning>
+**Good UX writing is invisible.** Users should understand immediately without noticing the words.
+</Warning>
+
+**Never:**
+- Use jargon without explanation
+- Blame users ("You made an error" → "This field is required")
+- Be vague ("Something went wrong" without explanation)
+- Use passive voice unnecessarily
+- Write overly long explanations
+- Use humor for errors (be empathetic)
+- Assume technical knowledge
+- Vary terminology for variety
+- Repeat information
+- Use placeholders as the only labels
+
+## Usage Examples
+
+### Example 1: Clarify Error Messages
+
+```bash
+/clarify error-messages
+```
+
+The skill will:
+1. Find all error message implementations
+2. Identify unclear or technical messages
+3. Rewrite with clear explanations and actionable guidance
+4. Add helpful examples where appropriate
+5. Ensure consistent, empathetic tone
+
+### Example 2: Improve Form Labels
+
+```bash
+/clarify checkout-form
+```
+
+The skill will:
+1. Review all form labels and help text
+2. Replace ambiguous labels with specific ones
+3. Add format hints and examples
+4. Improve validation messages
+5. Ensure accessible label relationships
+
+## Philosophy
+
+Write like you're explaining to a smart friend who's unfamiliar with the product. Be clear, be helpful, be human. The clarify skill embodies excellent communication skills and clarity expertise to make every word count.

@@ -1,0 +1,197 @@
+---
+title: Design Principles
+description: Core design philosophy and principles from the frontend-design skill
+---
+
+The frontend-design skill guides AI toward distinctive, production-grade interfaces that avoid generic aesthetics. This page documents the core design principles that inform every design decision.
+
+## Design Direction
+
+Every interface should commit to a **bold aesthetic direction** with clear intentionality:
+
+<Steps>
+  <Step title="Define Purpose">
+    What problem does this interface solve? Who uses it? Understanding the context drives all design decisions.
+  </Step>
+  <Step title="Choose a Tone">
+    Pick an extreme and commit: brutally minimal, maximalist chaos, retro-futuristic, organic/natural, luxury/refined, playful/toy-like, editorial/magazine, brutalist/raw, art deco/geometric, soft/pastel, industrial/utilitarian.
+  </Step>
+  <Step title="Set Constraints">
+    Technical requirements (framework, performance, accessibility) that shape the design space.
+  </Step>
+  <Step title="Create Differentiation">
+    What makes this interface unforgettable? What's the one thing someone will remember?
+  </Step>
+</Steps>
+
+<Info>
+**Critical Insight**: Choose a clear conceptual direction and execute it with precision. Bold maximalism and refined minimalism both work—the key is intentionality, not intensity.
+</Info>
+
+## Typography
+
+Typography creates hierarchy and personality. The frontend-design skill emphasizes distinctive, purposeful type choices.
+
+### Font Selection
+
+<CardGroup cols={2}>
+  <Card title="Choose Distinctive Fonts" icon="font">
+    Avoid overused fonts (Inter, Roboto, Arial, Open Sans, system defaults). Choose fonts that are beautiful, unique, and interesting. Pair a distinctive display font with a refined body font.
+  </Card>
+  <Card title="Use Modular Scales" icon="ruler">
+    Use fewer sizes with more contrast. A 5-size system (xs, sm, base, lg, xl+) covers most needs. Pick a ratio (1.25, 1.333, 1.5) and commit.
+  </Card>
+</CardGroup>
+
+### Hierarchy & Readability
+
+- **Vertical Rhythm**: Line-height should be the base unit for all vertical spacing
+- **Measure**: Use `ch` units for character-based width (`max-width: 65ch`)
+- **Fluid Type**: Use `clamp(min, preferred, max)` for responsive typography
+- **OpenType Features**: Leverage font features like tabular numbers, proper fractions, and small caps
+
+<Check>Use rem/em for font sizes to respect user browser settings. Minimum 16px for body text.</Check>
+
+## Color & Theme
+
+### Modern Color Systems
+
+<Tip>
+**Use OKLCH instead of HSL**. It's perceptually uniform—equal steps in lightness look equal, unlike HSL where 50% lightness in yellow looks bright while 50% in blue looks dark.
+</Tip>
+
+```css
+/* OKLCH: lightness (0-100%), chroma (0-0.4+), hue (0-360) */
+--color-primary: oklch(60% 0.15 250);      /* Blue */
+--color-primary-light: oklch(85% 0.08 250); /* Lighter, reduced chroma */
+--color-primary-dark: oklch(35% 0.12 250);  /* Darker */
+```
+
+### Palette Strategy
+
+**Commit to a cohesive palette.** Dominant colors with sharp accents outperform timid, evenly-distributed palettes.
+
+- **Tint your neutrals** toward your brand hue—even subtle hints create subconscious cohesion
+- **Never use pure black (#000) or pure white (#fff)**—always tint them
+- **Use modern CSS color functions** (oklch, color-mix, light-dark) for maintainable palettes
+
+<Warning>
+Don't use gray text on colored backgrounds—it looks washed out. Use a shade of the background color instead.
+</Warning>
+
+## Layout & Space
+
+Create visual rhythm through varied spacing—not the same padding everywhere.
+
+### Spacing Systems
+
+- **Use 4pt base** for granularity: 4, 8, 12, 16, 24, 32, 48, 64, 96px
+- **Name tokens semantically**: `--space-sm`, `--space-lg` (not `--spacing-8`)
+- **Use gap instead of margins** for sibling spacing
+
+### Composition
+
+<CardGroup cols={2}>
+  <Card title="Create Visual Rhythm" icon="wave-pulse">
+    Use varied spacing—tight groupings, generous separations. Without rhythm, layouts feel monotonous.
+  </Card>
+  <Card title="Embrace Asymmetry" icon="scissors">
+    Break the grid intentionally for emphasis. Left-aligned text with asymmetric layouts feels more designed than centering everything.
+  </Card>
+  <Card title="Avoid Card Overuse" icon="square">
+    Not everything needs a container. Never nest cards inside cards—use spacing, typography, and subtle dividers instead.
+  </Card>
+  <Card title="Use Fluid Spacing" icon="arrows-left-right">
+    Use `clamp()` for spacing that breathes on larger screens.
+  </Card>
+</CardGroup>
+
+## Motion
+
+Focus on high-impact moments. One well-orchestrated page load creates more delight than scattered micro-interactions.
+
+### Duration & Easing
+
+| Duration | Use Case |
+|----------|----------|
+| 100-150ms | Instant feedback (buttons, toggles) |
+| 200-300ms | State changes (menus, tooltips) |
+| 300-500ms | Layout changes (accordions, modals) |
+| 500-800ms | Entrance animations (page loads) |
+
+<Check>Use exponential easing (ease-out-quart/quint/expo) for natural deceleration</Check>
+
+### Best Practices
+
+- **Animate only transform and opacity**—everything else causes layout recalculation
+- **Use grid-template-rows transitions** for height animations instead of animating height directly
+- **Always support reduced motion**: `@media (prefers-reduced-motion: reduce)`
+
+<Warning>
+Don't use bounce or elastic easing—they feel dated and tacky. Real objects decelerate smoothly.
+</Warning>
+
+## Interaction
+
+Make interactions feel fast. Use optimistic UI—update immediately, sync later.
+
+### Progressive Disclosure
+
+Start simple, reveal sophistication through interaction:
+- Basic options first, advanced behind expandable sections
+- Hover states that reveal secondary actions
+- Empty states that teach the interface, not just say "nothing here"
+
+### State Management
+
+Every interactive element needs these states designed:
+- Default, Hover, Focus, Active, Disabled, Loading, Error, Success
+
+<Tip>
+**Use `:focus-visible`** to show focus rings only for keyboard users, not mouse users.
+</Tip>
+
+## Responsive
+
+Adapt the interface for different contexts—don't just shrink it.
+
+- **Use container queries** (`@container`) for component-level responsiveness
+- **Detect input method, not just screen size**: Use `(pointer: coarse)` and `(hover: hover)` queries
+- **Don't hide critical functionality on mobile**—adapt the interface, don't amputate it
+
+## The AI Slop Test
+
+<Warning>
+**Critical quality check**: If you showed this interface to someone and said "AI made this," would they believe you immediately? If yes, that's the problem.
+</Warning>
+
+A distinctive interface should make someone ask "how was this made?" not "which AI made this?"
+
+Review the anti-patterns (see [Anti-Patterns](/concepts/anti-patterns))—they are the fingerprints of AI-generated work.
+
+## Implementation Principles
+
+**Match implementation complexity to the aesthetic vision:**
+
+- Maximalist designs need elaborate code with extensive animations and effects
+- Minimalist designs need restraint, precision, and careful attention to spacing, typography, and subtle details
+
+Interpret creatively and make unexpected choices that feel genuinely designed for the context. No design should be the same. Vary between light and dark themes, different fonts, different aesthetics.
+
+<Note>
+**Never converge on common choices across generations.** Each interface should be distinctive and memorable.
+</Note>
+
+## Reference Files
+
+The frontend-design skill includes seven domain-specific reference files with deeper expertise:
+
+- **Typography**: Type systems, font pairing, modular scales, OpenType features
+- **Color & Contrast**: OKLCH, tinted neutrals, dark mode, accessibility
+- **Spatial Design**: Spacing systems, grids, visual hierarchy, container queries
+- **Motion Design**: Easing curves, staggering, perceived performance
+- **Interaction Design**: Forms, focus states, loading patterns, keyboard navigation
+- **Responsive Design**: Mobile-first, fluid design, safe areas
+- **UX Writing**: Button labels, error messages, empty states
+
+These references provide the depth and expertise needed to create truly exceptional interfaces.

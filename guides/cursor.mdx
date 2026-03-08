@@ -1,0 +1,338 @@
+---
+title: Cursor Guide
+description: How Impeccable works with Cursor's Agent Skills system
+---
+
+## Overview
+
+Cursor uses the [Agent Skills Standard](https://agentskills.io/specification) to organize skills and reference files. Impeccable transforms its rich source format into Cursor-compatible skills that work seamlessly with Agent mode.
+
+<Note>
+Agent Skills require **Cursor Nightly** channel. Enable in Settings → Beta → Nightly, then enable Agent Skills in Settings → Rules.
+</Note>
+
+## Installation
+
+<Steps>
+  <Step title="Download the bundle">
+    Visit [impeccable.style](https://impeccable.style) and download the Cursor bundle, or copy from the repository:
+    
+    ```bash
+    cp -r dist/cursor/.cursor your-project/
+    ```
+  </Step>
+  
+  <Step title="Enable Agent Skills">
+    1. Switch to **Nightly channel** in Cursor Settings → Beta
+    2. Enable **Agent Skills** in Cursor Settings → Rules
+  </Step>
+  
+  <Step title="Verify installation">
+    Open Agent mode and type `/audit` - if the command is recognized, installation succeeded.
+  </Step>
+</Steps>
+
+## File Structure
+
+Cursor organizes skills using the Agent Skills directory structure:
+
+```
+your-project/
+└── .cursor/
+    └── skills/
+        ├── audit/
+        │   └── SKILL.md
+        ├── normalize/
+        │   └── SKILL.md
+        └── frontend-design/
+            ├── SKILL.md
+            └── reference/
+                ├── typography.md
+                ├── color-and-contrast.md
+                ├── spatial-design.md
+                ├── motion-design.md
+                ├── interaction-design.md
+                ├── responsive-design.md
+                └── ux-writing.md
+```
+
+Each skill directory contains:
+- **SKILL.md** - Main skill file with YAML frontmatter
+- **reference/** (optional) - Domain-specific reference documents
+
+## Skill Format
+
+Cursor skills use YAML frontmatter with the following structure:
+
+<CodeGroup>
+```yaml User-Invokable Skill
+---
+name: audit
+description: Perform comprehensive audit of interface quality
+user-invokable: true
+args:
+  - name: area
+    description: The feature or area to audit (optional)
+    required: false
+---
+
+Skill instructions here...
+```
+
+```yaml Reference Skill
+---
+name: frontend-design
+description: Comprehensive design principles and anti-patterns
+license: Apache 2.0 - Based on Anthropic's frontend-design skill
+---
+
+Design guidance for the LLM...
+```
+</CodeGroup>
+
+## How Arguments Work
+
+Cursor **does not support arguments in frontmatter**. This is a key limitation compared to other providers.
+
+### Invocation Styles
+
+When you use a command like `/audit`, Cursor has two ways to handle optional arguments:
+
+<CodeGroup>
+```bash Without Argument
+/audit
+```
+
+```bash With Argument (Appended)
+/audit header component
+```
+</CodeGroup>
+
+If you provide text after the command, Cursor **appends it to the skill prompt** as context. The skill must be written to handle both cases gracefully.
+
+### Writing Argument-Friendly Prompts
+
+Impeccable skills are designed to work with or without appended arguments:
+
+```markdown
+Run systematic quality checks {{area}}. If an area is specified, 
+focus exclusively on that feature. Otherwise, audit the entire interface.
+
+## Diagnostic Scan
+
+Run comprehensive checks across multiple dimensions...
+```
+
+The `{{area}}` placeholder gets replaced during build, but the surrounding text ensures the skill works whether you type `/audit` or `/audit checkout form`.
+
+## Provider-Specific Transformations
+
+The build system applies these transformations for Cursor:
+
+### 1. Strip Advanced Metadata
+
+Cursor only supports basic frontmatter fields:
+
+```yaml
+# Preserved
+name: audit
+description: Comprehensive quality checks
+license: Apache 2.0
+
+# Removed (not supported)
+allowed-tools: [grep, read]
+compatibility: {requires: ["web"]}
+metadata: {category: "quality"}
+```
+
+### 2. Replace Placeholders
+
+Argument placeholders are transformed for append-style invocation:
+
+<CodeGroup>
+```markdown Source (Rich Format)
+Audit the {{area}} for quality issues. Focus on:
+- Accessibility
+- Performance
+```
+
+```markdown Cursor Output
+Audit the specified area for quality issues. Focus on:
+- Accessibility
+- Performance
+```
+</CodeGroup>
+
+### 3. Preserve Reference Files
+
+Reference files are copied as-is into each skill's `reference/` subdirectory. The `frontend-design` skill includes 7 reference files covering typography, color, spatial design, and more.
+
+## Usage Examples
+
+### Basic Command
+
+```bash
+/audit
+```
+
+Runs a comprehensive audit of the entire interface.
+
+### Focused Command
+
+```bash
+/normalize checkout form
+```
+
+Aligns the checkout form with design system standards.
+
+### Multi-Step Workflow
+
+```bash
+/audit
+# Reviews the report, decides what to fix
+
+/normalize
+# Fixes inconsistencies
+
+/polish
+# Final cleanup before shipping
+```
+
+## Available Skills
+
+Impeccable includes **17 user-invokable skills** plus the comprehensive `frontend-design` reference skill:
+
+| Skill | Purpose |
+|-------|--------|
+| `/audit` | Technical quality checks (a11y, performance, responsive) |
+| `/critique` | UX design review (hierarchy, clarity, emotional resonance) |
+| `/normalize` | Align with design system standards |
+| `/polish` | Final pass before shipping |
+| `/distill` | Strip to essence |
+| `/clarify` | Improve unclear UX copy |
+| `/optimize` | Performance improvements |
+| `/harden` | Error handling, i18n, edge cases |
+| `/animate` | Add purposeful motion |
+| `/colorize` | Introduce strategic color |
+| `/bolder` | Amplify boring designs |
+| `/quieter` | Tone down overly bold designs |
+| `/delight` | Add moments of joy |
+| `/extract` | Pull into reusable components |
+| `/adapt` | Adapt for different devices |
+| `/onboard` | Design onboarding flows |
+| `/teach-impeccable` | One-time setup: gather design context |
+
+## Quirks & Limitations
+
+<Warning>
+**No Argument Syntax**: Unlike Claude Code or Gemini, Cursor doesn't support `{{arg}}` placeholders in skill bodies. Arguments must be appended after the command.
+</Warning>
+
+### Append-Only Arguments
+
+Cursor treats everything after `/command` as additional context:
+
+```bash
+# This works
+/audit checkout flow
+
+# This also works (everything is context)
+/normalize button styles and spacing in the header
+```
+
+### No Argument Validation
+
+Cursor doesn't validate required vs optional arguments. Skills must handle any input gracefully.
+
+### Skill Discovery
+
+Agent Skills are automatically discovered from `.cursor/skills/`. No manual registration needed.
+
+### Nightly Channel Requirement
+
+Agent Skills are currently only available in Cursor Nightly. If you're on the stable channel, commands won't be recognized.
+
+## Troubleshooting
+
+### Commands Not Recognized
+
+<Steps>
+  <Step title="Check Nightly channel">
+    Settings → Beta → Nightly
+  </Step>
+  
+  <Step title="Enable Agent Skills">
+    Settings → Rules → Agent Skills (toggle on)
+  </Step>
+  
+  <Step title="Verify file structure">
+    Ensure `.cursor/skills/audit/SKILL.md` exists in your project root
+  </Step>
+  
+  <Step title="Restart Cursor">
+    Fully quit and relaunch Cursor to reload skills
+  </Step>
+</Steps>
+
+### Skills Not Loading
+
+If skills exist but aren't recognized:
+
+1. Check YAML frontmatter is valid (no syntax errors)
+2. Ensure `name` field matches directory name
+3. Look for file permission issues
+4. Check Cursor's output panel for error messages
+
+### Arguments Not Working
+
+Remember: Cursor appends arguments, doesn't inject them. Write skills that work with or without trailing context.
+
+## Best Practices
+
+### 1. Design for Flexibility
+
+Write skills that work with zero, one, or many appended words:
+
+```markdown
+✅ Good: "Audit the interface {{area}}"
+✅ Good: "Focus on the specified area, or audit everything"
+❌ Bad: "Audit the {{area}}" (breaks without argument)
+```
+
+### 2. Use Reference Skills
+
+The `frontend-design` skill provides deep domain expertise. User-invokable skills explicitly invoke it:
+
+```markdown
+**First**: Use the frontend-design skill for design principles and anti-patterns.
+
+## Your Task
+...
+```
+
+### 3. Combine Commands
+
+Chain multiple skills for complex workflows:
+
+1. `/audit` - Find issues
+2. `/normalize` - Fix inconsistencies  
+3. `/polish` - Final cleanup
+4. `/animate` - Add motion
+
+### 4. Stay Specific
+
+When appending context, be specific:
+
+```bash
+# Vague
+/audit stuff
+
+# Specific
+/audit checkout form accessibility and mobile layout
+```
+
+## Learn More
+
+- [Agent Skills Specification](https://agentskills.io/specification)
+- [Cursor Documentation](https://cursor.com/docs/context/skills)
+- [Impeccable Source Code](https://github.com/pbakaus/impeccable)

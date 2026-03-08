@@ -1,0 +1,466 @@
+---
+title: Claude Code Guide
+description: How Impeccable works with Claude Code's skills system
+---
+
+## Overview
+
+Claude Code uses [Anthropic's Skills specification](https://github.com/anthropics/skills) with full support for frontmatter metadata, arguments, and reference files. Impeccable delivers the richest feature set for Claude Code, preserving all metadata and providing native argument support.
+
+## Installation
+
+<Steps>
+  <Step title="Download the bundle">
+    Visit [impeccable.style](https://impeccable.style) and download the Claude Code bundle, or copy from the repository:
+    
+    <CodeGroup>
+    ```bash Project-Specific
+    cp -r dist/claude-code/.claude your-project/
+    ```
+    
+    ```bash Global (All Projects)
+    cp -r dist/claude-code/.claude/* ~/.claude/
+    ```
+    </CodeGroup>
+  </Step>
+  
+  <Step title="Verify installation">
+    In Claude Code, type `/audit` - the skill should autocomplete with its description.
+  </Step>
+</Steps>
+
+<Note>
+Claude Code supports both **project-specific** (`.claude/` in project root) and **global** (`~/.claude/` in home directory) skills. Project-specific skills take precedence.
+</Note>
+
+## File Structure
+
+Claude Code follows the Anthropic Skills directory structure:
+
+```
+your-project/
+└── .claude/
+    └── skills/
+        ├── audit/
+        │   └── SKILL.md
+        ├── normalize/
+        │   └── SKILL.md
+        └── frontend-design/
+            ├── SKILL.md
+            └── reference/
+                ├── typography.md
+                ├── color-and-contrast.md
+                ├── spatial-design.md
+                ├── motion-design.md
+                ├── interaction-design.md
+                ├── responsive-design.md
+                └── ux-writing.md
+```
+
+## Skill Format
+
+Claude Code skills use comprehensive YAML frontmatter:
+
+<CodeGroup>
+```yaml User-Invokable Skill
+---
+name: audit
+description: Perform comprehensive audit of interface quality
+user-invokable: true
+args:
+  - name: area
+    description: The feature or area to audit (optional)
+    required: false
+allowed-tools:
+  - grep
+  - read
+  - write
+compatibility:
+  requires:
+    - web
+---
+
+Skill instructions here with {{area}} placeholders...
+```
+
+```yaml Reference Skill
+---
+name: frontend-design
+description: Comprehensive design principles and anti-patterns
+license: Apache 2.0 - Based on Anthropic's frontend-design skill
+metadata:
+  category: design
+  domain: frontend
+---
+
+Design guidance for Claude...
+```
+</CodeGroup>
+
+## How Arguments Work
+
+Claude Code has **native argument support** with placeholder injection:
+
+### Argument Syntax
+
+<CodeGroup>
+```bash Without Argument
+/audit
+```
+
+```bash With Argument
+/audit checkout form
+```
+</CodeGroup>
+
+When you provide an argument, Claude **injects it into the skill body** at `{{area}}` placeholders:
+
+```markdown
+# Source
+Audit the {{area}} for quality issues.
+
+# Becomes (with /audit checkout form)
+Audit the checkout form for quality issues.
+```
+
+### Multiple Arguments
+
+Claude Code supports multiple named arguments:
+
+```yaml
+args:
+  - name: component
+    description: The component to adapt
+    required: true
+  - name: device
+    description: Target device (mobile, tablet, desktop)
+    required: false
+```
+
+Invoke with space-separated values:
+
+```bash
+/adapt header mobile
+```
+
+### Optional vs Required
+
+The `required` field in frontmatter indicates whether an argument must be provided. Claude validates this and prompts for missing required arguments.
+
+## Provider-Specific Transformations
+
+Claude Code receives the **full-featured output** with minimal transformations:
+
+### 1. Preserve All Metadata
+
+All frontmatter fields are preserved:
+
+```yaml
+name: audit
+description: Comprehensive quality checks
+user-invokable: true
+args: [...]
+allowed-tools: [...]
+compatibility: {...}
+metadata: {...}
+license: Apache 2.0
+```
+
+### 2. Native Placeholder Support
+
+Argument placeholders remain as `{{argname}}`:
+
+```markdown
+Audit the {{area}} for quality issues. Focus on:
+- Accessibility
+- Performance
+```
+
+### 3. Reference Files
+
+Reference files are copied into each skill's `reference/` subdirectory with full content preserved.
+
+## Usage Examples
+
+### Basic Command
+
+```bash
+/audit
+```
+
+Runs audit on entire interface (no argument provided).
+
+### With Argument
+
+```bash
+/audit checkout form
+```
+
+Audits only the checkout form component.
+
+### Multi-Argument Command
+
+```bash
+/adapt navigation mobile
+```
+
+Adapts the navigation component for mobile devices.
+
+### Complex Workflow
+
+```bash
+# Step 1: Identify issues
+/audit
+
+# Step 2: Fix inconsistencies
+/normalize
+
+# Step 3: Improve performance
+/optimize
+
+# Step 4: Final polish
+/polish
+```
+
+## Available Skills
+
+Impeccable includes **17 user-invokable skills** for Claude Code:
+
+| Skill | Arguments | Purpose |
+|-------|-----------|--------|
+| `/audit` | `[area]` | Technical quality checks (a11y, performance, responsive) |
+| `/critique` | `[design]` | UX design review (hierarchy, clarity, emotional resonance) |
+| `/normalize` | `[scope]` | Align with design system standards |
+| `/polish` | `[component]` | Final pass before shipping |
+| `/distill` | `[feature]` | Strip to essence |
+| `/clarify` | `[copy]` | Improve unclear UX copy |
+| `/optimize` | `[target]` | Performance improvements |
+| `/harden` | `[flow]` | Error handling, i18n, edge cases |
+| `/animate` | `[element]` | Add purposeful motion |
+| `/colorize` | `[component]` | Introduce strategic color |
+| `/bolder` | `[section]` | Amplify boring designs |
+| `/quieter` | `[section]` | Tone down overly bold designs |
+| `/delight` | `[interaction]` | Add moments of joy |
+| `/extract` | `[pattern]` | Pull into reusable components |
+| `/adapt` | `[component] [device]` | Adapt for different devices |
+| `/onboard` | `[flow]` | Design onboarding flows |
+| `/teach-impeccable` | - | One-time setup: gather design context |
+
+## Advanced Features
+
+### Allowed Tools
+
+Claude Code respects `allowed-tools` in frontmatter to constrain which tools a skill can use:
+
+```yaml
+allowed-tools:
+  - grep
+  - read
+  - write
+  - edit
+```
+
+This prevents skills from running arbitrary commands or accessing network resources.
+
+### Compatibility Requirements
+
+The `compatibility` field specifies environmental requirements:
+
+```yaml
+compatibility:
+  requires:
+    - web
+    - node
+  optional:
+    - tailwind
+```
+
+Claude can warn users if requirements aren't met.
+
+### Skill Metadata
+
+Custom metadata helps organize and categorize skills:
+
+```yaml
+metadata:
+  category: quality
+  domain: frontend
+  version: 1.0.0
+  tags:
+    - accessibility
+    - performance
+```
+
+## Quirks & Best Practices
+
+### Skill Discovery
+
+Claude Code automatically discovers skills in:
+1. `.claude/skills/` (project-specific, higher priority)
+2. `~/.claude/skills/` (global, lower priority)
+
+No manual registration needed.
+
+### Argument Validation
+
+Claude validates required arguments before executing the skill. If a required argument is missing, Claude prompts the user for it.
+
+### Reference Skill Invocation
+
+User-invokable skills explicitly reference the `frontend-design` skill:
+
+```markdown
+**First**: Use the frontend-design skill for design principles and anti-patterns.
+```
+
+This ensures Claude loads the comprehensive design knowledge before executing the task.
+
+### Combining Skills
+
+Claude Code excels at chaining skills:
+
+```bash
+# Quality workflow
+/audit → /normalize → /optimize → /polish
+
+# Design workflow  
+/critique → /bolder → /colorize → /animate → /delight
+```
+
+## Troubleshooting
+
+### Skills Not Found
+
+<Steps>
+  <Step title="Check file structure">
+    Ensure `.claude/skills/{name}/SKILL.md` exists
+  </Step>
+  
+  <Step title="Validate YAML">
+    Use a YAML validator to check frontmatter syntax
+  </Step>
+  
+  <Step title="Check name field">
+    The `name` in frontmatter must match the directory name
+  </Step>
+  
+  <Step title="Restart Claude Code">
+    Reload the window to refresh skill cache
+  </Step>
+</Steps>
+
+### Arguments Not Injecting
+
+If `{{argname}}` appears literally in output:
+
+1. Verify the argument name matches frontmatter exactly
+2. Ensure `user-invokable: true` is set
+3. Check that you're using the correct invocation syntax
+
+### Permission Errors
+
+If skills can't read/write files:
+
+1. Check file permissions on `.claude/` directory
+2. Verify `allowed-tools` includes necessary tools
+3. Ensure Claude Code has filesystem access
+
+## Migration from Other Providers
+
+### From Cursor
+
+Claude Code adds argument injection support:
+
+```markdown
+# Cursor (append-only)
+/audit checkout form
+# Claude receives: "Run audit. checkout form"
+
+# Claude Code (injection)
+/audit checkout form  
+# Claude receives: "Run audit on checkout form."
+```
+
+### From Gemini CLI
+
+Claude Code uses named arguments instead of `{{args}}`:
+
+```yaml
+# Gemini (single args string)
+Prompt: Audit {{args}}
+
+# Claude Code (named arguments)
+args:
+  - name: area
+Prompt: Audit {{area}}
+```
+
+### From Codex CLI
+
+Claude Code uses `{{argname}}` instead of `$ARGNAME`:
+
+```markdown
+# Codex
+Audit $AREA for issues
+
+# Claude Code
+Audit {{area}} for issues
+```
+
+## Best Practices
+
+### 1. Use Descriptive Arguments
+
+```yaml
+✅ Good
+args:
+  - name: component
+    description: The UI component to analyze
+    required: false
+
+❌ Bad
+args:
+  - name: x
+    description: thing
+```
+
+### 2. Make Arguments Optional
+
+Design skills to work with or without arguments:
+
+```markdown
+Audit {{area}}. If no area specified, audit the entire interface.
+```
+
+### 3. Leverage Reference Skills
+
+Explicitly invoke comprehensive skills like `frontend-design`:
+
+```markdown
+**First**: Use the frontend-design skill to understand anti-patterns.
+**Then**: Apply that knowledge to the current task.
+```
+
+### 4. Constrain Tool Access
+
+Use `allowed-tools` to limit what each skill can do:
+
+```yaml
+# Design review skill (read-only)
+allowed-tools:
+  - grep
+  - read
+
+# Refactoring skill (read-write)
+allowed-tools:
+  - grep
+  - read
+  - write
+  - edit
+```
+
+## Learn More
+
+- [Anthropic Skills Specification](https://github.com/anthropics/skills)
+- [Claude Code Documentation](https://code.claude.com/docs/en/slash-commands)
+- [Impeccable Source Code](https://github.com/pbakaus/impeccable)

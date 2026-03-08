@@ -1,0 +1,453 @@
+---
+title: Gemini CLI Guide
+description: How Impeccable works with Gemini CLI's skills system
+---
+
+## Overview
+
+Gemini CLI uses a unique skills system with TOML-based commands and modular markdown files. Impeccable transforms its source format into Gemini-compatible skills that leverage the CLI's import features for efficient context management.
+
+<Note>
+Gemini CLI skills require the **preview version**: `npm i -g @google/gemini-cli@preview`
+</Note>
+
+## Installation
+
+<Steps>
+  <Step title="Install preview version">
+    ```bash
+    npm i -g @google/gemini-cli@preview
+    ```
+  </Step>
+  
+  <Step title="Download the bundle">
+    Visit [impeccable.style](https://impeccable.style) and download the Gemini CLI bundle, or copy from the repository:
+    
+    ```bash
+    cp -r dist/gemini/.gemini your-project/
+    ```
+  </Step>
+  
+  <Step title="Enable skills">
+    Run `/settings` in Gemini CLI and enable **Skills**
+  </Step>
+  
+  <Step title="Verify installation">
+    Run `/skills list` to see all available skills
+  </Step>
+</Steps>
+
+## File Structure
+
+Gemini CLI uses a **different structure** than other providers:
+
+```
+your-project/
+└── .gemini/
+    └── skills/
+        ├── audit/
+        │   └── SKILL.md
+        ├── normalize/
+        │   └── SKILL.md
+        └── frontend-design/
+            ├── SKILL.md
+            └── reference/
+                ├── typography.md
+                ├── color-and-contrast.md
+                ├── spatial-design.md
+                ├── motion-design.md
+                ├── interaction-design.md
+                ├── responsive-design.md
+                └── ux-writing.md
+```
+
+### Key Differences
+
+1. **Skills in subdirectories**: Each skill lives in `.gemini/skills/{name}/SKILL.md`
+2. **Reference files**: Modular reference files in `reference/` subdirectories
+3. **No TOML for skills**: Unlike custom commands, skills use markdown with YAML frontmatter
+
+## Skill Format
+
+Gemini CLI skills use YAML frontmatter (similar to other providers):
+
+<CodeGroup>
+```yaml User-Invokable Skill
+---
+name: audit
+description: Perform comprehensive audit of interface quality
+---
+
+Run systematic quality checks {{args}}. If an area is specified,
+focus exclusively on that feature...
+```
+
+```yaml Reference Skill  
+---
+name: frontend-design
+description: Comprehensive design principles and anti-patterns
+---
+
+Design guidance covering typography, color, spatial design...
+```
+</CodeGroup>
+
+## How Arguments Work
+
+Gemini CLI uses a **single `{{args}}` placeholder** instead of named arguments:
+
+### Argument Syntax
+
+<CodeGroup>
+```bash Without Arguments
+/audit
+```
+
+```bash With Arguments
+/audit checkout form accessibility
+```
+</CodeGroup>
+
+Everything after the command name becomes `{{args}}`:
+
+```markdown
+# Source
+Audit the interface {{args}}.
+
+# With: /audit checkout form
+# Becomes: Audit the interface checkout form.
+```
+
+<Warning>
+Gemini CLI doesn't support **named arguments** like `{{component}}` or `{{device}}`. All arguments are captured in a single `{{args}}` string.
+</Warning>
+
+### Writing Args-Friendly Prompts
+
+Design prompts that work with or without args:
+
+```markdown
+✅ Good
+Audit {{args}}. If specific areas are mentioned, focus there. 
+Otherwise, audit the entire interface.
+
+❌ Bad
+Audit the {{area}} component.
+# Breaks if user doesn't provide an area
+```
+
+## Provider-Specific Transformations
+
+The build system applies these transformations for Gemini CLI:
+
+### 1. Argument Consolidation
+
+All argument placeholders become `{{args}}`:
+
+<CodeGroup>
+```yaml Source (Named Arguments)
+args:
+  - name: component
+  - name: device
+
+Adapt {{component}} for {{device}}.
+```
+
+```yaml Gemini Output (Single Args)
+Adapt {{args}}.
+```
+</CodeGroup>
+
+### 2. Simplified Frontmatter
+
+Gemini CLI only uses `name` and `description`:
+
+```yaml
+# Preserved
+name: audit
+description: Comprehensive quality checks
+
+# Removed (not supported)
+user-invokable: true
+args: [...]
+allowed-tools: [...]
+compatibility: {...}
+```
+
+### 3. Reference Files Preserved
+
+Reference files are copied into skill subdirectories. The `frontend-design` skill includes 7 reference files for comprehensive design guidance.
+
+## Usage Examples
+
+### Basic Command
+
+```bash
+/audit
+```
+
+Runs audit on entire interface.
+
+### With Arguments
+
+```bash
+/audit checkout form and payment flow
+```
+
+Audits specific areas (all text after `/audit` becomes `{{args}}`).
+
+### Multi-Step Workflow
+
+```bash
+# Identify issues
+/audit
+
+# Fix inconsistencies
+/normalize button styles
+
+# Performance pass
+/optimize
+
+# Final cleanup
+/polish
+```
+
+### Focused Refinement
+
+```bash
+/critique hero section
+/bolder hero section  
+/colorize hero section
+/animate hero section
+/delight hero section
+```
+
+## Available Skills
+
+Impeccable includes **17 user-invokable skills** for Gemini CLI:
+
+| Skill | Purpose |
+|-------|--------|
+| `/audit` | Technical quality checks (a11y, performance, responsive) |
+| `/critique` | UX design review (hierarchy, clarity, emotional resonance) |
+| `/normalize` | Align with design system standards |
+| `/polish` | Final pass before shipping |
+| `/distill` | Strip to essence |
+| `/clarify` | Improve unclear UX copy |
+| `/optimize` | Performance improvements |
+| `/harden` | Error handling, i18n, edge cases |
+| `/animate` | Add purposeful motion |
+| `/colorize` | Introduce strategic color |
+| `/bolder` | Amplify boring designs |
+| `/quieter` | Tone down overly bold designs |
+| `/delight` | Add moments of joy |
+| `/extract` | Pull into reusable components |
+| `/adapt` | Adapt for different devices |
+| `/onboard` | Design onboarding flows |
+| `/teach-impeccable` | One-time setup: gather design context |
+
+## Gemini CLI Features
+
+### Skill Discovery
+
+Gemini CLI automatically discovers skills in `.gemini/skills/`. Use `/skills list` to see all available skills.
+
+### Skill Management
+
+<CodeGroup>
+```bash List Skills
+/skills list
+```
+
+```bash Show Skill Details
+/skills show audit
+```
+
+```bash Enable/Disable
+/skills enable audit
+/skills disable audit
+```
+</CodeGroup>
+
+### Context Management
+
+Gemini CLI loads skill content into context when invoked. Reference files are loaded automatically when a skill references them.
+
+### GEMINI.md (Root-Level Skills)
+
+Gemini CLI also supports a root-level `GEMINI.md` file for always-on context:
+
+```markdown
+# GEMINI.md (project root)
+
+Always follow these design principles:
+
+@./GEMINI.frontend-design.md
+```
+
+The `@./file.md` syntax imports external files. However, Impeccable uses the **skills directory** approach for better organization.
+
+## Quirks & Limitations
+
+### Single Args String
+
+<Warning>
+Gemini CLI only supports `{{args}}` (not `{{component}}` or `{{device}}`). All arguments are concatenated into one string.
+</Warning>
+
+This means:
+
+```bash
+# Both become: {{args}} = "navigation mobile"
+/adapt navigation mobile
+/adapt mobile navigation
+```
+
+The skill must parse the args string intelligently.
+
+### No Argument Validation
+
+Gemini CLI doesn't validate required vs optional arguments. Skills must handle any input gracefully.
+
+### Preview Version Required
+
+Skills are only available in `@preview` releases. Stable releases don't support this feature yet.
+
+### Skill Reloading
+
+Changes to skill files require restarting Gemini CLI or running `/skills reload`.
+
+## Troubleshooting
+
+### Skills Not Found
+
+<Steps>
+  <Step title="Check preview version">
+    ```bash
+    gemini --version
+    # Should show @preview tag
+    ```
+  </Step>
+  
+  <Step title="Enable skills">
+    ```bash
+    /settings
+    # Enable "Skills" option
+    ```
+  </Step>
+  
+  <Step title="Verify file structure">
+    Ensure `.gemini/skills/audit/SKILL.md` exists
+  </Step>
+  
+  <Step title="Reload skills">
+    ```bash
+    /skills reload
+    ```
+  </Step>
+</Steps>
+
+### Arguments Not Working
+
+If `{{args}}` appears literally in responses:
+
+1. Check that you're using `/command args` syntax (not `/command` on one line and args on the next)
+2. Verify the skill body contains `{{args}}` placeholder
+3. Ensure there are no typos (it's `{{args}}` not `{{arg}}` or `{args}`)
+
+### Skill Not Loading Context
+
+If skills seem to lack domain knowledge:
+
+1. Check that reference files exist in `reference/` subdirectory
+2. Verify the main SKILL.md references the `frontend-design` skill
+3. Try explicitly mentioning design principles in your command
+
+## Migration from Other Providers
+
+### From Cursor or Claude Code
+
+Gemini CLI consolidates named arguments:
+
+```markdown
+# Other providers (named args)
+/adapt {{component}} for {{device}}
+
+# Gemini CLI (single args)
+/adapt {{args}}
+# User types: /adapt header for mobile
+```
+
+### From Codex CLI
+
+Gemini CLI uses `{{args}}` instead of `$ARGNAME`:
+
+```markdown
+# Codex
+Audit $AREA for issues
+
+# Gemini CLI
+Audit {{args}} for issues
+```
+
+## Best Practices
+
+### 1. Design for Flexible Args
+
+Write prompts that work with any number of words:
+
+```markdown
+✅ Good
+Perform task on {{args}}. Parse the args to identify 
+components, devices, or other targets.
+
+❌ Bad  
+Perform task on {{component}} for {{device}}.
+# Gemini doesn't support named args
+```
+
+### 2. Use Reference Skills
+
+Explicitly invoke `frontend-design` for comprehensive guidance:
+
+```markdown
+**First**: Use the frontend-design skill for design principles.
+**Then**: Apply those principles to {{args}}.
+```
+
+### 3. Be Explicit in Commands
+
+Since Gemini uses a single args string, be specific:
+
+```bash
+# Vague
+/audit stuff
+
+# Specific
+/audit checkout form for accessibility and mobile layout
+```
+
+### 4. Chain Skills Sequentially
+
+Gemini CLI excels at workflows:
+
+```bash
+/audit → /normalize → /optimize → /polish
+/critique → /bolder → /colorize → /animate
+```
+
+### 5. Use Skill Management
+
+Disable skills you don't need to reduce context:
+
+```bash
+/skills disable onboard
+/skills disable teach-impeccable
+```
+
+## Learn More
+
+- [Gemini CLI Documentation](https://geminicli.com/docs/cli/skills/)
+- [Gemini CLI GEMINI.md Guide](https://github.com/google-gemini/gemini-cli/blob/main/docs/cli/gemini-md.md)
+- [Gemini CLI Custom Commands](https://cloud.google.com/blog/topics/developers-practitioners/gemini-cli-custom-slash-commands)
+- [Impeccable Source Code](https://github.com/pbakaus/impeccable)

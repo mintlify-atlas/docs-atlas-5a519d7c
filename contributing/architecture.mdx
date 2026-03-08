@@ -1,0 +1,284 @@
+---
+title: "Architecture"
+description: "System architecture and design decisions for Impeccable"
+---
+
+## Design Philosophy
+
+Impeccable uses a **feature-rich source format** that transforms into provider-specific formats. This "Option A" architecture maintains full metadata in source files and downgrades for providers with limited support (like Cursor), rather than limiting everyone to the lowest common denominator.
+
+### Why This Approach?
+
+Different providers have different capabilities:
+
+- **Cursor**: No frontmatter or argument support
+- **Claude Code, Gemini, Codex**: Full support for metadata and arguments
+
+By maintaining rich source files, we preserve maximum functionality where supported while still providing working (if simpler) versions for all providers.
+
+## Core Concepts
+
+### Single Source of Truth
+
+All content lives in `source/` directory:
+
+- **Skills** (`source/skills/*.md`): Reusable instruction sets
+- **Commands** (`source/commands/*.md`): Quick prompts
+
+These files contain full metadata using YAML frontmatter.
+
+### Build-Time Transformation
+
+The build system (`scripts/build.js`) transforms source files into provider-specific formats:
+
+1. Read source files with full metadata
+2. Apply provider-specific transformations
+3. Write to `dist/` directory
+4. Generate ZIP bundles
+
+### Committed Distribution
+
+The `dist/` directory is committed to the repository so end users can:
+
+- Download files directly from GitHub
+- Copy files without needing build tools
+- Use the project immediately
+
+## Source File Format
+
+### Skills
+
+Skills follow the [Agent Skills specification](https://agentskills.io/specification):
+
+```yaml
+---
+name: skill-name
+description: What this skill provides
+license: License info (optional)
+compatibility: Environment requirements (optional)
+---
+
+Skill instructions for the LLM here...
+```
+
+**Frontmatter fields**:
+- `name` (required): Skill identifier (1-64 chars, lowercase/numbers/hyphens)
+- `description` (required): What the skill provides (1-1024 chars)
+- `license` (optional): License/attribution info
+- `compatibility` (optional): Environment requirements (1-500 chars)
+- `metadata` (optional): Arbitrary key-value pairs
+- `allowed-tools` (optional, experimental): Pre-approved tools list
+
+**Body**: The skill instructions for the LLM.
+
+### Commands
+
+Commands use custom frontmatter with argument support:
+
+```yaml
+---
+name: command-name
+description: What this command does
+args:
+  - name: argname
+    description: Argument description
+    required: false
+---
+
+Command prompt here with {{argname}} placeholders...
+```
+
+**Frontmatter fields**:
+- `name` (required): Command identifier
+- `description` (required): What the command does
+- `args` (optional): Array of argument objects
+  - `name`: Argument identifier
+  - `description`: What it's for
+  - `required`: Boolean (defaults to false)
+
+**Body**: The actual prompt. Use `{{argname}}` for argument placeholders.
+
+## Provider Transformations
+
+### Cursor (Agent Skills Standard)
+
+**Commands**
+- Strip frontmatter (Cursor doesn't support it)
+- Body only → `dist/cursor/.cursor/commands/*.md`
+
+**Skills**
+- Full Agent Skills standard → `dist/cursor/.cursor/skills/{name}/SKILL.md`
+- Supports full YAML frontmatter
+- Reference files in skill subdirectories
+- Requires Cursor nightly channel
+
+### Claude Code (Full Featured)
+
+**Commands**
+- Keep full YAML frontmatter → `dist/claude-code/.claude/commands/*.md`
+
+**Skills**
+- Keep full YAML frontmatter → `dist/claude-code/.claude/skills/{name}/SKILL.md`
+- Matches [Anthropic Skills spec](https://github.com/anthropics/skills)
+
+### Gemini CLI (Full Featured)
+
+**Commands**
+- Convert to TOML format → `dist/gemini/.gemini/commands/*.toml`
+- Use `description` and `prompt` keys
+- Transform `{{argname}}` → `{{args}}` (Gemini uses single args string)
+
+**Skills**
+- Modular with imports → `dist/gemini/GEMINI.{name}.md`
+- Main `GEMINI.md` uses `@./GEMINI.{name}.md` import syntax
+- Gemini automatically loads imported files
+
+### Codex CLI (Full Featured)
+
+**Commands**
+- Custom prompt format → `dist/codex/.codex/prompts/*.md`
+- Use `description` and `argument-hint` in frontmatter
+- Transform `{{argname}}` → `$ARGNAME` (uppercase variables)
+- Invoked as `/prompts:<name>`
+
+**Skills**
+- Agent Skills standard → `dist/codex/.codex/skills/{name}/SKILL.md`
+- Same SKILL.md format as Claude Code
+- Reference files in subdirectories
+
+## Build System Architecture
+
+The build system is modular and zero-dependency:
+
+```
+scripts/
+├── build.js                 # Main orchestrator (~250 lines)
+└── lib/
+    ├── utils.js             # Shared utilities
+    ├── zip.js               # ZIP generation
+    └── transformers/        # Provider-specific
+        ├── cursor.js
+        ├── claude-code.js
+        ├── gemini.js
+        ├── codex.js
+        └── index.js         # Registry
+```
+
+### Key Functions
+
+- `parseFrontmatter()`: Extracts YAML frontmatter and body
+- `readSourceFiles()`: Recursively reads source files
+- `transformCursor()`: Strips frontmatter for Cursor
+- `transformClaudeCode()`: Keeps full format
+- `transformGemini()`: Converts to TOML + modular skills
+- `transformCodex()`: Custom prompts + skills
+
+### Build Process
+
+1. Read all source files
+2. Parse frontmatter and body
+3. Apply transformations for each provider
+4. Write to provider-specific directories
+5. Generate ZIP bundles
+6. Copy Claude Code output to local `.claude/` for development
+
+## Website Architecture
+
+The [impeccable.style](https://impeccable.style) website uses a dual deployment model:
+
+### Tech Stack
+
+- **Frontend**: Vanilla JavaScript, modern CSS
+- **Local Development**: Bun server (`server/index.js`)
+- **Production**: Vercel Functions (`/api` directory)
+- **Shared Logic**: `server/lib/api-handlers.js`
+
+### Design
+
+- Editorial precision aesthetic
+- Cormorant Garamond (display) + Instrument Sans (body)
+- OKLCH color space for vibrant, perceptually uniform colors
+- Editorial sidebar layout
+- Modular CSS architecture (9 files)
+
+### API Endpoints
+
+- `/` - Homepage (static HTML)
+- `/api/skills` - JSON list of all skills
+- `/api/commands` - JSON list of all commands
+- `/api/download/[type]/[provider]/[id]` - Individual file download
+- `/api/download/bundle/[provider]` - ZIP bundle download
+
+## Key Design Decisions
+
+### Why commit dist/?
+
+End users can copy files directly without needing build tools.
+
+### Why separate transformers?
+
+- Each provider ~30-85 lines, easy to understand
+- Can modify one without affecting others
+- Easy to add new providers
+
+### Why Bun?
+
+- Much faster than Node.js (2-4x)
+- All-in-one toolkit (runtime + package manager)
+- Zero config, TypeScript native
+- Node.js compatible (works with existing code)
+
+### Why modular skills for Gemini/Codex?
+
+- Better context management (load only what's needed)
+- Cleaner file organization
+- Gemini: Uses native `@file.md` import feature
+- Codex: Uses routing pattern
+
+### Why vanilla JS for website?
+
+- No build complexity
+- Bun handles everything natively
+- Modern features (ES6+, CSS nesting, OKLCH colors)
+- Fast, lean, maintainable
+
+## Extensibility
+
+The architecture makes it easy to:
+
+### Add a New Provider
+
+1. Create `scripts/lib/transformers/newprovider.js`
+2. Export transformation function
+3. Add to `transformers/index.js`
+4. Call from `build.js`
+
+### Add New Source Types
+
+1. Define format in `source/newtype/`
+2. Add parser in `utils.js`
+3. Add transformers for each provider
+
+### Modify Output Format
+
+1. Edit provider-specific transformer
+2. Rebuild
+3. Test with provider
+
+## Reference Documentation
+
+- [Agent Skills Specification](https://agentskills.io/specification)
+- [Cursor Commands](https://cursor.com/docs/agent/chat/commands)
+- [Cursor Skills](https://cursor.com/docs/context/skills)
+- [Claude Code Slash Commands](https://code.claude.com/docs/en/slash-commands)
+- [Anthropic Skills](https://github.com/anthropics/skills)
+- [Gemini CLI Custom Commands](https://cloud.google.com/blog/topics/developers-practitioners/gemini-cli-custom-slash-commands)
+- [Gemini CLI GEMINI.md](https://github.com/google-gemini/gemini-cli/blob/main/docs/cli/gemini-md.md)
+- [Codex CLI Slash Commands](https://developers.openai.com/codex/guides/slash-commands)
+- [Codex CLI Skills](https://developers.openai.com/codex/skills/)
+
+## Related
+
+- [Contributing Overview](/contributing/overview) - How to get started
+- [Adding Content](/contributing/adding-content) - How to add skills and commands
+- [Build System](/contributing/build-system) - Build system details

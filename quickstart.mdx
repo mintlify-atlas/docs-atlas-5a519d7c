@@ -1,80 +1,337 @@
 ---
-title: "Quickstart"
-description: "Start building awesome documentation in minutes"
+title: Quick Start
+description: Get from zero to first command in under 5 minutes. Install Impeccable and start creating distinctive interfaces.
 ---
 
-## Get started in three steps
+## Overview
 
-Get your documentation site running locally and make your first customization.
+This guide will get you up and running with Impeccable in under 5 minutes. You'll:
 
-### Step 1: Set up your local environment
+1. Download the bundle for your AI tool
+2. Install it in your project
+3. Run your first command
+4. See the difference in your AI's output
 
-<AccordionGroup>
-  <Accordion icon="copy" title="Clone your docs locally">
-    During the onboarding process, you created a GitHub repository with your docs content if you didn't already have one. You can find a link to this repository in your [dashboard](https://dashboard.mintlify.com).
-    
-    To clone the repository locally so that you can make and preview changes to your docs, follow the [Cloning a repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) guide in the GitHub docs.
-  </Accordion>
-  <Accordion icon="rectangle-terminal" title="Start the preview server">
-    1. Install the Mintlify CLI: `npm i -g mint`
-    2. Navigate to your docs directory and run: `mint dev`
-    3. Open `http://localhost:3000` to see your docs live!
-    
-    <Tip>Your preview updates automatically as you edit files.</Tip>
-  </Accordion>
-</AccordionGroup>
+<Note>
+Choose the AI tool you're using. If you're not sure, Claude Code is a great starting point and works directly in your browser.
+</Note>
 
-### Step 2: Deploy your changes
+## Installation
 
-<AccordionGroup>
-  <Accordion icon="github" title="Install our GitHub app">
-    Install the Mintlify GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app).
-    
-    Our GitHub app automatically deploys your changes to your docs site, so you don't need to manage deployments yourself.
-</Accordion>
-<Accordion icon="palette" title="Update your site name and colors">
-    For a first change, let's update the name and colors of your docs site.
+<Steps>
+  <Step title="Download the Bundle">
+    Visit [impeccable.style](https://impeccable.style) and download the ZIP for your tool.
 
-    1. Open `docs.json` in your editor.
-    2. Change the `"name"` field to your project name.
-    3. Update the `"colors"` to match your brand.
-    4. Save and see your changes instantly at `http://localhost:3000`.
+    The bundle includes:
+    - The frontend-design skill with 7 reference files
+    - All 17 commands (audit, polish, animate, etc.)
+    - Provider-specific formatting
+  </Step>
 
-    <Tip>Try changing the primary color to see an immediate difference!</Tip>
-  </Accordion>
-</AccordionGroup>
+  <Step title="Extract to Your Project">
+    <CodeGroup>
+    ```bash Cursor
+    # Extract to your project root
+    unzip impeccable-cursor.zip -d your-project/
+    # Creates: your-project/.cursor/
+    ```
 
-### Step 3: Go live
+    ```bash Claude Code
+    # Extract to your project root
+    unzip impeccable-claude-code.zip -d your-project/
+    # Creates: your-project/.claude/
+    ```
 
-<Accordion icon="rocket" title="Publish your docs">
-  1. Commit and push your changes.
-  2. Your docs will update and be live in moments!
-</Accordion>
+    ```bash Gemini CLI
+    # Extract to your project root
+    unzip impeccable-gemini.zip -d your-project/
+    # Creates: your-project/.gemini/
+    ```
 
-## Next steps
+    ```bash Codex CLI
+    # Extract to your project root
+    unzip impeccable-codex.zip -d your-project/
+    # Creates: your-project/.codex/
+    ```
+    </CodeGroup>
 
-Now that you have your docs running, explore these key features:
+    <Info>
+    The extracted folder is hidden (starts with a dot). On macOS, press `Cmd+Shift+.` in Finder to see hidden files.
+    </Info>
+  </Step>
+
+  <Step title="Enable Skills (If Required)">
+    <Tabs>
+      <Tab title="Cursor">
+        Skills require additional setup in Cursor:
+        
+        1. Switch to **Nightly** channel in Cursor Settings → Beta
+        2. Enable **Agent Skills** in Cursor Settings → Rules
+
+        [Learn more about Cursor skills →](https://cursor.com/docs/context/skills)
+      </Tab>
+      <Tab title="Claude Code">
+        No additional setup required! Claude Code automatically detects skills in `.claude/skills/`.
+      </Tab>
+      <Tab title="Gemini CLI">
+        Skills require setup in Gemini CLI:
+        
+        1. Install preview version: `npm i -g @google/gemini-cli@preview`
+        2. Run `/settings` and enable **Skills**
+        3. Run `/skills list` to verify installation
+
+        [Learn more about Gemini CLI skills →](https://geminicli.com/docs/cli/skills/)
+      </Tab>
+      <Tab title="Codex CLI">
+        No additional setup required! Codex CLI automatically detects skills in `.codex/skills/`.
+      </Tab>
+    </Tabs>
+  </Step>
+</Steps>
+
+## Your First Command
+
+Let's try the `/audit` command to see how Impeccable analyzes your interface:
+
+<Steps>
+  <Step title="Create a Simple Component">
+    Create a basic React component (or use an existing one):
+
+    ```jsx components/Button.jsx
+    export default function Button({ children }) {
+      return (
+        <button style={{
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          color: '#999',
+          fontFamily: 'Inter, sans-serif',
+          padding: '12px 24px',
+          borderRadius: '8px',
+          border: 'none',
+          boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+        }}>
+          {children}
+        </button>
+      );
+    }
+    ```
+
+    <Note>
+    This component intentionally includes common AI design anti-patterns (purple gradient, gray text on color, Inter font, generic border radius).
+    </Note>
+  </Step>
+
+  <Step title="Run the Audit Command">
+    In your AI tool, run:
+
+    <CodeGroup>
+    ```text Cursor
+    /audit components/Button.jsx
+    ```
+
+    ```text Claude Code
+    /audit components/Button.jsx
+    ```
+
+    ```text Gemini CLI
+    /audit components/Button.jsx
+    ```
+
+    ```text Codex CLI
+    /prompts:audit components/Button.jsx
+    ```
+    </CodeGroup>
+
+    <Info>
+    Codex CLI uses a different syntax: `/prompts:audit` instead of `/audit`
+    </Info>
+  </Step>
+
+  <Step title="Review the Report">
+    Impeccable will generate a comprehensive audit report identifying issues:
+
+    **Anti-Patterns Verdict:**
+    - Purple gradient (AI color palette tell)
+    - Gray text on colored background (poor contrast)
+    - Inter font (overused, generic)
+    - Generic rounded corners with shadow (forgettable)
+
+    **Detailed Findings:**
+    - **Critical**: Color contrast ratio fails WCAG AA (2.1:1, needs 4.5:1)
+    - **High**: AI color palette (purple gradient is 2024-2025 AI fingerprint)
+    - **Medium**: Generic typography (Inter is overused)
+    - **Low**: Lacks interaction states (no hover, focus, disabled)
+
+    **Recommendations:**
+    - Use `/colorize` to introduce strategic, accessible colors
+    - Use `/polish` to add all interaction states
+    - Consider distinctive typography alternatives
+  </Step>
+
+  <Step title="Fix the Issues">
+    Now run the suggested commands to fix the issues:
+
+    ```text
+    /colorize components/Button.jsx
+    ```
+
+    Your AI will now apply the principles from the frontend-design skill:
+    - Replace purple gradient with a distinctive, accessible color
+    - Use tinted neutrals instead of pure gray
+    - Suggest alternative fonts (e.g., Instrument Sans, Plus Jakarta Sans)
+    - Add proper interaction states
+  </Step>
+</Steps>
+
+## The Difference
+
+Let's compare the before and after:
+
+<CodeGroup>
+```jsx Before
+export default function Button({ children }) {
+  return (
+    <button style={{
+      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      color: '#999',
+      fontFamily: 'Inter, sans-serif',
+      padding: '12px 24px',
+      borderRadius: '8px',
+      border: 'none',
+      boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+    }}>
+      {children}
+    </button>
+  );
+}
+```
+
+```jsx After (Example)
+export default function Button({ children }) {
+  return (
+    <button style={{
+      background: 'oklch(0.55 0.15 240)',
+      color: 'oklch(0.95 0.02 240)',
+      fontFamily: '"Instrument Sans", system-ui, sans-serif',
+      padding: '12px 24px',
+      borderRadius: '4px',
+      border: 'none',
+      transition: 'transform 150ms ease-out-quart, box-shadow 150ms ease-out-quart',
+      cursor: 'pointer'
+    }}
+    onMouseEnter={(e) => {
+      e.target.style.transform = 'translateY(-1px)';
+      e.target.style.boxShadow = '0 6px 12px oklch(0.55 0.15 240 / 0.2)';
+    }}
+    onMouseLeave={(e) => {
+      e.target.style.transform = 'translateY(0)';
+      e.target.style.boxShadow = 'none';
+    }}>
+      {children}
+    </button>
+  );
+}
+```
+</CodeGroup>
 
 <CardGroup cols={2}>
+  <Card title="Before" icon="circle-xmark">
+    - Purple gradient (AI tell)
+    - Poor contrast (#999 on gradient)
+    - Inter font (generic)
+    - No interaction states
+    - Generic shadows
+  </Card>
+  <Card title="After" icon="circle-check">
+    - Distinctive OKLCH color
+    - Accessible contrast
+    - Interesting font choice
+    - Smooth hover transitions
+    - Purposeful micro-interactions
+  </Card>
+</CardGroup>
 
-<Card title="Write Content" icon="pen-to-square" href="/essentials/markdown">
-  Learn MDX syntax and start writing your documentation.
-</Card>
+## Explore More Commands
 
-<Card title="Customize style" icon="palette" href="/essentials/settings">
-  Make your docs match your brand perfectly.
-</Card>
+Now that you've seen how `/audit` and `/colorize` work, try these commands:
 
-<Card title="Add code examples" icon="square-code" href="/essentials/code">
-  Include syntax-highlighted code blocks.
-</Card>
+<Tabs>
+  <Tab title="Quality">
+    - `/audit` - Comprehensive quality checks
+    - `/critique` - UX design review
+    - `/polish` - Final pass before shipping
+  </Tab>
+  <Tab title="Refinement">
+    - `/distill` - Strip to essence
+    - `/normalize` - Align with design system
+    - `/clarify` - Improve UX copy
+  </Tab>
+  <Tab title="Enhancement">
+    - `/animate` - Add purposeful motion
+    - `/bolder` - Amplify boring designs
+    - `/delight` - Add moments of joy
+  </Tab>
+  <Tab title="Adaptation">
+    - `/adapt` - Responsive design
+    - `/extract` - Reusable components
+    - `/onboard` - User onboarding flows
+  </Tab>
+</Tabs>
 
-<Card title="API documentation" icon="code" href="/api-reference/introduction">
-  Auto-generate API docs from OpenAPI specs.
-</Card>
+<Info>
+Most commands accept an optional argument to target specific areas:
+- `/polish checkout-form` - Polish just the checkout form
+- `/animate hero-section` - Add animation to hero section
+- `/audit navigation` - Audit just the navigation
+</Info>
 
+## How Commands Work
+
+Each command is a specialized skill that follows a structured workflow:
+
+<Steps>
+  <Step title="Load Context">
+    The command loads the frontend-design skill with all reference files (typography, color, spatial design, motion, etc.)
+  </Step>
+  <Step title="Analyze Code">
+    It analyzes your code against design principles and anti-patterns
+  </Step>
+  <Step title="Generate Report or Changes">
+    Audit commands generate reports. Action commands (polish, animate, etc.) make actual code changes
+  </Step>
+  <Step title="Apply Best Practices">
+    All changes follow the comprehensive guidelines in the skill references
+  </Step>
+</Steps>
+
+## Working Without Commands
+
+You don't have to use commands! The frontend-design skill is automatically available whenever your AI works on frontend code. Simply ask:
+
+```text
+Build a landing page hero section using the frontend-design skill
+```
+
+Your AI will automatically apply all the principles, avoid anti-patterns, and create distinctive interfaces.
+
+Commands are shortcuts for specific workflows (auditing, polishing, animating), but the underlying skill knowledge is always active.
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Installation Guide" icon="download" href="/installation">
+    Detailed installation instructions for all providers
+  </Card>
+  <Card title="Command Reference" icon="terminal" href="/usage/commands-overview">
+    Complete guide to all 17 commands
+  </Card>
+  <Card title="Design Principles" icon="book" href="/concepts/design-principles">
+    Deep dive into the design guidelines
+  </Card>
+  <Card title="Best Practices" icon="star" href="/usage/best-practices">
+    Tips and workflows for effective usage
+  </Card>
 </CardGroup>
 
 <Note>
-  **Need help?** See our [full documentation](https://mintlify.com/docs) or join our [community](https://mintlify.com/community).
+**Pro tip**: Run `/audit` on your existing components to see how many AI anti-patterns you're already using. It's eye-opening!
 </Note>

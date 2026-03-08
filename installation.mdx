@@ -1,0 +1,679 @@
+---
+title: Installation
+description: Detailed installation instructions for Cursor, Claude Code, Gemini CLI, and Codex CLI. Get Impeccable working in your development environment.
+---
+
+## Overview
+
+Impeccable is distributed as provider-specific bundles optimized for each AI tool. This guide covers installation for all 4 supported providers.
+
+<Info>
+**Recommended**: Download from [impeccable.style](https://impeccable.style) for ready-to-use bundles with automatic updates.
+</Info>
+
+## Choose Your Provider
+
+<CardGroup cols={2}>
+  <Card title="Cursor" icon="cursor" href="#cursor">
+    AI-first code editor
+  </Card>
+  <Card title="Claude Code" icon="message-bot" href="#claude-code">
+    Browser-based coding assistant
+  </Card>
+  <Card title="Gemini CLI" icon="terminal" href="#gemini-cli">
+    Google's command-line tool
+  </Card>
+  <Card title="Codex CLI" icon="code" href="#codex-cli">
+    OpenAI's command-line tool
+  </Card>
+</CardGroup>
+
+---
+
+## Cursor
+
+Cursor supports the [Agent Skills](https://agentskills.io) standard. Impeccable installs as skills in your project's `.cursor/` directory.
+
+### Requirements
+
+<Warning>
+Cursor skills require **Nightly channel** and **Agent Skills** to be enabled. Standard releases don't support skills yet.
+</Warning>
+
+<Steps>
+  <Step title="Switch to Nightly Channel">
+    1. Open Cursor Settings
+    2. Go to **Beta** section
+    3. Switch to **Nightly** channel
+    4. Restart Cursor
+  </Step>
+
+  <Step title="Enable Agent Skills">
+    1. Open Cursor Settings
+    2. Go to **Rules** section
+    3. Enable **Agent Skills**
+  </Step>
+</Steps>
+
+### Installation
+
+<Tabs>
+  <Tab title="Option 1: Website (Recommended)">
+    <Steps>
+      <Step title="Download Bundle">
+        Visit [impeccable.style](https://impeccable.style) and click **Download for Cursor**.
+      </Step>
+
+      <Step title="Extract to Project">
+        ```bash
+        # Navigate to your project
+        cd your-project/
+
+        # Extract the ZIP
+        unzip ~/Downloads/impeccable-cursor.zip -d .
+
+        # Verify installation
+        ls -la .cursor/skills/
+        ```
+
+        You should see:
+        ```
+        .cursor/skills/
+        ├── frontend-design/
+        │   ├── SKILL.md
+        │   └── reference/
+        ├── audit/
+        ├── polish/
+        ├── animate/
+        └── ... (14 more commands)
+        ```
+      </Step>
+
+      <Step title="Verify in Cursor">
+        Open Cursor and type `/` in the chat. You should see Impeccable commands:
+        - `/audit`
+        - `/polish`
+        - `/animate`
+        - And 14 more...
+      </Step>
+    </Steps>
+  </Tab>
+
+  <Tab title="Option 2: From Repository">
+    If you've cloned the Impeccable repository:
+
+    ```bash
+    # Clone the repository
+    git clone https://github.com/pbakaus/impeccable.git
+    cd impeccable
+
+    # Copy to your project
+    cp -r dist/cursor/.cursor your-project/
+    ```
+
+    <Note>
+    The `dist/` directory contains pre-built files. You don't need to run the build system.
+    </Note>
+  </Tab>
+</Tabs>
+
+### Usage
+
+Once installed, use commands in Cursor's chat:
+
+```text
+/audit components/Button.jsx
+/polish src/pages/Landing.tsx
+/animate dashboard
+```
+
+<Info>
+Commands work project-wide. The skills are automatically loaded when you use them.
+</Info>
+
+### Troubleshooting
+
+<Accordion title="Commands don't appear in autocomplete">
+  1. Verify you're on Nightly channel (Settings → Beta)
+  2. Ensure Agent Skills is enabled (Settings → Rules)
+  3. Restart Cursor completely
+  4. Check `.cursor/skills/` directory exists
+</Accordion>
+
+<Accordion title="Cursor doesn't load the skill">
+  Skills must follow the Agent Skills standard. Verify `SKILL.md` files have proper frontmatter:
+  
+  ```yaml
+  ---
+  name: audit
+  description: Perform comprehensive audit...
+  user-invokable: true
+  ---
+  ```
+</Accordion>
+
+---
+
+## Claude Code
+
+Claude Code has native support for skills in `.claude/` directories. Works both project-specific and globally.
+
+### Requirements
+
+<Note>
+No special setup required! Claude Code automatically detects skills.
+</Note>
+
+### Installation
+
+<Tabs>
+  <Tab title="Project-Specific (Recommended)">
+    Install in your project to share skills with your team:
+
+    <Steps>
+      <Step title="Download Bundle">
+        Visit [impeccable.style](https://impeccable.style) and click **Download for Claude Code**.
+      </Step>
+
+      <Step title="Extract to Project">
+        ```bash
+        # Navigate to your project
+        cd your-project/
+
+        # Extract the ZIP
+        unzip ~/Downloads/impeccable-claude-code.zip -d .
+
+        # Verify installation
+        ls -la .claude/skills/
+        ```
+
+        You should see:
+        ```
+        .claude/skills/
+        ├── frontend-design/
+        │   ├── SKILL.md
+        │   └── reference/
+        ├── audit/
+        ├── polish/
+        └── ... (15 more)
+        ```
+      </Step>
+
+      <Step title="Commit to Version Control">
+        ```bash
+        git add .claude/
+        git commit -m "Add Impeccable design skills"
+        ```
+
+        <Info>
+        This makes skills available to your entire team automatically.
+        </Info>
+      </Step>
+    </Steps>
+  </Tab>
+
+  <Tab title="Global Installation">
+    Install globally to use across all projects:
+
+    ```bash
+    # Extract to home directory
+    unzip ~/Downloads/impeccable-claude-code.zip -d ~
+
+    # Move to global location
+    cp -r ~/.claude/skills/* ~/.claude/ || mkdir -p ~/.claude && cp -r .claude/skills ~/.claude/
+
+    # Verify
+    ls -la ~/.claude/skills/
+    ```
+
+    <Warning>
+    Global skills apply to ALL projects. Use project-specific installation for team projects.
+    </Warning>
+  </Tab>
+
+  <Tab title="From Repository">
+    ```bash
+    # Clone the repository
+    git clone https://github.com/pbakaus/impeccable.git
+    cd impeccable
+
+    # Project-specific
+    cp -r dist/claude-code/.claude your-project/
+
+    # Or global
+    cp -r dist/claude-code/.claude/* ~/.claude/
+    ```
+  </Tab>
+</Tabs>
+
+### Usage
+
+Commands work in Claude Code's chat:
+
+```text
+/audit components/Dashboard.tsx
+/polish checkout flow
+/animate hero section
+```
+
+<Info>
+Claude Code shows available skills when you type `/`. Commands autocomplete automatically.
+</Info>
+
+### Troubleshooting
+
+<Accordion title="Commands don't appear">
+  1. Verify `.claude/skills/` directory exists in your project or `~/.claude/skills/` globally
+  2. Check `SKILL.md` files have proper YAML frontmatter
+  3. Refresh Claude Code (reload the page)
+</Accordion>
+
+---
+
+## Gemini CLI
+
+Gemini CLI uses TOML format for commands and modular imports for skills.
+
+### Requirements
+
+<Warning>
+Gemini CLI skills require **preview version** and manual skill enablement.
+</Warning>
+
+<Steps>
+  <Step title="Install Preview Version">
+    ```bash
+    npm i -g @google/gemini-cli@preview
+    ```
+  </Step>
+
+  <Step title="Enable Skills">
+    ```bash
+    # Run Gemini CLI
+    gemini
+
+    # In the CLI:
+    /settings
+
+    # Enable "Skills" option
+    # Exit and restart
+    ```
+  </Step>
+</Steps>
+
+### Installation
+
+<Tabs>
+  <Tab title="Option 1: Website (Recommended)">
+    <Steps>
+      <Step title="Download Bundle">
+        Visit [impeccable.style](https://impeccable.style) and click **Download for Gemini CLI**.
+      </Step>
+
+      <Step title="Extract to Project">
+        ```bash
+        # Navigate to your project
+        cd your-project/
+
+        # Extract the ZIP
+        unzip ~/Downloads/impeccable-gemini.zip -d .
+
+        # Verify installation
+        ls -la .gemini/
+        ls -la GEMINI*.md
+        ```
+
+        You should see:
+        ```
+        .gemini/
+        └── commands/
+            ├── audit.toml
+            ├── polish.toml
+            └── ... (15 more)
+        
+        GEMINI.md
+        GEMINI.frontend-design.md
+        GEMINI.audit.md
+        ...
+        ```
+      </Step>
+
+      <Step title="Verify in Gemini CLI">
+        ```bash
+        # In Gemini CLI
+        /skills list
+        ```
+
+        You should see Impeccable skills listed.
+      </Step>
+    </Steps>
+  </Tab>
+
+  <Tab title="Option 2: From Repository">
+    ```bash
+    # Clone the repository
+    git clone https://github.com/pbakaus/impeccable.git
+    cd impeccable
+
+    # Copy to your project
+    cp -r dist/gemini/.gemini your-project/
+    cp dist/gemini/GEMINI*.md your-project/
+    ```
+  </Tab>
+</Tabs>
+
+### Usage
+
+Commands in Gemini CLI use standard slash syntax:
+
+```text
+/audit components/Header.tsx
+/polish navigation
+/animate page transitions
+```
+
+<Info>
+Gemini CLI uses modular imports. Main `GEMINI.md` file imports skill modules using `@./GEMINI.*.md` syntax.
+</Info>
+
+### Troubleshooting
+
+<Accordion title="Commands not recognized">
+  1. Verify you're on preview version: `gemini --version`
+  2. Check skills are enabled in `/settings`
+  3. Run `/skills list` to see loaded skills
+  4. Verify `.gemini/commands/` contains `.toml` files
+</Accordion>
+
+<Accordion title="Skills not loading">
+  Gemini expects `GEMINI.md` and modular files in project root:
+  
+  ```
+  your-project/
+  ├── GEMINI.md                    # Main import file
+  ├── GEMINI.frontend-design.md   # Skill modules
+  └── .gemini/                     # Commands directory
+      └── commands/
+  ```
+</Accordion>
+
+---
+
+## Codex CLI
+
+Codex CLI uses a custom prompt format and invokes commands with `/prompts:` prefix.
+
+### Requirements
+
+<Note>
+Codex CLI works with standard installation. No special setup required.
+</Note>
+
+### Installation
+
+<Tabs>
+  <Tab title="Option 1: Website (Recommended)">
+    <Steps>
+      <Step title="Download Bundle">
+        Visit [impeccable.style](https://impeccable.style) and click **Download for Codex CLI**.
+      </Step>
+
+      <Step title="Extract to Home Directory">
+        Codex CLI expects skills in `~/.codex/`:
+
+        ```bash
+        # Extract the ZIP
+        unzip ~/Downloads/impeccable-codex.zip -d ~
+
+        # Verify installation
+        ls -la ~/.codex/prompts/
+        ls -la ~/.codex/skills/
+        ```
+
+        You should see:
+        ```
+        ~/.codex/
+        ├── prompts/
+        │   ├── audit.md
+        │   ├── polish.md
+        │   └── ... (15 more)
+        └── skills/
+            ├── frontend-design/
+            └── ... (17 more)
+        ```
+      </Step>
+
+      <Step title="Verify in Codex">
+        ```bash
+        # In Codex CLI
+        /prompts:list
+        ```
+
+        You should see Impeccable prompts listed.
+      </Step>
+    </Steps>
+  </Tab>
+
+  <Tab title="Option 2: From Repository">
+    ```bash
+    # Clone the repository
+    git clone https://github.com/pbakaus/impeccable.git
+    cd impeccable
+
+    # Copy to home directory
+    cp -r dist/codex/.codex/* ~/.codex/
+    ```
+  </Tab>
+</Tabs>
+
+### Usage
+
+<Warning>
+Codex CLI uses different syntax: `/prompts:<name>` instead of `/<name>`
+</Warning>
+
+Commands in Codex CLI:
+
+```text
+/prompts:audit components/Layout.tsx
+/prompts:polish dashboard
+/prompts:animate transitions
+```
+
+<Info>
+The `/prompts:` prefix tells Codex to use your custom prompts from `~/.codex/prompts/`.
+</Info>
+
+### Troubleshooting
+
+<Accordion title="Prompts not found">
+  1. Verify files exist in `~/.codex/prompts/`
+  2. Check frontmatter format (uses `description` and `argument-hint`, not `args` array)
+  3. Run `/prompts:list` to see available prompts
+</Accordion>
+
+<Accordion title="Wrong syntax error">
+  Remember: Codex uses `/prompts:audit`, not `/audit`
+  
+  The `:` is required to invoke custom prompts.
+</Accordion>
+
+---
+
+## Universal Bundle
+
+Want to support multiple tools? Use the universal bundle.
+
+<Steps>
+  <Step title="Download Universal Bundle">
+    Visit [impeccable.style](https://impeccable.style) and click **Download Universal**.
+  </Step>
+
+  <Step title="Extract to Project">
+    ```bash
+    unzip impeccable-universal.zip -d your-project/
+    ```
+
+    This creates all provider directories:
+    ```
+    your-project/
+    ├── .cursor/
+    ├── .claude/
+    ├── .gemini/
+    ├── .codex/
+    └── README.txt
+    ```
+  </Step>
+
+  <Step title="Commit to Version Control">
+    ```bash
+    git add .cursor/ .claude/ .gemini/ .codex/
+    git commit -m "Add Impeccable skills for all providers"
+    ```
+
+    Now your team can use whichever tool they prefer!
+  </Step>
+</Steps>
+
+<Info>
+The universal bundle includes all providers in a single ZIP. Perfect for teams using multiple tools.
+</Info>
+
+---
+
+## Prefixed Installation
+
+If you have existing commands with conflicting names, use the prefixed bundle:
+
+<Steps>
+  <Step title="Download Prefixed Bundle">
+    Visit [impeccable.style](https://impeccable.style) and click **Download (Prefixed)**.
+  </Step>
+
+  <Step title="Extract and Use">
+    Commands are prefixed with `i-`:
+    ```text
+    /i-audit
+    /i-polish
+    /i-animate
+    ```
+  </Step>
+</Steps>
+
+<Note>
+Prefixed bundles work identically, just with `i-` prefix to avoid naming conflicts.
+</Note>
+
+---
+
+## Verification
+
+After installation, verify everything works:
+
+<Steps>
+  <Step title="Check Directory Structure">
+    <CodeGroup>
+    ```bash Cursor
+    ls -la .cursor/skills/
+    # Should show: frontend-design, audit, polish, etc.
+    ```
+
+    ```bash Claude Code
+    ls -la .claude/skills/
+    # Should show: frontend-design, audit, polish, etc.
+    ```
+
+    ```bash Gemini CLI
+    ls -la .gemini/commands/
+    ls -la GEMINI*.md
+    # Should show: command TOML files and skill modules
+    ```
+
+    ```bash Codex CLI
+    ls -la ~/.codex/prompts/
+    ls -la ~/.codex/skills/
+    # Should show: prompt files and skills
+    ```
+    </CodeGroup>
+  </Step>
+
+  <Step title="Test a Command">
+    Create a simple test file and run `/audit`:
+
+    ```jsx test.jsx
+    export function Button() {
+      return <button style={{ color: '#999' }}>Click</button>;
+    }
+    ```
+
+    Then run:
+    ```text
+    /audit test.jsx
+    ```
+
+    You should get a detailed audit report with anti-pattern warnings.
+  </Step>
+
+  <Step title="Verify Skill Loading">
+    Ask your AI:
+    ```text
+    What design principles does the frontend-design skill include?
+    ```
+
+    If the skill is loaded, you'll get a detailed response about typography, color, spatial design, etc.
+  </Step>
+</Steps>
+
+---
+
+## Updating
+
+To update to the latest version:
+
+<Steps>
+  <Step title="Download Latest Bundle">
+    Visit [impeccable.style](https://impeccable.style) and download the latest version.
+  </Step>
+
+  <Step title="Backup Existing Installation">
+    ```bash
+    # Backup current installation
+    mv .claude/ .claude.backup/
+    # Or for Cursor:
+    mv .cursor/ .cursor.backup/
+    ```
+  </Step>
+
+  <Step title="Extract New Version">
+    ```bash
+    unzip ~/Downloads/impeccable-[provider].zip -d .
+    ```
+  </Step>
+
+  <Step title="Verify and Clean Up">
+    ```bash
+    # Test new installation
+    # If working, remove backup:
+    rm -rf .claude.backup/
+    ```
+  </Step>
+</Steps>
+
+---
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Quick Start" icon="rocket" href="/quickstart">
+    Try your first command in under 5 minutes
+  </Card>
+  <Card title="Command Reference" icon="terminal" href="/usage/commands-overview">
+    Complete guide to all 17 commands
+  </Card>
+  <Card title="Design Principles" icon="book" href="/concepts/design-principles">
+    Deep dive into the skill's design guidelines
+  </Card>
+  <Card title="Best Practices" icon="star" href="/usage/best-practices">
+    Tips and workflows for effective usage
+  </Card>
+</CardGroup>

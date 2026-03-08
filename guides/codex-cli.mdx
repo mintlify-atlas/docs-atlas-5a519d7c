@@ -1,0 +1,510 @@
+---
+title: Codex CLI Guide
+description: How Impeccable works with Codex CLI's custom prompts and skills system
+---
+
+## Overview
+
+Codex CLI uses a hybrid approach: **custom prompts** for user-invokable commands and **Agent Skills** for reference documentation. Impeccable transforms its source format into Codex-compatible prompts with uppercase variable syntax and comprehensive skill files.
+
+<Note>
+Codex CLI is OpenAI's code-focused CLI tool. Skills and custom prompts are available in recent versions.
+</Note>
+
+## Installation
+
+<Steps>
+  <Step title="Install Codex CLI">
+    ```bash
+    npm install -g openai-codex
+    ```
+  </Step>
+  
+  <Step title="Download the bundle">
+    Visit [impeccable.style](https://impeccable.style) and download the Codex CLI bundle, or copy from the repository:
+    
+    ```bash
+    cp -r dist/codex/.codex/* ~/.codex/
+    ```
+  </Step>
+  
+  <Step title="Verify installation">
+    In Codex CLI, type `/prompts:audit` - the command should be recognized.
+  </Step>
+</Steps>
+
+<Warning>
+Codex CLI installs **globally** (in `~/.codex/`), not per-project. All projects share the same skills and prompts.
+</Warning>
+
+## File Structure
+
+Codex CLI uses a unique directory structure:
+
+```
+~/.codex/
+└── skills/
+    ├── audit/
+    │   └── SKILL.md
+    ├── normalize/
+    │   └── SKILL.md
+    └── frontend-design/
+        ├── SKILL.md
+        └── reference/
+            ├── typography.md
+            ├── color-and-contrast.md
+            ├── spatial-design.md
+            ├── motion-design.md
+            ├── interaction-design.md
+            ├── responsive-design.md
+            └── ux-writing.md
+```
+
+### Key Differences
+
+1. **Global installation**: Everything lives in `~/.codex/` (not per-project)
+2. **Skills directory**: Uses `.codex/skills/` (not `.codex/commands/`)
+3. **Prompt prefix**: Commands are invoked as `/prompts:name` (not just `/name`)
+
+## Skill Format
+
+Codex CLI skills use YAML frontmatter with **argument hints**:
+
+<CodeGroup>
+```yaml User-Invokable Skill
+---
+name: audit
+description: Perform comprehensive audit of interface quality
+argument-hint: [AREA=<value>]
+---
+
+Run systematic quality checks on $AREA. If AREA is not specified,
+audit the entire interface...
+```
+
+```yaml Multi-Argument Skill
+---
+name: adapt  
+description: Adapt component for different devices
+argument-hint: <component> [DEVICE=<value>]
+---
+
+Adapt $COMPONENT for $DEVICE. Component is required, device is optional...
+```
+
+```yaml Reference Skill
+---
+name: frontend-design
+description: Comprehensive design principles and anti-patterns
+license: Apache 2.0 - Based on Anthropic's frontend-design skill
+---
+
+Design guidance for Codex...
+```
+</CodeGroup>
+
+## How Arguments Work
+
+Codex CLI uses **uppercase variable syntax** (`$ARGNAME`) instead of lowercase placeholders:
+
+### Argument Syntax
+
+<CodeGroup>
+```bash Without Arguments
+/prompts:audit
+```
+
+```bash With Arguments
+/prompts:audit AREA=checkout
+```
+
+```bash Multiple Arguments
+/prompts:adapt header DEVICE=mobile
+```
+</CodeGroup>
+
+### Variable Transformation
+
+Codex transforms arguments into uppercase variables:
+
+```markdown
+# Source (during build)
+Audit the {{area}} for issues.
+
+# Codex Output
+Audit the $AREA for issues.
+
+# User types: /prompts:audit AREA=checkout
+# Codex receives: Audit the checkout for issues.
+```
+
+### Argument Hints
+
+The `argument-hint` field in frontmatter shows users the expected syntax:
+
+```yaml
+# Optional argument
+argument-hint: [AREA=<value>]
+
+# Required argument  
+argument-hint: <component>
+
+# Multiple arguments
+argument-hint: <component> [DEVICE=<value>]
+```
+
+Codex displays this hint when users type the command name.
+
+## Provider-Specific Transformations
+
+The build system applies these transformations for Codex CLI:
+
+### 1. Uppercase Variables
+
+Argument placeholders become uppercase variables:
+
+<CodeGroup>
+```markdown Source (Lowercase)
+Audit {{area}} for quality issues.
+Focus on {{aspect}} if specified.
+```
+
+```markdown Codex Output (Uppercase)
+Audit $AREA for quality issues.
+Focus on $ASPECT if specified.
+```
+</CodeGroup>
+
+### 2. Argument Hints
+
+Codex generates argument hints from the `args` array:
+
+```yaml
+# Source
+args:
+  - name: area
+    required: false
+  - name: aspect
+    required: true
+
+# Becomes
+argument-hint: <aspect> [AREA=<value>]
+```
+
+Required arguments use `<name>`, optional use `[NAME=<value>]`.
+
+### 3. Skill Structure
+
+Codex CLI uses the Agent Skills standard (same as Cursor and Claude Code) for skill files:
+
+```yaml
+name: audit
+description: Comprehensive quality checks
+argument-hint: [AREA=<value>]
+license: Apache 2.0
+```
+
+### 4. Reference Files
+
+Reference files are copied into `reference/` subdirectories, preserving the full content of domain-specific guides.
+
+## Usage Examples
+
+### Basic Command
+
+```bash
+/prompts:audit
+```
+
+Runs audit on entire interface.
+
+### With Argument
+
+```bash
+/prompts:audit AREA=checkout
+```
+
+Audits the checkout flow.
+
+### Multiple Arguments
+
+```bash
+/prompts:adapt header DEVICE=mobile
+```
+
+Adapts header component for mobile devices.
+
+### Complex Workflow
+
+```bash
+# Quality pass
+/prompts:audit
+/prompts:normalize  
+/prompts:optimize
+/prompts:polish
+
+# Design refinement
+/prompts:critique DESIGN=hero
+/prompts:bolder SECTION=hero
+/prompts:colorize COMPONENT=hero
+/prompts:animate ELEMENT=hero
+```
+
+## Available Skills
+
+Impeccable includes **17 user-invokable prompts** for Codex CLI:
+
+| Command | Arguments | Purpose |
+|---------|-----------|--------|
+| `/prompts:audit` | `[AREA=<value>]` | Technical quality checks (a11y, performance, responsive) |
+| `/prompts:critique` | `[DESIGN=<value>]` | UX design review (hierarchy, clarity, emotional resonance) |
+| `/prompts:normalize` | `[SCOPE=<value>]` | Align with design system standards |
+| `/prompts:polish` | `[COMPONENT=<value>]` | Final pass before shipping |
+| `/prompts:distill` | `[FEATURE=<value>]` | Strip to essence |
+| `/prompts:clarify` | `[COPY=<value>]` | Improve unclear UX copy |
+| `/prompts:optimize` | `[TARGET=<value>]` | Performance improvements |
+| `/prompts:harden` | `[FLOW=<value>]` | Error handling, i18n, edge cases |
+| `/prompts:animate` | `[ELEMENT=<value>]` | Add purposeful motion |
+| `/prompts:colorize` | `[COMPONENT=<value>]` | Introduce strategic color |
+| `/prompts:bolder` | `[SECTION=<value>]` | Amplify boring designs |
+| `/prompts:quieter` | `[SECTION=<value>]` | Tone down overly bold designs |
+| `/prompts:delight` | `[INTERACTION=<value>]` | Add moments of joy |
+| `/prompts:extract` | `[PATTERN=<value>]` | Pull into reusable components |
+| `/prompts:adapt` | `<component> [DEVICE=<value>]` | Adapt for different devices |
+| `/prompts:onboard` | `[FLOW=<value>]` | Design onboarding flows |
+| `/prompts:teach-impeccable` | - | One-time setup: gather design context |
+
+## Codex CLI Features
+
+### Custom Prompts System
+
+Codex CLI organizes user-invokable commands as **custom prompts** with the `/prompts:` prefix:
+
+```bash
+# List all custom prompts
+/prompts:list
+
+# Show prompt details
+/prompts:show audit
+
+# Execute prompt
+/prompts:audit AREA=checkout
+```
+
+### Skills for Reference
+
+Codex treats skills as **reference documentation** rather than invokable commands. They're loaded automatically when prompts reference them:
+
+```markdown
+**First**: Use the frontend-design skill for design principles.
+**Then**: Apply those principles to the task.
+```
+
+### Global Installation
+
+Unlike other providers, Codex skills are **global**:
+
+```bash
+# All projects share these skills
+~/.codex/skills/
+
+# NOT project-specific
+project/.codex/  ❌
+```
+
+This means you install once and all projects benefit.
+
+### Argument Validation
+
+Codex validates arguments based on `argument-hint`:
+
+- Required arguments (`<name>`) must be provided
+- Optional arguments (`[NAME=<value>]`) can be omitted
+- Codex prompts for missing required arguments
+
+## Quirks & Limitations
+
+### Prompts Prefix Required
+
+<Warning>
+Codex commands must use `/prompts:` prefix. Typing `/audit` won't work - use `/prompts:audit` instead.
+</Warning>
+
+### Uppercase Variables Only
+
+Codex uses `$ARGNAME` (uppercase) not `{{argname}}` or `{{args}}`:
+
+```markdown
+✅ Correct: Audit $AREA  
+❌ Wrong: Audit {{area}}
+❌ Wrong: Audit {{args}}
+```
+
+### Global Scope
+
+Skills affect **all projects**. You can't have different skills per project.
+
+### No Per-Project Override
+
+Codex doesn't support project-specific skills. Everything in `~/.codex/` applies globally.
+
+### Argument Syntax
+
+Codex uses `KEY=value` syntax (not space-separated):
+
+```bash
+✅ Correct: /prompts:audit AREA=checkout
+❌ Wrong: /prompts:audit checkout
+❌ Wrong: /prompts:audit area checkout
+```
+
+## Troubleshooting
+
+### Commands Not Found
+
+<Steps>
+  <Step title="Check installation location">
+    Ensure files are in `~/.codex/skills/` (not project directory)
+  </Step>
+  
+  <Step title="Use correct prefix">
+    Type `/prompts:audit` (not `/audit`)
+  </Step>
+  
+  <Step title="Verify file structure">
+    Check that `~/.codex/skills/audit/SKILL.md` exists
+  </Step>
+  
+  <Step title="Restart Codex CLI">
+    Fully quit and restart to reload skills
+  </Step>
+</Steps>
+
+### Arguments Not Working
+
+If `$ARGNAME` appears literally in responses:
+
+1. Verify you're using `KEY=value` syntax (not space-separated)
+2. Check argument name matches the hint exactly (case-sensitive)
+3. Ensure the skill body uses uppercase `$ARGNAME`
+
+### Skills Not Loading
+
+If prompts can't find the `frontend-design` skill:
+
+1. Verify `~/.codex/skills/frontend-design/SKILL.md` exists
+2. Check YAML frontmatter is valid
+3. Ensure `name` field matches directory name
+4. Look for file permission issues
+
+## Migration from Other Providers
+
+### From Cursor or Claude Code
+
+Codex uses uppercase variables:
+
+```markdown
+# Other providers
+Audit {{area}} for issues
+
+# Codex CLI  
+Audit $AREA for issues
+```
+
+### From Gemini CLI
+
+Codex supports named arguments (Gemini only has `{{args}}`):
+
+```markdown
+# Gemini (single args string)
+Adapt {{args}}
+
+# Codex (named variables)
+Adapt $COMPONENT for $DEVICE
+```
+
+### Invocation Changes
+
+Codex requires the `/prompts:` prefix:
+
+```bash
+# Other providers
+/audit
+/normalize
+
+# Codex CLI
+/prompts:audit
+/prompts:normalize
+```
+
+## Best Practices
+
+### 1. Use Descriptive Variable Names
+
+```yaml
+✅ Good
+argument-hint: <component> [DEVICE=<value>]
+Prompt: Adapt $COMPONENT for $DEVICE
+
+❌ Bad
+argument-hint: <x> [Y=<value>]  
+Prompt: Adapt $X for $Y
+```
+
+### 2. Make Arguments Optional When Possible
+
+Design prompts that work with or without arguments:
+
+```markdown
+Audit $AREA. If AREA is not specified, audit the entire interface.
+```
+
+### 3. Leverage Reference Skills
+
+Explicitly invoke comprehensive skills:
+
+```markdown
+**First**: Use the frontend-design skill for anti-patterns.
+**Then**: Apply that knowledge to $COMPONENT.
+```
+
+### 4. Use Argument Hints
+
+Provide clear hints so users know the expected syntax:
+
+```yaml
+# Clear
+argument-hint: <component> [DEVICE=mobile|tablet|desktop]
+
+# Unclear
+argument-hint: stuff
+```
+
+### 5. Chain Prompts for Workflows
+
+Codex excels at sequential refinement:
+
+```bash
+/prompts:audit → /prompts:normalize → /prompts:optimize → /prompts:polish
+/prompts:critique → /prompts:bolder → /prompts:colorize → /prompts:animate
+```
+
+### 6. Remember Global Scope
+
+Since skills are global, design them to work across different projects:
+
+```markdown
+✅ Good: Generic, reusable guidance
+"Follow design system tokens for colors"
+
+❌ Bad: Project-specific assumptions  
+"Use the primary-blue token from our Figma file"
+```
+
+## Learn More
+
+- [Codex CLI Documentation](https://developers.openai.com/codex/)
+- [Codex Custom Prompts](https://developers.openai.com/codex/guides/slash-commands)
+- [Codex Skills System](https://developers.openai.com/codex/skills/)
+- [Agent Skills Specification](https://agentskills.io/specification)
+- [Impeccable Source Code](https://github.com/pbakaus/impeccable)

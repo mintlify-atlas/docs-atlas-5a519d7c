@@ -1,0 +1,143 @@
+---
+title: Audit
+description: Comprehensive interface quality audit across accessibility, performance, theming, and responsive design
+---
+
+The **audit** skill performs systematic quality checks and generates comprehensive reports with prioritized issues and actionable recommendations. It's designed to document problems, not fix them—use other commands like normalize, optimize, and harden to address the issues found.
+
+## When to Use
+
+Use the audit skill when you need to:
+
+- Perform a comprehensive quality check before shipping
+- Identify accessibility, performance, or design issues
+- Generate a prioritized list of improvements needed
+- Assess overall interface quality with specific, actionable feedback
+- Detect AI-generated design patterns and anti-patterns
+
+## Parameters
+
+<ParamField path="area" type="string" optional>
+  The specific feature or area to audit. If not specified, audits the entire interface.
+</ParamField>
+
+## What It Checks
+
+The audit skill runs comprehensive checks across multiple dimensions:
+
+### 1. Accessibility (A11y)
+
+- **Contrast issues**: Text contrast ratios below WCAG standards (4.5:1 or 7:1 for AAA)
+- **Missing ARIA**: Interactive elements without proper roles, labels, or states
+- **Keyboard navigation**: Missing focus indicators, illogical tab order, keyboard traps
+- **Semantic HTML**: Improper heading hierarchy, missing landmarks, divs instead of buttons
+- **Alt text**: Missing or poor image descriptions
+- **Form issues**: Inputs without labels, poor error messaging, missing required indicators
+
+### 2. Performance
+
+- **Layout thrashing**: Reading/writing layout properties in loops
+- **Expensive animations**: Animating layout properties instead of transform/opacity
+- **Missing optimization**: Images without lazy loading, unoptimized assets, missing will-change
+- **Bundle size**: Unnecessary imports, unused dependencies
+- **Render performance**: Unnecessary re-renders, missing memoization
+
+### 3. Theming
+
+- **Hard-coded colors**: Colors not using design tokens
+- **Broken dark mode**: Missing dark mode variants, poor contrast in dark theme
+- **Inconsistent tokens**: Using wrong tokens, mixing token types
+- **Theme switching issues**: Values that don't update on theme change
+
+### 4. Responsive Design
+
+- **Fixed widths**: Hard-coded widths that break on mobile
+- **Touch targets**: Interactive elements smaller than 44x44px
+- **Horizontal scroll**: Content overflow on narrow viewports
+- **Text scaling**: Layouts that break when text size increases
+- **Missing breakpoints**: No mobile/tablet variants
+
+### 5. Anti-Patterns (Critical)
+
+Checks against all **DON'T** guidelines in the frontend-design skill, looking for:
+
+- AI slop tells (AI color palette, gradient text, glassmorphism, hero metrics, card grids, generic fonts)
+- General design anti-patterns (gray on color, nested cards, bounce easing, redundant copy)
+
+## Report Structure
+
+The audit generates a detailed report with the following sections:
+
+<Steps>
+  <Step title="Anti-Patterns Verdict">
+    Pass/fail assessment: Does this look AI-generated? Lists specific tells from the Anti-Patterns section with brutal honesty.
+  </Step>
+  
+  <Step title="Executive Summary">
+    - Total issues found (count by severity)
+    - Most critical issues (top 3-5)
+    - Overall quality score (if applicable)
+    - Recommended next steps
+  </Step>
+  
+  <Step title="Detailed Findings by Severity">
+    Issues organized by Critical, High, Medium, and Low severity. Each issue includes:
+    - Location (component, file, line)
+    - Severity level
+    - Category (Accessibility/Performance/Theming/Responsive)
+    - Description of the issue
+    - Impact on users
+    - WCAG/Standard violated (if applicable)
+    - Recommendation for fixing
+    - Suggested command to use
+  </Step>
+  
+  <Step title="Patterns & Systemic Issues">
+    Identifies recurring problems that indicate systemic issues needing broader fixes.
+  </Step>
+  
+  <Step title="Positive Findings">
+    Notes what's working well—good practices to maintain and exemplary implementations to replicate.
+  </Step>
+  
+  <Step title="Recommendations by Priority">
+    Creates an actionable plan:
+    - Immediate: Critical blockers
+    - Short-term: High-severity issues
+    - Medium-term: Quality improvements
+    - Long-term: Nice-to-haves and optimizations
+  </Step>
+  
+  <Step title="Suggested Commands for Fixes">
+    Maps issues to available commands for addressing them (normalize, optimize, harden, etc.).
+  </Step>
+</Steps>
+
+## Usage Example
+
+```bash
+# Audit entire interface
+/audit
+
+# Audit specific feature
+/audit area="checkout flow"
+```
+
+## Best Practices
+
+- **Document thoroughly**: Explain impact for each issue—why does this matter?
+- **Be actionable**: Focus on what actually matters, not noise
+- **Prioritize ruthlessly**: Everything can't be critical
+- **Celebrate successes**: Include positive findings for what works well
+- **Be specific**: "The submit button" not "some elements"
+- **Verify issues**: Don't report false positives without verification
+
+## Important Notes
+
+<Warning>
+  This is an **audit**, not a fix. The audit skill documents issues thoroughly with clear explanations of impact. Use other commands (normalize, optimize, harden, polish) to fix issues after the audit is complete.
+</Warning>
+
+<Info>
+  The audit skill starts by checking the frontend-design skill for design principles and anti-patterns. Make sure this skill is available for the most comprehensive audit results.
+</Info>

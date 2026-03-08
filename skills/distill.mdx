@@ -1,0 +1,178 @@
+---
+title: Distill
+description: Strip designs to their essence by removing unnecessary complexity
+---
+
+The **distill** skill helps you remove unnecessary complexity from designs, revealing essential elements and creating clarity through ruthless simplification. Great design is simple, powerful, and clean.
+
+## Purpose
+
+Distill focuses on systematic simplification across multiple dimensions:
+- Information architecture and content hierarchy
+- Visual design and styling
+- Layout and structure
+- Interaction patterns and user flows
+- Code organization and complexity
+
+The goal is not to remove features, but to remove obstacles between users and their goals.
+
+## Parameters
+
+<ParamField path="target" type="string" optional>
+  The feature or component to distill. When omitted, analyzes the entire project for simplification opportunities.
+</ParamField>
+
+## When to Use
+
+Use the distill skill when:
+- Designs feel cluttered or overwhelming
+- Too many competing elements demand attention
+- Users report confusion or difficulty finding features
+- Interface has accumulated complexity over time
+- You need to improve focus and clarity
+- Visual noise distracts from core functionality
+
+## Workflow
+
+### 1. Context Gathering (Mandatory)
+
+Before simplifying, the skill gathers critical context:
+- **Target audience**: Who uses this product?
+- **Use cases**: What are users trying to accomplish?
+- **Essential vs nice-to-have**: What's truly necessary?
+
+If this information isn't available or must be inferred, the skill will ask clarifying questions. This prevents simplifying the wrong things, which destroys usability.
+
+### 2. Assess Current State
+
+Analyzes complexity sources:
+- Too many elements competing for attention
+- Excessive variation in colors, fonts, sizes without purpose
+- Information overload with no progressive disclosure
+- Visual noise from unnecessary decorations
+- Confusing hierarchy
+- Feature creep
+
+Identifies the essence:
+- What's the primary user goal?
+- What's necessary vs nice-to-have?
+- What can be removed, hidden, or combined?
+- What's the 20% delivering 80% of value?
+
+### 3. Plan Simplification
+
+Creates a ruthless editing strategy:
+- Core purpose (the ONE thing this accomplishes)
+- Essential elements (truly necessary items)
+- Progressive disclosure opportunities
+- Consolidation possibilities
+
+### 4. Simplify Systematically
+
+#### Information Architecture
+- Reduce scope by removing secondary actions and redundant information
+- Hide complexity behind clear entry points (accordions, modals, step-through flows)
+- Combine related actions and consolidate forms
+- Establish clear hierarchy: ONE primary action, few secondary actions
+- Remove all redundancy
+
+#### Visual Simplification
+- Reduce color palette to 1-2 colors plus neutrals
+- Limit typography to one font family, 3-4 sizes, 2-3 weights
+- Remove decorations that don't serve hierarchy or function
+- Flatten structure and reduce nesting
+- Remove unnecessary cards (use spacing and alignment instead)
+- Apply consistent spacing scale
+
+#### Layout Simplification
+- Replace complex grids with simple vertical flow where possible
+- Move secondary content inline or hide it (remove sidebars)
+- Use available space generously with full-width layouts
+- Maintain consistent alignment
+- Add generous white space
+
+#### Interaction Simplification
+- Reduce choices (paradox of choice is real)
+- Implement smart defaults
+- Use inline actions instead of modal flows
+- Remove unnecessary steps
+- Provide ONE clear CTA, not five competing actions
+
+#### Content Simplification
+- Cut sentences in half, then do it again
+- Use active voice: "Save changes" not "Changes will be saved"
+- Replace jargon with plain language
+- Create scannable structure with short paragraphs and bullet points
+- Remove marketing fluff and redundant copy
+
+#### Code Simplification
+- Remove unused code (dead CSS, unused components)
+- Flatten component trees
+- Consolidate similar styles
+- Reduce variants (does that component need 12 variations or will 3 suffice?)
+
+### 5. Verify Simplification
+
+Ensures improvements actually help:
+- Faster task completion
+- Reduced cognitive load
+- Still complete (all necessary features accessible)
+- Clearer hierarchy
+- Better performance
+
+## Key Principles
+
+<Warning>
+**Simplicity is not about removing features** - it's about removing obstacles between users and their goals. Every element should justify its existence.
+</Warning>
+
+**Never:**
+- Remove necessary functionality
+- Sacrifice accessibility for simplicity
+- Make things so simple they're unclear
+- Remove information users need to make decisions
+- Eliminate hierarchy completely
+- Oversimplify complex domains
+
+## Usage Examples
+
+### Example 1: Simplify a Dashboard
+
+```bash
+/distill dashboard
+```
+
+The skill will:
+1. Analyze current dashboard complexity
+2. Identify competing metrics and visual noise
+3. Propose consolidation of related data
+4. Suggest progressive disclosure for secondary metrics
+5. Simplify color usage and reduce decorative elements
+6. Implement changes and verify improved clarity
+
+### Example 2: General Simplification
+
+```bash
+/distill
+```
+
+Without a target, the skill:
+1. Surveys the entire codebase for complexity
+2. Identifies patterns of over-complication
+3. Prioritizes highest-impact simplification opportunities
+4. Systematically reduces complexity across the project
+
+## Integration
+
+The distill skill automatically loads the **frontend-design** skill to access design principles and anti-patterns before proceeding with simplification work.
+
+## Philosophy
+
+> "Perfection is achieved not when there is nothing more to add, but when there is nothing left to take away." — Antoine de Saint-Exupéry
+
+Simplification requires:
+- **Confidence**: Knowing what to keep
+- **Courage**: Removing the rest
+- **Discipline**: Saying no to good ideas to make room for great execution
+
+The distill skill embodies great taste and judgment, helping you create designs that are focused, clear, and powerful through intentional simplification.

@@ -1,0 +1,656 @@
+---
+title: "Customization"
+description: "How to customize Impeccable commands, add project context, and use /teach-impeccable"
+---
+
+Impeccable is designed to adapt to your project's specific needs. This guide covers how to customize the skills, add project context, and make Impeccable work better for your team.
+
+## Project Context with /teach-impeccable
+
+The most important customization is establishing project-specific design context. The `/teach-impeccable` command is designed for exactly this purpose.
+
+### Why Project Context Matters
+
+Without context, AI makes assumptions based on generic training data. This leads to:
+- Generic design choices (the "AI slop" aesthetic)
+- Decisions that don't match your brand or users
+- Wasted time fixing inappropriate suggestions
+
+With context, every command understands:
+- Who your users are and what they need
+- Your brand personality and aesthetic direction
+- Design principles specific to your product
+- What to avoid (anti-references)
+
+### Running /teach-impeccable
+
+<Steps>
+  <Step title="Run the command">
+    Execute `/teach-impeccable` in your AI tool. This only needs to be done once per project.
+    
+    ```bash
+    /teach-impeccable
+    ```
+    
+    **Codex CLI users:** Use `/prompts:teach-impeccable`
+  </Step>
+  
+  <Step title="Let it explore your codebase">
+    The command will automatically:
+    - Read your README and documentation
+    - Analyze package.json and dependencies
+    - Review existing components and patterns
+    - Examine design tokens and CSS variables
+    - Find brand assets and style guides
+    
+    This helps it understand what you've already established.
+  </Step>
+  
+  <Step title="Answer focused questions">
+    Based on what it found (or didn't find), you'll be asked targeted questions:
+    
+    **Users & Purpose:**
+    - Who uses this? What's their context?
+    - What job are they trying to get done?
+    - What emotions should the interface evoke?
+    
+    **Brand & Personality:**
+    - How would you describe the brand in 3 words?
+    - Any reference sites that capture the right feel?
+    - What should this NOT look like?
+    
+    **Aesthetic Preferences:**
+    - Visual direction? (minimal, bold, elegant, playful, etc.)
+    - Light mode, dark mode, or both?
+    - Any colors that must be used or avoided?
+    
+    **Accessibility:**
+    - Specific requirements (WCAG level, user needs)?
+    - Considerations for reduced motion or color blindness?
+  </Step>
+  
+  <Step title="Review generated context">
+    The command synthesizes your answers into a Design Context section:
+    
+    ```markdown
+    ## Design Context
+    
+    ### Users
+    Software engineers and technical founders who value speed and
+    functionality over decoration. They're working under time pressure
+    and need tools that get out of their way.
+    
+    ### Brand Personality
+    Efficient. Honest. Smart. The interface should feel confident and
+    capable without being flashy. Think Bauhaus, not Baroque.
+    
+    ### Aesthetic Direction
+    Brutally minimal with intentional typography. Dark mode primary.
+    References: Linear, Arc browser, Raycast. Anti-references:
+    Overly colorful dashboards, illustration-heavy UIs.
+    
+    ### Design Principles
+    1. Speed over decoration - every element must justify its existence
+    2. Information density - respect that our users are experts
+    3. Keyboard-first - mouse is secondary
+    4. Dark mode default - light mode as alternative
+    5. Monospace where it adds meaning, not as lazy aesthetic
+    ```
+  </Step>
+  
+  <Step title="Context saved to config">
+    This gets written to your config file:
+    - **Cursor:** `.cursorrules` or `.cursor/rules/impeccable.md`
+    - **Claude Code:** `.claude/rules/impeccable.md`
+    - **Gemini CLI:** `GEMINI.md`
+    - **Codex CLI:** `.codex/rules/impeccable.md`
+    
+    Now every command automatically has this context!
+  </Step>
+</Steps>
+
+### Example: Complete Design Context
+
+<Accordion title="E-commerce Platform Example">
+  ```markdown
+  ## Design Context
+  
+  ### Users
+  Small business owners (boutiques, artisan shops, local retailers)
+  managing their online stores. They're not technical and need an
+  interface that's approachable and confidence-inspiring. They're often
+  multitasking and stressed.
+  
+  ### Brand Personality
+  Approachable. Trustworthy. Empowering. The interface should feel like
+  a helpful assistant, not a complex tool. Warm without being cutesy.
+  
+  ### Aesthetic Direction
+  Clean and friendly with gentle colors. Light mode primary. Generous
+  spacing, large touch targets. References: Shopify, Stripe Dashboard.
+  Anti-references: Dense admin panels, technical/developer-focused UIs.
+  
+  ### Design Principles
+  1. Clarity over cleverness - no jargon or technical terms
+  2. Forgiving design - easy to undo, hard to make mistakes
+  3. Progressive disclosure - start simple, reveal complexity gradually
+  4. Mobile-friendly - many users manage stores from phones
+  5. Accessible - WCAG AA minimum, clear labels, good contrast
+  ```
+</Accordion>
+
+<Accordion title="Developer Tool Example">
+  ```markdown
+  ## Design Context
+  
+  ### Users
+  Professional developers building APIs and backend services. They value
+  speed, information density, and keyboard navigation. They're skeptical
+  of unnecessary design and want tools that respect their expertise.
+  
+  ### Brand Personality
+  Precise. Powerful. No-nonsense. The interface should feel like a
+  professional tool, not a consumer product. Form follows function.
+  
+  ### Aesthetic Direction
+  Technical minimalism with thoughtful typography. Dark mode with high
+  contrast. References: GitHub, VS Code, Vercel. Anti-references:
+  Gradient-heavy UIs, illustration-driven designs, overly playful.
+  
+  ### Design Principles
+  1. Keyboard-first - mouse should be optional for core workflows
+  2. Information density - don't hide complexity behind progressive disclosure
+  3. Fast by default - no unnecessary animations or decorations
+  4. Monospace intentionally - for code and technical content only
+  5. Dark mode primary - respect developer preferences
+  ```
+</Accordion>
+
+---
+
+## Customizing the Frontend-Design Skill
+
+The core `frontend-design` skill can be customized by adding project-specific guidance.
+
+### Adding Custom Anti-Patterns
+
+If your team has specific patterns to avoid, document them in your config:
+
+```markdown
+## Project-Specific Anti-Patterns
+
+**DON'T** use red for primary CTAs - reserved for destructive actions
+**DON'T** use icons without labels - our users aren't familiar with icon meanings
+**DON'T** hide critical functionality behind menus - must be visible by default
+**DON'T** use auto-playing animations - accessibility concern for our audience
+```
+
+### Adding Custom Design Tokens
+
+Document your design tokens so commands reference them:
+
+```markdown
+## Design Tokens
+
+### Colors
+- Primary: oklch(55% 0.2 250) (Deep blue)
+- Secondary: oklch(70% 0.15 180) (Teal)
+- Success: oklch(65% 0.18 145) (Green)
+- Error: oklch(60% 0.2 25) (Warm red)
+- Neutrals: Tinted toward primary (0.01 chroma at 250°)
+
+### Typography
+- Display: Plus Jakarta Sans (700, 800)
+- Body: Inter (400, 500, 600)
+- Mono: JetBrains Mono (code only)
+
+### Spacing Scale
+- Base unit: 4px
+- Scale: 4, 8, 12, 16, 24, 32, 48, 64, 96
+```
+
+### Adding Component Patterns
+
+Document established patterns that commands should follow:
+
+```markdown
+## Component Patterns
+
+### Buttons
+- Primary: Filled background, high contrast text
+- Secondary: Border only, transparent background
+- Ghost: No border, text only
+- Never use more than one primary button per screen section
+
+### Cards
+- Use sparingly - not everything needs a container
+- Border only (no shadows) for consistency
+- 16px padding on mobile, 24px on desktop
+- Never nest cards inside cards
+
+### Forms
+- Labels above inputs, not as placeholders
+- Error messages inline below field
+- Required indicator: red asterisk after label
+- Validation on blur, not on every keystroke
+```
+
+---
+
+## Customizing Individual Commands
+
+You can influence command behavior through your config file.
+
+### Example: Custom /audit Criteria
+
+Add project-specific audit criteria:
+
+```markdown
+## Audit Requirements
+
+When running /audit, also check:
+
+1. **Accessibility**
+   - WCAG AAA compliance (not just AA)
+   - All interactive elements have 48x48px touch targets (not just 44x44px)
+   - Skip links on all pages
+   
+2. **Performance**
+   - Lighthouse score > 95 for all metrics
+   - First Contentful Paint < 1s
+   - No CLS issues
+   
+3. **Internationalization**
+   - All text must support 40% expansion (for German)
+   - RTL support for Arabic and Hebrew
+   - Date formats use Intl API
+```
+
+### Example: Custom /polish Standards
+
+Define your polish standards:
+
+```markdown
+## Polish Standards
+
+When running /polish, ensure:
+
+- All animations use our custom easing: cubic-bezier(0.22, 1, 0.36, 1)
+- Transition durations: 200ms for interactions, 300ms for state changes
+- Focus indicators are 3px solid with our primary color
+- All images have aspect-ratio set to prevent CLS
+- No TODO comments in production code
+- TypeScript strict mode with zero 'any' types
+```
+
+---
+
+## Tool-Specific Customization
+
+Each AI tool has different capabilities for customization.
+
+### Cursor
+
+**Location:** `.cursorrules` or `.cursor/rules/`
+
+**Capabilities:**
+- Add project context to `.cursorrules`
+- Create skill-specific rule files in `.cursor/rules/`
+- Rules are always loaded automatically
+
+**Example structure:**
+```
+project/
+├── .cursorrules                    # General rules + Design Context
+└── .cursor/
+    ├── skills/
+    │   └── frontend-design/
+    │       ├── SKILL.md           # Impeccable skill
+    │       └── reference/         # Design references
+    └── rules/
+        └── impeccable.md          # Custom design rules
+```
+
+### Claude Code
+
+**Location:** `.claude/rules/` or `.claude/skills/`
+
+**Capabilities:**
+- Rich frontmatter with metadata
+- Modular rule files
+- Can reference external documentation
+
+**Example structure:**
+```
+project/
+└── .claude/
+    ├── skills/
+    │   └── frontend-design/
+    │       ├── SKILL.md
+    │       └── reference/
+    ├── rules/
+    │   ├── design-context.md      # From /teach-impeccable
+    │   ├── design-tokens.md       # Token documentation
+    │   └── component-patterns.md  # Pattern library
+    └── commands/
+        └── *.md                   # All 17 commands
+```
+
+### Gemini CLI
+
+**Location:** `GEMINI.md` (root level) or `.gemini/`
+
+**Capabilities:**
+- Import system (`@./filename.md`)
+- Modular documentation
+- TOML commands with custom metadata
+
+**Example structure:**
+```
+project/
+├── GEMINI.md                      # Main file with imports
+├── GEMINI.design-context.md       # Design context
+├── GEMINI.tokens.md               # Design tokens
+└── .gemini/
+    └── commands/
+        └── *.toml                 # All 17 commands
+```
+
+**GEMINI.md example:**
+```markdown
+This project uses Impeccable for frontend design.
+
+@./GEMINI.design-context.md
+@./GEMINI.tokens.md
+
+All commands available: /audit, /critique, /normalize, etc.
+```
+
+### Codex CLI
+
+**Location:** `.codex/` directory
+
+**Capabilities:**
+- Custom prompts with arguments
+- Routing to specialized agents
+- Skills system
+
+**Example structure:**
+```
+project/
+└── .codex/
+    ├── prompts/
+    │   └── *.md                   # Commands as prompts
+    ├── skills/
+    │   └── frontend-design/
+    │       ├── SKILL.md
+    │       └── reference/
+    └── rules/
+        └── design-context.md      # From /teach-impeccable
+```
+
+---
+
+## Best Practices for Customization
+
+<AccordionGroup>
+  <Accordion title="Start with /teach-impeccable">
+    Don't manually write design context. Let `/teach-impeccable` guide you through the process and generate structured context.
+  </Accordion>
+  
+  <Accordion title="Document incrementally">
+    Start with basic context and add more as patterns emerge. Don't try to document everything upfront.
+  </Accordion>
+  
+  <Accordion title="Be specific, not exhaustive">
+    Focus on what makes your project unique. Don't document things that are already standard practice.
+    
+    **Good:** "We use monospace only for code blocks, not as aesthetic choice"
+    
+    **Bad:** "Use good typography" (too vague)
+  </Accordion>
+  
+  <Accordion title="Include anti-references">
+    Saying what NOT to do is often more valuable than saying what to do.
+    
+    "Anti-references: Notion (too playful), Linear (too minimal), Salesforce (too dense)"
+  </Accordion>
+  
+  <Accordion title="Update as you learn">
+    Design context evolves. Update your config as you discover what works and what doesn't.
+  </Accordion>
+  
+  <Accordion title="Share with your team">
+    Commit config files to version control. Everyone should have the same design context.
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Advanced: Creating Custom Commands
+
+You can create your own commands that extend Impeccable.
+
+### Example: Custom /audit-accessibility Command
+
+**Cursor** (`.cursor/commands/audit-accessibility.md`):
+```markdown
+Run comprehensive accessibility audit beyond WCAG AA.
+
+Check for:
+- WCAG AAA compliance
+- Screen reader compatibility (test with NVDA/JAWS)
+- Keyboard-only navigation
+- Focus indicator visibility (3:1 contrast minimum)
+- Touch target sizes (48x48px minimum, not just 44x44px)
+- Color independence (works without color)
+- Reduced motion support
+- High contrast mode support
+- Text zoom to 200%
+
+Generate detailed report with severity ratings and WCAG references.
+```
+
+**Claude Code** (`.claude/commands/audit-accessibility.md`):
+```markdown
+---
+name: audit-accessibility
+description: Comprehensive accessibility audit beyond WCAG AA
+args:
+  - name: area
+    description: Specific component or page to audit
+    required: false
+---
+
+Run comprehensive accessibility audit beyond WCAG AA.
+
+[Same content as above]
+```
+
+**Gemini CLI** (`.gemini/commands/audit-accessibility.toml`):
+```toml
+description = "Comprehensive accessibility audit beyond WCAG AA"
+
+prompt = """
+Run comprehensive accessibility audit beyond WCAG AA.
+
+[Content here]
+
+Focus area: {{args}}
+"""
+```
+
+### Example: Custom /brand-check Command
+
+Check if designs match brand guidelines:
+
+```markdown
+---
+name: brand-check
+description: Verify designs match brand guidelines
+---
+
+Review designs against brand guidelines:
+
+1. **Color Palette**
+   - Primary: oklch(55% 0.2 250) only
+   - Secondary: oklch(70% 0.15 180) only
+   - No other colors except neutrals
+   - All neutrals tinted toward 250°
+
+2. **Typography**
+   - Display: Plus Jakarta Sans only (700, 800 weights)
+   - Body: Inter only (400, 500, 600 weights)
+   - Mono: JetBrains Mono for code only
+   - No other fonts
+
+3. **Spacing**
+   - All spacing must be multiple of 4px
+   - No arbitrary values (23px, 31px, etc.)
+
+4. **Components**
+   - All buttons use standard variants (primary, secondary, ghost)
+   - No custom button styles
+   - Cards use border-only style, no shadows
+
+Report any deviations with specific locations and corrections.
+```
+
+---
+
+## Examples by Project Type
+
+<Tabs>
+  <Tab title="SaaS Dashboard">
+    ```markdown
+    ## Design Context
+    
+    ### Users
+    Business analysts and operations managers tracking KPIs.
+    Need at-a-glance insights, not deep exploration.
+    
+    ### Brand Personality
+    Professional. Trustworthy. Clear. No fluff.
+    
+    ### Aesthetic Direction
+    Clean and data-focused. Light mode. References: Amplitude,
+    Mixpanel. Anti-references: Colorful illustration-heavy UIs.
+    
+    ### Design Principles
+    1. Data clarity - charts and metrics take priority
+    2. Scannable hierarchy - should understand page in 3 seconds
+    3. Consistent patterns - same visualization = same meaning
+    4. Responsive - works on tablets and small laptops
+    5. Fast loading - dashboard renders in < 2s
+    ```
+  </Tab>
+  
+  <Tab title="Marketing Site">
+    ```markdown
+    ## Design Context
+    
+    ### Users
+    Potential customers discovering the product for first time.
+    Skeptical, comparison shopping, need to be convinced.
+    
+    ### Brand Personality
+    Confident. Energetic. Bold. Stand out from competitors.
+    
+    ### Aesthetic Direction
+    Dramatic and memorable. Dark mode with vibrant accents.
+    References: Stripe, Vercel, Linear. Anti-references:
+    Generic SaaS templates, stock photography.
+    
+    ### Design Principles
+    1. Hero moment - landing page makes immediate impact
+    2. Show, don't tell - product screenshots and demos
+    3. Fast performance - optimized for SEO and conversion
+    4. Clear CTAs - obvious path to signup/demo
+    5. Mobile-first - most traffic is mobile
+    ```
+  </Tab>
+  
+  <Tab title="Content Platform">
+    ```markdown
+    ## Design Context
+    
+    ### Users
+    Readers consuming long-form content. Need comfortable
+    reading experience without distractions.
+    
+    ### Brand Personality
+    Thoughtful. Refined. Editorial. Respect for content.
+    
+    ### Aesthetic Direction
+    Editorial minimalism with beautiful typography. Light mode
+    primary. References: Medium, Substack, iA Writer.
+    Anti-references: Busy news sites, ad-heavy layouts.
+    
+    ### Design Principles
+    1. Typography first - reading experience is everything
+    2. Generous whitespace - content needs room to breathe
+    3. Minimal chrome - UI gets out of the way
+    4. Fast loading - readers are impatient
+    5. Accessible - 4.5:1 contrast minimum, readable at all sizes
+    ```
+  </Tab>
+</Tabs>
+
+---
+
+## Troubleshooting Customization
+
+<AccordionGroup>
+  <Accordion title="Commands not using my context">
+    **Problem:** Commands give generic suggestions despite having design context.
+    
+    **Solutions:**
+    - Verify context is in correct config file location
+    - Restart your AI tool to reload config
+    - Make context more specific (avoid vague statements)
+    - Reference context explicitly: "Check Design Context section in config"
+  </Accordion>
+  
+  <Accordion title="/teach-impeccable not creating file">
+    **Problem:** Command runs but doesn't write to config file.
+    
+    **Solutions:**
+    - Check file permissions in project directory
+    - Verify correct config file path for your tool
+    - Look for existing Design Context section (might be updating)
+    - Check if tool's working directory is project root
+  </Accordion>
+  
+  <Accordion title="Custom commands not recognized">
+    **Problem:** Created custom command but tool doesn't see it.
+    
+    **Solutions:**
+    - Verify file is in correct commands directory
+    - Check file name matches command name
+    - Restart AI tool to reload commands
+    - For Gemini CLI, check TOML syntax is valid
+    - For Codex CLI, use `/prompts:` prefix
+  </Accordion>
+  
+  <Accordion title="Context conflicts with skill guidelines">
+    **Problem:** Project context contradicts Impeccable's design principles.
+    
+    **Solutions:**
+    - Be explicit about overrides: "For this project, ignore guideline about..."
+    - Use "Project-Specific" headers to clarify precedence
+    - Consider if Impeccable is the right tool (might need different approach)
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Commands Overview" icon="list" href="/usage/commands-overview">
+    Complete reference of all 17 commands
+  </Card>
+  <Card title="Best Practices" icon="star" href="/usage/best-practices">
+    When to use which commands and workflow recommendations
+  </Card>
+</CardGroup>

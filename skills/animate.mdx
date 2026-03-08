@@ -1,0 +1,168 @@
+---
+title: Animate
+description: Review a feature and enhance it with purposeful animations, micro-interactions, and motion effects that improve usability and delight.
+---
+
+The **animate** skill analyzes features and strategically adds animations and micro-interactions that enhance understanding, provide feedback, and create delight.
+
+## When to Use
+
+Use this skill when you need to:
+- Add visual feedback to user actions
+- Smooth jarring state transitions
+- Create delight through motion
+- Guide user attention
+- Improve perceived performance
+
+## Parameters
+
+<ParamField path="target" type="string" optional>
+  The feature or component to animate (optional)
+</ParamField>
+
+## How It Works
+
+### 1. Context Gathering (Mandatory)
+
+The skill requires understanding:
+- **Target audience** (critical)
+- **Desired use-cases** (critical)
+- **Brand personality** (playful vs serious, energetic vs calm)
+- **Performance constraints**
+
+<Warning>
+The skill will ask clarifying questions if this context cannot be inferred from the codebase. Do NOT proceed without answers - guessing leads to inappropriate or excessive animation.
+</Warning>
+
+### 2. Animation Assessment
+
+Identifies opportunities where motion would improve the experience:
+
+- **Missing feedback** - Actions without visual acknowledgment
+- **Jarring transitions** - Instant state changes that feel abrupt
+- **Unclear relationships** - Spatial or hierarchical relationships that aren't obvious
+- **Lack of delight** - Functional but joyless interactions
+- **Missed guidance** - Opportunities to direct attention
+
+### 3. Animation Categories
+
+<AccordionGroup>
+  <Accordion title="Entrance Animations">
+    - Page load choreography with staggered reveals (100-150ms delays)
+    - Hero section dramatic entrances
+    - Scroll-triggered content reveals
+    - Modal/drawer smooth entry
+  </Accordion>
+
+  <Accordion title="Micro-interactions">
+    - **Button feedback**: Hover scale (1.02-1.05), click press (0.95 → 1)
+    - **Form interactions**: Input focus, validation animations
+    - **Toggle switches**: Smooth slide + color transition (200-300ms)
+    - **Like/favorite**: Scale + rotation effects
+  </Accordion>
+
+  <Accordion title="State Transitions">
+    - Show/hide with fade + slide
+    - Expand/collapse with height transitions
+    - Loading states and skeleton screens
+    - Success/error state changes
+  </Accordion>
+
+  <Accordion title="Navigation & Flow">
+    - Page transitions and crossfades
+    - Tab switching indicators
+    - Carousel/slider smooth transforms
+    - Scroll effects and parallax
+  </Accordion>
+
+  <Accordion title="Delight Moments">
+    - Empty state subtle animations
+    - Completed action celebrations
+    - Easter eggs for discovery
+    - Contextual animations (weather, time-of-day)
+  </Accordion>
+</AccordionGroup>
+
+## Technical Guidelines
+
+### Timing by Purpose
+
+- **100-150ms**: Instant feedback (button press, toggle)
+- **200-300ms**: State changes (hover, menu open)
+- **300-500ms**: Layout changes (accordion, modal)
+- **500-800ms**: Entrance animations (page load)
+
+### Recommended Easing Curves
+
+```css
+/* Use these - natural deceleration */
+--ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);    /* Smooth, refined */
+--ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);   /* Slightly snappier */
+--ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);     /* Confident, decisive */
+```
+
+<Warning>
+**AVOID**: Bounce and elastic easing curves - they feel dated and tacky.
+</Warning>
+
+### Performance Best Practices
+
+- **GPU acceleration**: Use `transform` and `opacity`, avoid layout properties
+- **will-change**: Add sparingly for known expensive animations
+- **Monitor FPS**: Ensure 60fps on target devices
+- Exit animations should be ~75% of enter duration
+
+## Accessibility
+
+<Note>
+Always respect `prefers-reduced-motion`. This is mandatory for accessibility compliance.
+</Note>
+
+```css
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+```
+
+## Critical Don'ts
+
+<Warning>
+- **NEVER** use bounce or elastic easing curves
+- **NEVER** animate layout properties (width, height, top, left) - use transform instead
+- **NEVER** use durations over 500ms for feedback
+- **NEVER** animate without purpose
+- **NEVER** ignore `prefers-reduced-motion`
+- **NEVER** animate everything
+- **NEVER** block interaction during animations unless intentional
+</Warning>
+
+## Quality Verification
+
+The skill verifies that animations:
+- Run smoothly at 60fps
+- Feel natural with organic easing
+- Have appropriate timing
+- Work with reduced motion settings
+- Don't block user interactions
+- Add real value to the interface
+
+## Example Usage
+
+```bash
+# Animate a specific component
+/animate target="checkout button"
+
+# Animate entire feature
+/animate target="dashboard page"
+
+# General animation review
+/animate
+```
+
+<Info>
+Remember: Motion should enhance understanding and provide feedback, not just add decoration. Animate with purpose, respect performance constraints, and always consider accessibility.
+</Info>

@@ -1,0 +1,711 @@
+---
+title: "Commands Overview"
+description: "Complete reference of all 17 Impeccable commands with descriptions and use cases"
+---
+
+Impeccable provides 17 specialized commands that guide Claude toward exceptional frontend design. Each command has a specific purpose and can be used independently or as part of a design workflow.
+
+## Quick Reference
+
+<CardGroup cols={2}>
+  <Card title="/teach-impeccable" icon="graduation-cap" href="#teach-impeccable">
+    One-time setup to gather design context
+  </Card>
+  <Card title="/audit" icon="magnifying-glass" href="#audit">
+    Run comprehensive quality checks
+  </Card>
+  <Card title="/critique" icon="comments" href="#critique">
+    Get UX design review and feedback
+  </Card>
+  <Card title="/normalize" icon="arrows-to-circle" href="#normalize">
+    Align with design system standards
+  </Card>
+  <Card title="/polish" icon="sparkles" href="#polish">
+    Final pass before shipping
+  </Card>
+  <Card title="/distill" icon="filter" href="#distill">
+    Strip to essence and remove complexity
+  </Card>
+  <Card title="/clarify" icon="message" href="#clarify">
+    Improve unclear UX copy
+  </Card>
+  <Card title="/optimize" icon="gauge-high" href="#optimize">
+    Improve performance and speed
+  </Card>
+  <Card title="/harden" icon="shield" href="#harden">
+    Handle errors and edge cases
+  </Card>
+  <Card title="/animate" icon="wand-magic-sparkles" href="#animate">
+    Add purposeful motion
+  </Card>
+  <Card title="/colorize" icon="palette" href="#colorize">
+    Introduce strategic color
+  </Card>
+  <Card title="/bolder" icon="bolt" href="#bolder">
+    Amplify boring designs
+  </Card>
+  <Card title="/quieter" icon="volume-low" href="#quieter">
+    Tone down overly bold designs
+  </Card>
+  <Card title="/delight" icon="face-smile" href="#delight">
+    Add moments of joy
+  </Card>
+  <Card title="/extract" icon="cube" href="#extract">
+    Pull into reusable components
+  </Card>
+  <Card title="/adapt" icon="mobile" href="#adapt">
+    Adapt for different devices
+  </Card>
+  <Card title="/onboard" icon="route" href="#onboard">
+    Design onboarding flows
+  </Card>
+</CardGroup>
+
+## Complete Command Reference
+
+### Setup & Planning
+
+#### /teach-impeccable
+
+**Purpose:** One-time setup that gathers design context for your project and saves it to your AI config file.
+
+**When to use:**
+- First time using Impeccable on a project
+- Starting a new project that needs design guidelines
+- Establishing persistent design context for all future sessions
+
+**What it does:**
+1. Explores your codebase to understand existing design patterns
+2. Asks targeted questions about users, brand, and aesthetic preferences
+3. Creates a "Design Context" section in your config file
+4. Establishes design principles that guide all future work
+
+**Example:**
+```bash
+/teach-impeccable
+```
+
+**Syntax:** `Codex CLI uses /prompts:teach-impeccable`
+
+---
+
+### Quality Assurance
+
+#### /audit
+
+**Purpose:** Run comprehensive quality checks across accessibility, performance, theming, and responsive design.
+
+**When to use:**
+- Before major releases or deployments
+- After implementing new features
+- When you suspect quality issues but aren't sure what they are
+- As part of regular quality reviews
+
+**What it checks:**
+- **Accessibility:** Contrast ratios, ARIA labels, keyboard navigation, semantic HTML
+- **Performance:** Layout thrashing, expensive animations, bundle size
+- **Theming:** Hard-coded colors, dark mode issues, token consistency
+- **Responsive:** Fixed widths, touch targets, horizontal scroll
+- **Anti-patterns:** AI slop detection, generic design patterns
+
+**Output:** Detailed report with severity ratings, impact analysis, and suggested commands for fixes.
+
+**Example:**
+```bash
+/audit              # Audit entire interface
+/audit header       # Audit specific area
+```
+
+**Syntax:** `Codex CLI uses /prompts:audit`
+
+<Accordion title="Example Audit Report Structure">
+  ```markdown
+  ## Anti-Patterns Verdict
+  Pass/Fail with specific tells from AI slop detection
+  
+  ## Executive Summary
+  - Total issues: 23 (3 Critical, 8 High, 9 Medium, 3 Low)
+  - Most critical: Missing alt text on hero images
+  - Recommended: Run /normalize for theming issues
+  
+  ## Critical Issues
+  1. Hero image missing alt text (WCAG A violation)
+     - Impact: Screen reader users can't access content
+     - Fix: Add descriptive alt text
+     - Command: /harden
+  ```
+</Accordion>
+
+---
+
+#### /critique
+
+**Purpose:** Evaluate design effectiveness from a UX perspective with actionable feedback.
+
+**When to use:**
+- After completing initial designs
+- When designs feel "off" but you can't pinpoint why
+- Before presenting designs to stakeholders
+- When you want honest feedback on visual hierarchy and emotional resonance
+
+**What it evaluates:**
+- AI slop detection (most important)
+- Visual hierarchy and information flow
+- Information architecture and navigation
+- Emotional resonance and brand alignment
+- Discoverability and affordance
+- Composition and balance
+- Typography as communication
+- Color with purpose
+
+**Output:** Design director-style feedback with specific issues prioritized by impact.
+
+**Example:**
+```bash
+/critique                    # Critique entire interface
+/critique checkout-form      # Critique specific feature
+```
+
+**Syntax:** `Codex CLI uses /prompts:critique`
+
+---
+
+### Consistency & Standards
+
+#### /normalize
+
+**Purpose:** Align designs with your design system standards and ensure consistency.
+
+**When to use:**
+- After adding new features that don't match existing patterns
+- When migrating to a new design system
+- When designs have drifted from standards over time
+- After bringing in external code or components
+
+**What it normalizes:**
+- Typography: Fonts, sizes, weights, line heights
+- Color & theme: Design tokens, palette consistency
+- Spacing & layout: Spacing scale, grid alignment
+- Components: Replace custom implementations with design system versions
+- Motion & interaction: Animation timing and patterns
+- Responsive behavior: Breakpoints and responsive patterns
+
+**Example:**
+```bash
+/normalize                  # Normalize entire interface
+/normalize dashboard        # Normalize specific feature
+```
+
+**Syntax:** `Codex CLI uses /prompts:normalize`
+
+---
+
+#### /polish
+
+**Purpose:** Final quality pass before shipping. Fixes alignment, spacing, consistency, and detail issues.
+
+**When to use:**
+- Right before shipping or deploying
+- After all features are functionally complete
+- When designs are "good" but need to be "great"
+- As the last step in your workflow
+
+**What it polishes:**
+- **Visual alignment:** Pixel-perfect alignment, consistent spacing
+- **Typography:** Hierarchy consistency, line length, kerning
+- **Color & contrast:** WCAG compliance, token usage, tinted neutrals
+- **Interaction states:** All states implemented (hover, focus, active, disabled, loading, error, success)
+- **Micro-interactions:** Smooth transitions, consistent easing
+- **Content & copy:** Consistent terminology and capitalization
+- **Icons & images:** Consistent style, proper alignment, alt text
+- **Forms & inputs:** Proper labels, validation, tab order
+- **Edge cases:** Loading, empty, error, and success states
+- **Code quality:** Remove console logs, unused imports, commented code
+
+**Example:**
+```bash
+/polish                    # Polish entire interface
+/polish checkout-form      # Polish specific area
+```
+
+**Syntax:** `Codex CLI uses /prompts:polish`
+
+<Accordion title="Polish Checklist">
+  The polish command works through a comprehensive checklist:
+  - ☐ Visual alignment perfect at all breakpoints
+  - ☐ Spacing uses design tokens consistently
+  - ☐ Typography hierarchy consistent
+  - ☐ All interactive states implemented
+  - ☐ All transitions smooth (60fps)
+  - ☐ Contrast ratios meet WCAG AA
+  - ☐ Keyboard navigation works
+  - ☐ No console errors or warnings
+  - ☐ No layout shift on load
+</Accordion>
+
+---
+
+### Simplification & Clarity
+
+#### /distill
+
+**Purpose:** Strip designs to their essence by removing unnecessary complexity.
+
+**When to use:**
+- When interfaces feel cluttered or overwhelming
+- After feature creep has added too much
+- When user feedback indicates confusion
+- When you want to reveal the essential elements
+
+**What it removes:**
+- Unnecessary elements and visual noise
+- Excessive variation in colors, fonts, and styles
+- Redundant information and duplicate content
+- Unnecessary borders, shadows, and decorations
+- Confusing hierarchy and competing actions
+
+**Approach:**
+- Identifies the ONE primary user goal
+- Removes or hides everything not essential
+- Uses progressive disclosure for complexity
+- Consolidates related actions and content
+
+**Example:**
+```bash
+/distill                  # Simplify entire interface
+/distill settings-page    # Simplify specific area
+```
+
+**Syntax:** `Codex CLI uses /prompts:distill`
+
+<Warning>
+  `/distill` requires understanding target audience and use cases. The command will ask clarifying questions if it can't infer context from the codebase.
+</Warning>
+
+---
+
+#### /clarify
+
+**Purpose:** Improve unclear UX copy, error messages, microcopy, labels, and instructions.
+
+**When to use:**
+- When users report confusion about interface text
+- After support tickets reveal unclear messaging
+- When error messages aren't helpful
+- During content audits
+
+**What it improves:**
+- **Error messages:** Explain what went wrong and how to fix it
+- **Form labels:** Clear, specific labels and instructions
+- **Button & CTA text:** Specific action descriptions
+- **Help text:** Add value beyond repeating labels
+- **Empty states:** Guide users toward action
+- **Success messages:** Confirm what happened and what's next
+- **Loading states:** Set expectations for wait times
+- **Confirmation dialogs:** State specific action and consequences
+
+**Principles:**
+- Be specific, concise, and active
+- Write like explaining to a smart friend
+- No jargon without explanation
+- Don't blame users for errors
+
+**Example:**
+```bash
+/clarify                  # Improve all copy
+/clarify error-messages   # Focus on specific area
+```
+
+**Syntax:** `Codex CLI uses /prompts:clarify`
+
+---
+
+### Performance & Resilience
+
+#### /optimize
+
+**Purpose:** Improve interface performance across loading speed, rendering, animations, and bundle size.
+
+**When to use:**
+- When Lighthouse scores are below targets
+- After user feedback about slow performance
+- Before major launches or traffic spikes
+- When adding heavy features or dependencies
+
+**What it optimizes:**
+- **Loading:** Images, JavaScript bundles, CSS, fonts
+- **Rendering:** Layout thrashing, paint/composite, DOM size
+- **Animations:** GPU acceleration, 60fps performance
+- **Network:** Request count, API optimization, compression
+- **Core Web Vitals:** LCP, FID/INP, CLS improvements
+
+**Approach:**
+- Measures before and after
+- Targets biggest bottlenecks first
+- Tests on real devices with real network conditions
+
+**Example:**
+```bash
+/optimize               # Optimize entire interface
+/optimize dashboard     # Optimize specific area
+```
+
+**Syntax:** `Codex CLI uses /prompts:optimize`
+
+---
+
+#### /harden
+
+**Purpose:** Improve interface resilience through error handling, i18n, text overflow, and edge case management.
+
+**When to use:**
+- Before production deployments
+- When preparing for international markets
+- After discovering edge case bugs
+- When designs only work with perfect data
+
+**What it hardens:**
+- **Text overflow:** Long names, descriptions, titles
+- **Internationalization:** Translation expansion, RTL support, character sets
+- **Error handling:** Network failures, API errors, validation errors
+- **Edge cases:** Empty states, loading states, large datasets
+- **Input validation:** Client and server-side validation
+- **Accessibility:** Keyboard nav, screen readers, reduced motion
+
+**Example:**
+```bash
+/harden                 # Harden entire interface
+/harden user-profile    # Harden specific feature
+```
+
+**Syntax:** `Codex CLI uses /prompts:harden`
+
+---
+
+### Visual Enhancement
+
+#### /animate
+
+**Purpose:** Add purposeful animations, micro-interactions, and motion effects that improve usability.
+
+**When to use:**
+- When interfaces feel static or lifeless
+- To provide feedback for user actions
+- To guide attention and explain behavior
+- To add delight and personality
+
+**What it animates:**
+- **Entrance animations:** Page load choreography, staggered reveals
+- **Micro-interactions:** Button feedback, form interactions, toggles
+- **State transitions:** Show/hide, expand/collapse, loading states
+- **Navigation:** Page transitions, tab switching, scroll effects
+- **Feedback:** Hover hints, drag & drop, copy confirmations
+
+**Technical approach:**
+- Uses exponential easing (ease-out-quart/quint/expo)
+- GPU-accelerated with transform and opacity
+- Respects `prefers-reduced-motion`
+- Targets 60fps performance
+
+**Example:**
+```bash
+/animate              # Add animations throughout
+/animate hero-section # Animate specific area
+```
+
+**Syntax:** `Codex CLI uses /prompts:animate`
+
+<Warning>
+  Never use bounce or elastic easing - they feel dated. Always respect `prefers-reduced-motion` for accessibility.
+</Warning>
+
+---
+
+#### /colorize
+
+**Purpose:** Add strategic color to features that are too monochromatic or lack visual interest.
+
+**When to use:**
+- When interfaces are pure grayscale or lack warmth
+- To add personality and emotional tone
+- To improve hierarchy and wayfinding
+- To encode meaning through semantic color
+
+**What it colorizes:**
+- **Semantic color:** Success, error, warning, info states
+- **Accent colors:** Primary actions, links, icons, headers
+- **Backgrounds:** Tinted neutrals, colored sections, gradients
+- **Data visualization:** Charts, graphs, heatmaps
+- **Borders & accents:** Colored borders, underlines, dividers
+
+**Principles:**
+- Choose 2-4 colors max beyond neutrals
+- 60/30/10 rule (dominant/secondary/accent)
+- Maintain WCAG contrast ratios
+- Never use gray text on colored backgrounds
+- Always tint neutrals (no pure gray or pure black)
+
+**Example:**
+```bash
+/colorize               # Add color throughout
+/colorize dashboard     # Colorize specific area
+```
+
+**Syntax:** `Codex CLI uses /prompts:colorize`
+
+---
+
+#### /bolder
+
+**Purpose:** Amplify safe or boring designs to make them more visually interesting and memorable.
+
+**When to use:**
+- When designs are too safe or generic
+- When interfaces lack personality or impact
+- When you need to stand out from competitors
+- When brand allows for more creative expression
+
+**What it amplifies:**
+- **Typography:** Replace generic fonts, extreme scale, weight contrast
+- **Color:** Increase saturation, bold palettes, sharp accents
+- **Spatial drama:** Extreme scale jumps, asymmetric layouts, generous space
+- **Visual effects:** Dramatic shadows, background treatments, custom elements
+- **Motion:** Entrance choreography, scroll effects, micro-interactions
+
+**Example:**
+```bash
+/bolder               # Make entire interface bolder
+/bolder landing-page  # Amplify specific area
+```
+
+**Syntax:** `Codex CLI uses /prompts:bolder`
+
+<Warning>
+  **AI Slop Trap:** When making things "bolder," avoid cyan/purple gradients, glassmorphism, and neon accents on dark backgrounds. These are generic AI defaults. The command includes explicit anti-pattern checks.
+</Warning>
+
+---
+
+#### /quieter
+
+**Purpose:** Tone down overly bold or overwhelming designs while maintaining visual interest.
+
+**When to use:**
+- When designs are too loud or overwhelming
+- When user feedback indicates visual fatigue
+- When moving from marketing to product interface
+- When brand calls for more refined aesthetic
+
+**What it quiets:**
+- Reduce color saturation and palette size
+- Simplify typography and reduce extreme scale
+- Remove excessive effects and decorations
+- Calm motion and reduce animation intensity
+- Increase whitespace and breathing room
+
+**Example:**
+```bash
+/quieter              # Tone down entire interface
+/quieter hero-section # Quiet specific area
+```
+
+**Syntax:** `Codex CLI uses /prompts:quieter`
+
+---
+
+### User Experience
+
+#### /delight
+
+**Purpose:** Add moments of joy, personality, and unexpected touches that make interfaces memorable.
+
+**When to use:**
+- When interfaces are functional but joyless
+- To differentiate from competitors
+- To improve user engagement and satisfaction
+- When brand personality allows for playfulness
+
+**What it adds:**
+- **Micro-interactions:** Satisfying button presses, hover surprises
+- **Personality in copy:** Playful errors, encouraging empty states
+- **Illustrations:** Custom illustrations, animated icons
+- **Satisfying interactions:** Drag & drop, toggles, progress celebrations
+- **Easter eggs:** Hidden discoveries, seasonal touches
+- **Celebration moments:** Success animations, milestone recognition
+
+**Principles:**
+- Delight amplifies, never blocks
+- Surprise and discovery over announcement
+- Appropriate to context and emotional moment
+- Remains fresh with repeated use
+
+**Example:**
+```bash
+/delight              # Add delight throughout
+/delight onboarding   # Focus on specific area
+```
+
+**Syntax:** `Codex CLI uses /prompts:delight`
+
+---
+
+### Component & Code
+
+#### /extract
+
+**Purpose:** Pull repeated patterns into reusable components, improving maintainability and consistency.
+
+**When to use:**
+- When you notice repeated UI patterns
+- During code reviews that flag duplication
+- When scaling design system
+- As part of refactoring efforts
+
+**What it extracts:**
+- Repeated UI patterns into components
+- Common styles into shared utilities
+- Design tokens from hard-coded values
+- Layout patterns into reusable templates
+
+**Example:**
+```bash
+/extract              # Identify and extract patterns
+/extract card-layouts # Focus on specific pattern
+```
+
+**Syntax:** `Codex CLI uses /prompts:extract`
+
+---
+
+### Responsive & Adaptive
+
+#### /adapt
+
+**Purpose:** Adapt interfaces for different devices, screen sizes, and contexts.
+
+**When to use:**
+- When designs only work on desktop
+- Before mobile launch
+- When user analytics show poor mobile experience
+- When creating responsive layouts
+
+**What it adapts:**
+- Mobile-first responsive layouts
+- Touch target sizes (44x44px minimum)
+- Navigation patterns for small screens
+- Content hierarchy for different viewports
+- Performance for mobile devices
+- Input methods (touch vs mouse)
+
+**Example:**
+```bash
+/adapt                # Adapt entire interface
+/adapt navigation     # Adapt specific component
+```
+
+**Syntax:** `Codex CLI uses /prompts:adapt`
+
+---
+
+#### /onboard
+
+**Purpose:** Design effective onboarding flows that help users get started and discover value.
+
+**When to use:**
+- When creating new product experiences
+- When user activation rates are low
+- When users don't understand how to get started
+- When adding complex features that need explanation
+
+**What it designs:**
+- First-time user experiences
+- Progressive disclosure of features
+- Empty states that teach
+- Tooltips and guided tours
+- Success moments and celebrations
+
+**Example:**
+```bash
+/onboard              # Design complete onboarding
+/onboard dashboard    # Onboard specific feature
+```
+
+**Syntax:** `Codex CLI uses /prompts:onboard`
+
+---
+
+## Command Combinations
+
+Commands work well in sequence. Here are recommended workflows:
+
+### Quality Workflow
+```bash
+/audit          # Find all issues
+/normalize      # Fix design system inconsistencies
+/harden         # Handle edge cases
+/polish         # Final pass before shipping
+```
+
+### Design Enhancement Workflow
+```bash
+/critique       # Get design feedback
+/distill        # Simplify complexity
+/colorize       # Add strategic color
+/animate        # Add purposeful motion
+/polish         # Final refinement
+```
+
+### Performance Workflow
+```bash
+/audit          # Identify performance issues
+/optimize       # Fix bottlenecks
+/harden         # Ensure resilience
+/polish         # Final checks
+```
+
+### New Project Workflow
+```bash
+/teach-impeccable  # Setup design context (one-time)
+/critique          # Review initial designs
+/normalize         # Ensure consistency
+/animate           # Add interactions
+/audit             # Quality check
+/polish            # Final pass
+```
+
+---
+
+## Tips for Using Commands
+
+<Tip>
+  **Focus on specific areas:** Most commands accept an optional argument to focus on a specific feature, component, or area. This provides more targeted results.
+  
+  Example: `/audit checkout-form` instead of just `/audit`
+</Tip>
+
+<Tip>
+  **Run /teach-impeccable first:** This one-time setup command establishes design context that makes all other commands more effective.
+</Tip>
+
+<Tip>
+  **Don't skip /audit:** Running `/audit` before polishing helps you understand what needs fixing and prevents wasted effort.
+</Tip>
+
+<Tip>
+  **Polish last:** `/polish` should always be the final step after functionality is complete. Polishing incomplete features wastes time.
+</Tip>
+
+<Tip>
+  **Combine complementary commands:** Use `/distill` to simplify, then `/polish` to refine. Use `/colorize` and `/animate` together for visual enhancement.
+</Tip>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Customization Guide" icon="wrench" href="/usage/customization">
+    Learn how to customize commands and add project context
+  </Card>
+  <Card title="Best Practices" icon="star" href="/usage/best-practices">
+    When to use which commands and workflow recommendations
+  </Card>
+</CardGroup>

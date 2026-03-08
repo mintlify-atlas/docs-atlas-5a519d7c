@@ -1,0 +1,160 @@
+---
+title: Bolder
+description: Amplify safe or boring designs to make them more visually interesting and stimulating. Increases impact while maintaining usability.
+---
+
+The **bolder** skill increases visual impact and personality in designs that are too safe, generic, or visually underwhelming, creating more engaging and memorable experiences.
+
+## When to Use
+
+Use this skill when:
+- Designs feel generic or derivative
+- Everything has similar visual weight (flat hierarchy)
+- Interface lacks personality or memorability
+- Visual scale is too timid
+- Design needs more drama or confidence
+
+## Parameters
+
+<ParamField path="target" type="string" optional>
+  The feature or component to make bolder (optional)
+</ParamField>
+
+## How It Works
+
+### 1. Context Gathering (Mandatory)
+
+The skill requires understanding:
+- **Target audience** (critical)
+- **Desired use-cases** (critical)
+- **Brand personality/tone**
+- **Constraints** (brand guidelines, accessibility, performance)
+
+<Warning>
+The skill will ask clarifying questions if context cannot be inferred. Do NOT proceed without answers - guessing leads to generic AI slop.
+</Warning>
+
+### 2. Current State Assessment
+
+Identifies what makes the design feel too safe:
+
+- **Generic choices**: System fonts, basic colors, standard layouts
+- **Timid scale**: Everything medium-sized with no drama
+- **Low contrast**: Everything has similar visual weight
+- **Static**: No motion, energy, or life
+- **Predictable**: Standard patterns with no surprises
+- **Flat hierarchy**: Nothing stands out
+
+<Note>
+"Bolder" doesn't mean chaotic or garish. It means distinctive, memorable, and confident. Think intentional drama, not random chaos.
+</Note>
+
+### 3. AI Slop Warning
+
+<Warning>
+**CRITICAL**: When making things "bolder," AI defaults to tired tricks:
+- Cyan/purple gradients
+- Glassmorphism
+- Neon accents on dark backgrounds
+- Gradient text on metrics
+
+These are the OPPOSITE of bold - they're generic. Bold means distinctive, not "more effects."
+</Warning>
+
+## Amplification Strategies
+
+<AccordionGroup>
+  <Accordion title="Typography Amplification">
+    - Replace generic fonts with distinctive choices
+    - Create extreme scale (3x-5x differences, not 1.5x)
+    - Use weight contrast (900 with 200, not 600 with 400)
+    - Try variable fonts, display fonts, condensed/extended widths
+    - Use monospace as intentional accent (not lazy "dev tool" default)
+  </Accordion>
+
+  <Accordion title="Color Intensification">
+    - Increase saturation (but not neon)
+    - Introduce unexpected color combinations (avoid purple-blue gradient)
+    - Let one bold color own 60% of design
+    - Use sharp, high-contrast accents
+    - Replace pure grays with tinted grays
+    - Create rich, intentional gradients (not generic)
+  </Accordion>
+
+  <Accordion title="Spatial Drama">
+    - Make important elements 3-5x larger
+    - Break the grid - let hero elements escape containers
+    - Use asymmetric layouts with tension
+    - Create generous white space (100-200px gaps, not 20-40px)
+    - Layer elements intentionally for depth
+  </Accordion>
+
+  <Accordion title="Visual Effects">
+    - Dramatic shadows for elevation (not generic drop shadows)
+    - Background treatments: mesh patterns, noise textures, geometric patterns
+    - Add texture & depth (NOT glassmorphism - it's overused AI slop)
+    - Thick borders, decorative frames, custom shapes
+    - Custom illustrative elements reinforcing brand
+  </Accordion>
+
+  <Accordion title="Motion & Animation">
+    - Entrance choreography with 50-100ms stagger delays
+    - Scroll effects: parallax, reveal animations
+    - Satisfying micro-interactions
+    - Smooth transitions using ease-out-quart/quint/expo
+    - NEVER use bounce or elastic (they cheapen the effect)
+  </Accordion>
+
+  <Accordion title="Composition Boldness">
+    - Create clear focal points with dramatic treatment
+    - Use diagonal flows (escape horizontal/vertical rigidity)
+    - Full-bleed elements using viewport width/height
+    - Try unexpected proportions (70/30, 80/20 splits)
+  </Accordion>
+</AccordionGroup>
+
+## Critical Don'ts
+
+<Warning>
+- **NEVER** add effects randomly without purpose (chaos ≠ bold)
+- **NEVER** sacrifice readability for aesthetics
+- **NEVER** make everything bold (then nothing is bold)
+- **NEVER** ignore accessibility (must still meet WCAG)
+- **NEVER** overwhelm with motion (animation fatigue is real)
+- **NEVER** copy trendy aesthetics blindly (bold means distinctive)
+</Warning>
+
+## The AI Slop Test
+
+<Note>
+**The test**: If you showed this to someone and said "AI made this bolder," would they believe you immediately? 
+
+If yes, you've failed. Bold means distinctive, not "more AI effects."
+</Note>
+
+## Quality Verification
+
+The skill verifies:
+- **NOT AI slop**: Doesn't look like every other AI-generated design
+- **Still functional**: Users can accomplish tasks without distraction
+- **Coherent**: Everything feels intentional and unified
+- **Memorable**: Users will remember this experience
+- **Performant**: All effects run smoothly
+- **Accessible**: Still meets accessibility standards
+
+## Example Usage
+
+```bash
+# Make specific component bolder
+/bolder target="hero section"
+
+# Make entire page bolder
+/bolder target="landing page"
+
+# General bold review
+/bolder
+```
+
+<Info>
+Remember: Bold design is confident design. It takes risks, makes statements, and creates memorable experiences. But bold without strategy is just loud. Be intentional, be dramatic, be unforgettable.
+</Info>

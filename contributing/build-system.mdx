@@ -1,0 +1,437 @@
+---
+title: "Build System"
+description: "Understanding the Impeccable build system"
+---
+
+## Overview
+
+The Impeccable build system transforms feature-rich source files into provider-specific formats. It's built with Bun for fast performance and uses zero external dependencies.
+
+## Architecture
+
+The build system is modular and focused:
+
+```
+scripts/
+├── build.js                 # Main orchestrator (~250 lines)
+└── lib/
+    ├── utils.js             # Shared utilities
+    ├── zip.js               # ZIP generation
+    └── transformers/        # Provider-specific transformers
+        ├── index.js         # Registry exports
+        ├── cursor.js        # Cursor transformer
+        ├── claude-code.js   # Claude Code transformer
+        ├── gemini.js        # Gemini CLI transformer
+        ├── codex.js         # Codex CLI transformer
+        ├── agents.js        # VS Code Copilot transformer
+        └── kiro.js          # Kiro transformer
+```
+
+## Build Commands
+
+```bash
+# Build all provider formats
+bun run build
+
+# Clean dist folder
+bun run clean
+
+# Rebuild from scratch
+bun run rebuild
+
+# Start development server
+bun run dev
+
+# Run tests
+bun run test
+```
+
+## Build Process
+
+The build follows these steps:
+
+### 1. Build Static Assets
+
+```javascript
+// Build Tailwind CSS
+buildTailwindCSS();
+
+// Bundle HTML, JS, CSS with Bun
+await buildStaticSite();
+```
+
+The website uses:
+- Tailwind CLI for CSS compilation (handles `@theme` directive)
+- Bun's built-in bundler for HTML/JS
+- Minification and source maps
+
+### 2. Read Source Files
+
+```javascript
+const { skills } = readSourceFiles(ROOT_DIR);
+const patterns = readPatterns(ROOT_DIR);
+```
+
+Reads all source files from:
+- `source/skills/*.md` - Skill definitions
+- `source/commands/*.md` - Command definitions
+
+### 3. Transform for Each Provider
+
+```javascript
+transformCursor(skills, DIST_DIR, patterns);
+transformClaudeCode(skills, DIST_DIR, patterns);
+transformGemini(skills, DIST_DIR, patterns);
+transformCodex(skills, DIST_DIR, patterns);
+transformAgents(skills, DIST_DIR, patterns);
+transformKiro(skills, DIST_DIR, patterns);
+```
+
+Each transformer handles provider-specific format requirements.
+
+### 4. Create Prefixed Versions
+
+```javascript
+const prefixOptions = { prefix: 'i-', outputSuffix: '-prefixed' };
+transformCursor(skills, DIST_DIR, patterns, prefixOptions);
+// ... repeat for all providers
+```
+
+Generates prefixed versions (e.g., `/i-audit`) to avoid conflicts.
+
+### 5. Assemble Universal Bundles
+
+```javascript
+assembleUniversal(DIST_DIR);          // Unprefixed
+assembleUniversal(DIST_DIR, '-prefixed'); // Prefixed
+```
+
+Combines all provider outputs into a single directory.
+
+### 6. Create ZIP Bundles
+
+```javascript
+await createAllZips(DIST_DIR);
+```
+
+Generates downloadable ZIP files for each provider and universal bundles.
+
+### 7. Sync to Local Development
+
+```javascript
+copyDirSync(skillsSrc, skillsDest);
+```
+
+Copies Claude Code output to `.claude/` for local development.
+
+## Core Utilities
+
+### parseFrontmatter(content)
+
+Extracts YAML frontmatter and body from a markdown file:
+
+```javascript
+const { frontmatter, body } = parseFrontmatter(content);
+// frontmatter: { name: 'skill-name', description: '...' }
+// body: 'Skill instructions...'
+```
+
+### readSourceFiles(rootDir)
+
+Recursively reads all source files:
+
+```javascript
+const { skills } = readSourceFiles(ROOT_DIR);
+// skills: [{ path, filename, frontmatter, body, userInvokable }, ...]
+```
+
+### writeFile(filePath, content)
+
+Writes content to a file, creating directories as needed:
+
+```javascript
+writeFile('dist/cursor/.cursor/commands/audit.md', body);
+```
+
+## Transformer Pattern
+
+Each provider has a dedicated transformer function:
+
+```javascript
+export function transformProviderName(skills, distDir, patterns, options = {}) {
+  const { prefix = '', outputSuffix = '' } = options;
+  const outputDir = path.join(distDir, `provider-name${outputSuffix}`);
+  
+  // Clean output directory
+  if (fs.existsSync(outputDir)) {
+    fs.rmSync(outputDir, { recursive: true });
+  }
+  
+  // Transform each skill
+  for (const skill of skills) {
+    // Provider-specific transformation logic
+    const transformed = transformSkillForProvider(skill, prefix);
+    writeFile(outputPath, transformed);
+  }
+  
+  console.log(`✓ Provider: ${skillCount} skills`);
+}
+```
+
+## Provider-Specific Details
+
+### Cursor Transformer
+
+**Location**: `scripts/lib/transformers/cursor.js`
+
+**Output**: `dist/cursor/.cursor/`
+
+**Transformations**:
+- Commands: Strip frontmatter, body only
+- Skills: Full Agent Skills standard with YAML frontmatter
+
+```javascript
+// Commands: body only (no frontmatter support)
+writeFile(
+  `dist/cursor/.cursor/commands/${name}.md`,
+  body
+);
+
+// Skills: Agent Skills standard
+writeFile(
+  `dist/cursor/.cursor/skills/${name}/SKILL.md`,
+  `---\n${yamlFrontmatter}\n---\n\n${body}`
+);
+```
+
+### Claude Code Transformer
+
+**Location**: `scripts/lib/transformers/claude-code.js`
+
+**Output**: `dist/claude-code/.claude/`
+
+**Transformations**:
+- Keeps full YAML frontmatter for both commands and skills
+- No transformations needed
+
+```javascript
+// Full format preserved
+writeFile(
+  `dist/claude-code/.claude/skills/${name}/SKILL.md`,
+  content
+);
+```
+
+### Gemini Transformer
+
+**Location**: `scripts/lib/transformers/gemini.js`
+
+**Output**: `dist/gemini/`
+
+**Transformations**:
+- Commands: Convert to TOML format
+- Skills: Modular files with `@import` syntax
+- Transform `{{argname}}` → `{{args}}`
+
+```javascript
+// Commands: TOML format
+const toml = `description = "${description}"\nprompt = """\n${body}\n"""`;
+
+// Skills: Modular with imports
+const mainFile = skills.map(s => 
+  `@./GEMINI.${s.name}.md`
+).join('\n');
+```
+
+### Codex Transformer
+
+**Location**: `scripts/lib/transformers/codex.js`
+
+**Output**: `dist/codex/.codex/`
+
+**Transformations**:
+- Commands: Custom prompt format with `argument-hint`
+- Skills: Agent Skills standard
+- Transform `{{argname}}` → `$ARGNAME`
+
+```javascript
+// Commands: Custom format
+const transformed = `---\ndescription: ${description}\nargument-hint: ${hint}\n---\n\n${transformedBody}`;
+
+// Transform placeholders
+body.replace(/\{\{(\w+)\}\}/g, (_, name) => `$${name.toUpperCase()}`);
+```
+
+## Output Structure
+
+The build generates:
+
+```
+dist/
+├── cursor/                  # Cursor format
+│   └── .cursor/
+│       ├── commands/*.md
+│       └── skills/*/SKILL.md
+├── cursor-prefixed/         # Prefixed version
+├── claude-code/             # Claude Code format
+│   └── .claude/
+├── claude-code-prefixed/
+├── gemini/                  # Gemini CLI format
+│   ├── .gemini/
+│   └── GEMINI*.md
+├── gemini-prefixed/
+├── codex/                   # Codex CLI format
+│   └── .codex/
+├── codex-prefixed/
+├── agents/                  # VS Code Copilot format
+├── agents-prefixed/
+├── kiro/                    # Kiro format
+├── kiro-prefixed/
+├── universal/               # All providers combined
+├── universal-prefixed/
+└── zips/                    # Downloadable bundles
+    ├── cursor.zip
+    ├── claude-code.zip
+    └── ...
+```
+
+## ZIP Generation
+
+**Location**: `scripts/lib/zip.js`
+
+Creates ZIP bundles for:
+- Individual providers (e.g., `cursor.zip`)
+- Universal bundles (all providers)
+- Prefixed versions
+
+```javascript
+export async function createAllZips(distDir) {
+  const providers = ['cursor', 'claude-code', 'gemini', 'codex', 'agents', 'kiro'];
+  
+  for (const provider of providers) {
+    await createZip(
+      path.join(distDir, provider),
+      path.join(distDir, 'zips', `${provider}.zip`)
+    );
+  }
+}
+```
+
+## Performance
+
+Bun provides significant performance benefits:
+
+- **Faster execution**: 2-4x faster than Node.js
+- **Native TypeScript**: No compilation needed
+- **Built-in bundler**: Fast HTML/JS/CSS bundling
+- **Zero dependencies**: No node_modules overhead
+
+**Typical build times**:
+- Full build: ~2-3 seconds
+- Clean rebuild: ~3-4 seconds
+
+## Development Tips
+
+### Watch Mode
+
+For active development, use:
+
+```bash
+# Terminal 1: Watch source files
+watch -n 1 bun run build
+
+# Terminal 2: Run dev server
+bun run dev
+```
+
+### Testing Transformers
+
+Test a single transformer:
+
+```javascript
+// In build.js, comment out others:
+// transformCursor(skills, DIST_DIR, patterns);
+transformClaudeCode(skills, DIST_DIR, patterns);
+// transformGemini(skills, DIST_DIR, patterns);
+// transformCodex(skills, DIST_DIR, patterns);
+```
+
+### Debugging
+
+Add console.log statements in transformers:
+
+```javascript
+console.log('Skill:', skill.frontmatter.name);
+console.log('Output path:', outputPath);
+console.log('Content:', content.slice(0, 100));
+```
+
+## Extending the Build System
+
+### Adding a New Provider
+
+1. **Create transformer**: `scripts/lib/transformers/newprovider.js`
+
+```javascript
+export function transformNewProvider(skills, distDir, patterns, options = {}) {
+  const { prefix = '', outputSuffix = '' } = options;
+  const outputDir = path.join(distDir, `newprovider${outputSuffix}`);
+  
+  // Your transformation logic
+  
+  console.log(`✓ New Provider: ${skills.length} skills`);
+}
+```
+
+2. **Export from registry**: `scripts/lib/transformers/index.js`
+
+```javascript
+export { transformNewProvider } from './newprovider.js';
+```
+
+3. **Call from build**: `scripts/build.js`
+
+```javascript
+import { transformNewProvider } from './lib/transformers/index.js';
+
+transformNewProvider(skills, DIST_DIR, patterns);
+transformNewProvider(skills, DIST_DIR, patterns, prefixOptions);
+```
+
+### Adding New Source Types
+
+1. **Define format**: Create `source/newtype/` directory
+2. **Add parser**: Update `readSourceFiles()` in `utils.js`
+3. **Update transformers**: Handle new type in each transformer
+
+## Troubleshooting
+
+### Build Fails with YAML Parsing Errors
+
+- Check frontmatter indentation (YAML is indent-sensitive)
+- Ensure `---` delimiters are on their own lines
+- Verify colons have spaces after them
+
+### Output Doesn't Match Expectations
+
+- Check transformer for your provider
+- Verify source file frontmatter structure
+- Run `bun run rebuild` for clean build
+
+### ZIP Generation Fails
+
+- Ensure output directories exist
+- Check file permissions
+- Verify ZIP library is working
+
+### Performance Issues
+
+- Profile with `console.time()` / `console.timeEnd()`
+- Check for unnecessary file operations
+- Ensure directories are cleaned properly
+
+## Related
+
+- [Contributing Overview](/contributing/overview) - Getting started
+- [Architecture](/contributing/architecture) - System design
+- [Adding Content](/contributing/adding-content) - Adding skills/commands

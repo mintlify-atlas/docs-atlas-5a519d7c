@@ -1,0 +1,384 @@
+---
+title: Skill System
+description: How Impeccable's skill system works, from source to distribution
+---
+
+Impeccable uses a sophisticated build system to maintain **one source of truth** for design skills and commands, then automatically transform them into provider-specific formats. Each AI tool has different capabilities, so we adapt the output rather than limiting the source.
+
+## Architecture Overview
+
+Impeccable uses **Option A: Feature-Rich Source** architecture:
+
+<Steps>
+  <Step title="Source Files">
+    Full metadata with YAML frontmatter, args, descriptions. Located in `source/` directory.
+  </Step>
+  <Step title="Build System">
+    Transforms source → provider-specific formats using Bun. Located in `scripts/` directory.
+  </Step>
+  <Step title="Distribution">
+    Committed output files for 6 providers in `dist/` directory. Users can copy directly without build tools.
+  </Step>
+</Steps>
+
+### Why Option A?
+
+**Different providers have different capabilities:**
+
+- **Cursor**: No frontmatter or arguments support (lowest common denominator)
+- **Claude Code**: Full YAML frontmatter, arguments, modular files
+- **Gemini CLI**: TOML commands, modular skills with imports
+- **Codex CLI**: Custom prompt format, arguments as variables
+- **Agents**: Agent Skills standard for VS Code Copilot, Antigravity
+- **Kiro**: Custom skill format
+
+Instead of limiting all providers to Cursor's capabilities, we:
+1. Author with full metadata in source files
+2. Generate full-featured versions for providers that support it
+3. Generate downgraded versions for Cursor
+
+<Info>
+This allows each provider to use its native features while maintaining a single source of truth.
+</Info>
+
+## Source File Format
+
+All skills follow the Agent Skills specification with YAML frontmatter:
+
+```yaml
+---
+name: skill-name
+description: Clear description of what this skill provides
+license: License info (optional)
+---
+
+Skill instructions for the LLM here.
+```
+
+### Skills vs Commands
+
+Impeccable previously distinguished between skills and commands, but has now unified to a **skills-only architecture**:
+
+- **Skills** can be user-invokable (like commands) or non-invokable (like traditional skills)
+- The `userInvokable: true` frontmatter flag determines if a skill appears as a slash command
+- This simplifies the codebase while maintaining the same functionality
+
+<CardGroup cols={2}>
+  <Card title="User-Invokable Skills" icon="terminal">
+    Skills with `userInvokable: true` appear as slash commands like `/audit`, `/polish`, `/critique`
+  </Card>
+  <Card title="Reference Skills" icon="book">
+    Skills like `frontend-design` are loaded automatically and provide context, not direct commands
+  </Card>
+</CardGroup>
+
+## Build System
+
+The build system uses **Bun** for fast, zero-config builds. It follows a modular transformer pattern:
+
+### Architecture
+
+```
+scripts/
+├── build.js              # Main orchestrator (~255 lines)
+├── lib/
+│   ├── utils.js          # Shared functions (parsing, file I/O)
+│   ├── zip.js            # ZIP bundle generation
+│   └── transformers/     # Provider-specific transformers
+│       ├── cursor.js     # Strips frontmatter
+│       ├── claude-code.js # Full featured
+│       ├── gemini.js     # TOML commands + modular skills
+│       ├── codex.js      # Custom prompt format
+│       ├── agents.js     # Agent Skills standard
+│       ├── kiro.js       # Kiro format
+│       └── index.js      # Transformer registry
+```
+
+### Build Process
+
+<Steps>
+  <Step title="Read Source Files">
+    Parse all skills with YAML frontmatter from `source/.claude/skills/`
+  </Step>
+  <Step title="Transform for Each Provider">
+    Apply provider-specific transformations (6 providers × 2 versions = 12 outputs)
+  </Step>
+  <Step title="Assemble Universal">
+    Combine all provider outputs into universal bundles
+  </Step>
+  <Step title="Create ZIPs">
+    Generate downloadable ZIP files for each provider
+  </Step>
+  <Step title="Build Website">
+    Compile Tailwind CSS and bundle static site with Bun
+  </Step>
+</Steps>
+
+Run the build:
+
+```bash
+bun run build
+```
+
+<Tip>
+Bun is 2-4x faster than Node.js and includes TypeScript support, package management, and bundling—no additional tools needed.
+</Tip>
+
+## Provider Transformations
+
+Each provider has a focused transformer file (~30-85 lines). Here's how each works:
+
+### 1. Cursor (Agent Skills Standard)
+
+**Format**: Agent Skills standard
+
+- **Skills**: `dist/cursor/.cursor/skills/{name}/SKILL.md`
+  - Full YAML frontmatter with name/description
+  - Reference files in skill subdirectories
+- **Installation**: Extract ZIP into project root, creates `.cursor/` folder
+- **Limitation**: Requires Cursor nightly channel
+
+```yaml
+# Example: SKILL.md with frontmatter
+---
+name: audit
+description: Run technical quality checks
+---
+
+Instructions...
+```
+
+### 2. Claude Code (Full Featured)
+
+**Format**: Full YAML frontmatter (matches [Anthropic Skills spec](https://github.com/anthropics/skills))
+
+- **Skills**: `dist/claude-code/.claude/skills/{name}/SKILL.md`
+- **Preserves**: All metadata, all args
+- **Installation**: Extract ZIP into project root or `~/.claude/` for global
+
+<Check>
+This is the reference implementation—full metadata, modular structure, maximum flexibility.
+</Check>
+
+### 3. Gemini CLI (Full Featured)
+
+**Format**: Modular with imports
+
+- **Skills**: `dist/gemini/GEMINI.{name}.md` (root level)
+  - Main `GEMINI.md` uses `@./GEMINI.{name}.md` import syntax
+  - Gemini automatically loads imported files for better context management
+- **Installation**: Extract ZIP into project root, creates `.gemini/` folder + skill files
+
+```markdown
+# GEMINI.md
+@./GEMINI.frontend-design.md
+@./GEMINI.audit.md
+```
+
+### 4. Codex CLI (Full Featured)
+
+**Format**: Agent Skills standard
+
+- **Skills**: `dist/codex/.codex/skills/{name}/SKILL.md`
+  - Same SKILL.md format as Claude Code with YAML frontmatter
+  - Reference files in skill subdirectories
+- **Installation**: Extract ZIP into project root, creates `.codex/` folder
+
+### 5. Agents (VS Code Copilot + Antigravity)
+
+**Format**: Agent Skills standard
+
+- **Skills**: `dist/agents/.agents/skills/{name}/SKILL.md`
+  - Implements [agentskills.io specification](https://agentskills.io/specification)
+  - Works with VS Code Copilot, Antigravity, and other Agent Skills-compatible tools
+- **Installation**: Extract ZIP into project root, creates `.agents/` folder
+
+### 6. Kiro
+
+**Format**: Kiro custom format
+
+- **Skills**: `dist/kiro/.kiro/skills/{name}/SKILL.md`
+- **Installation**: Extract ZIP into project root, creates `.kiro/` folder
+
+## Prefixed Versions
+
+All providers are built in two versions:
+
+<CardGroup cols={2}>
+  <Card title="Standard" icon="slash">
+    Commands like `/audit`, `/polish`, `/critique`
+  </Card>
+  <Card title="Prefixed" icon="i-cursor">
+    Commands prefixed with `i-`: `/i-audit`, `/i-polish`, `/i-critique`. Useful for avoiding conflicts with existing commands.
+  </Card>
+</CardGroup>
+
+The build system generates both automatically:
+
+```javascript
+// Standard version
+transformClaudeCode(skills, DIST_DIR, patterns);
+
+// Prefixed version
+transformClaudeCode(skills, DIST_DIR, patterns, { 
+  prefix: 'i-', 
+  outputSuffix: '-prefixed' 
+});
+```
+
+## Universal Bundle
+
+The universal bundle contains all providers in one package:
+
+```
+universal/
+├── .cursor/    → Cursor
+├── .claude/    → Claude Code
+├── .gemini/    → Gemini CLI (+ root-level files)
+├── .codex/     → Codex CLI
+├── .agents/    → VS Code Copilot, Antigravity
+├── .kiro/      → Kiro
+└── README.txt  → Installation instructions
+```
+
+<Info>
+These are hidden folders (dotfiles). On macOS, press **Cmd+Shift+.** in Finder to see them.
+</Info>
+
+## Key Design Decisions
+
+### Why Commit dist/?
+
+End users can copy files directly without needing build tools. This makes installation trivial—just download and extract.
+
+### Why Separate Transformers?
+
+- Each provider ~30-85 lines, easy to understand
+- Can modify one without affecting others
+- Easy to add new providers (just add a new transformer file)
+
+### Why Bun?
+
+<CardGroup cols={2}>
+  <Card title="Speed" icon="bolt">
+    Much faster than Node.js (2-4x)
+  </Card>
+  <Card title="All-in-One" icon="box">
+    Runtime + package manager + bundler
+  </Card>
+  <Card title="Zero Config" icon="magic">
+    TypeScript native, no configuration needed
+  </Card>
+  <Card title="Compatible" icon="check">
+    Works with existing Node.js code
+  </Card>
+</CardGroup>
+
+### Why Modular Skills?
+
+For Gemini and other providers that support it:
+
+- **Better context management**: Load only what's needed
+- **Cleaner organization**: Each skill is independent
+- **Native imports**: Gemini uses `@file.md` syntax to load dependencies
+
+## Adding New Content
+
+To add a new skill or update existing ones:
+
+<Steps>
+  <Step title="Edit Source Files">
+    Create or modify files in `source/.claude/skills/`. Always edit source, never edit `dist/` directly.
+  </Step>
+  <Step title="Add Frontmatter">
+    Include YAML frontmatter with `name`, `description`, and `userInvokable` (if it's a command).
+  </Step>
+  <Step title="Write Instructions">
+    Write the skill body with clear instructions for the LLM.
+  </Step>
+  <Step title="Build">
+    Run `bun run build` to generate all provider outputs.
+  </Step>
+  <Step title="Test">
+    Test with your provider to verify the transformation works correctly.
+  </Step>
+  <Step title="Commit">
+    Commit both source and dist files to keep them in sync.
+  </Step>
+</Steps>
+
+<Warning>
+**Source is truth**: Always edit `source/`, never edit `dist/` directly. The build system overwrites `dist/` on every run.
+</Warning>
+
+## Website Integration
+
+The build system also handles the website at impeccable.style:
+
+### Tech Stack
+
+- **Frontend**: Vanilla JavaScript, modern CSS
+- **Styling**: Tailwind CSS v4 with `@theme` directive
+- **Development**: Bun server with native routes (`server/index.js`)
+- **Production**: Vercel Functions with Bun runtime (`/api` directory)
+
+### Dual Server Setup
+
+<CardGroup cols={2}>
+  <Card title="Development" icon="laptop-code">
+    Monolithic Bun server at `server/index.js` for fast local iteration
+  </Card>
+  <Card title="Production" icon="cloud">
+    Individual Vercel Functions in `/api` directory for serverless deployment
+  </Card>
+</CardGroup>
+
+Both share the same handler logic from `server/lib/api-handlers.js`—zero duplication.
+
+### API Endpoints
+
+| Endpoint | Purpose |
+|----------|----------|
+| `/` | Homepage (static HTML) |
+| `/api/skills` | JSON list of all skills |
+| `/api/commands` | JSON list of all commands |
+| `/api/download/[type]/[provider]/[id]` | Individual file download |
+| `/api/download/bundle/[provider]` | ZIP bundle download |
+
+## Transformer Pattern
+
+Each transformer follows the same interface:
+
+```javascript
+export function transformProviderName(skills, distDir, patterns, options = {}) {
+  const { prefix = '', outputSuffix = '' } = options;
+  const outputDir = path.join(distDir, `provider-name${outputSuffix}`);
+  
+  // 1. Filter to user-invokable skills
+  const invokableSkills = skills.filter(s => s.userInvokable);
+  
+  // 2. Transform each skill
+  for (const skill of skills) {
+    // Provider-specific transformation logic
+  }
+  
+  // 3. Write to output directory
+  console.log(`✓ Provider Name: ${skills.length} skills`);
+}
+```
+
+This pattern makes it easy to:
+- Add new providers (just implement the interface)
+- Test transformations in isolation
+- Maintain consistency across providers
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Design Principles" icon="compass" href="/concepts/design-principles">
+    Learn the design principles encoded in the skills
+  </Card>
+  <Card title="Contributing" icon="code-pull-request" href="/contributing/overview">
+    Guidelines for contributing to Impeccable
+  </Card>
+</CardGroup>

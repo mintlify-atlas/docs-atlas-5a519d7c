@@ -1,0 +1,935 @@
+---
+title: "Best Practices"
+description: "When to use which commands, workflow recommendations, and tips for best results"
+---
+
+This guide covers when to use which commands, recommended workflows, and tips for getting the best results from Impeccable.
+
+## Command Selection Guide
+
+Choosing the right command for your situation:
+
+### When Starting a New Project
+
+<Steps>
+  <Step title="Run /teach-impeccable first">
+    Establish design context before doing any design work. This one-time setup makes all other commands more effective.
+    
+    ```bash
+    /teach-impeccable
+    ```
+  </Step>
+  
+  <Step title="Build initial features">
+    Focus on functionality first. Don't worry about polish yet.
+  </Step>
+  
+  <Step title="Run /critique for feedback">
+    Get design direction and identify major issues.
+    
+    ```bash
+    /critique
+    ```
+  </Step>
+  
+  <Step title="Run /normalize if needed">
+    If you have a design system, align everything to it.
+    
+    ```bash
+    /normalize
+    ```
+  </Step>
+  
+  <Step title="Add enhancements">
+    Use `/colorize`, `/animate`, or `/delight` to add personality.
+    
+    ```bash
+    /colorize
+    /animate
+    ```
+  </Step>
+  
+  <Step title="Run /audit for quality check">
+    Find accessibility, performance, and responsive issues.
+    
+    ```bash
+    /audit
+    ```
+  </Step>
+  
+  <Step title="Run /polish before shipping">
+    Final pass to fix all the little details.
+    
+    ```bash
+    /polish
+    ```
+  </Step>
+</Steps>
+
+---
+
+### When Fixing Design Issues
+
+**Problem:** Interface looks generic or AI-generated
+
+**Solution:**
+```bash
+/critique      # Identify AI slop patterns
+/bolder        # Make more distinctive (if appropriate)
+/colorize      # Add strategic color
+/animate       # Add purposeful motion
+```
+
+---
+
+**Problem:** Interface is too complex or cluttered
+
+**Solution:**
+```bash
+/critique      # Understand what's not working
+/distill       # Simplify ruthlessly
+/clarify       # Improve unclear copy
+/polish        # Refine the simplified version
+```
+
+---
+
+**Problem:** Inconsistent design across features
+
+**Solution:**
+```bash
+/audit         # Document all inconsistencies
+/normalize     # Align with design system
+/extract       # Pull patterns into reusable components
+/polish        # Final consistency pass
+```
+
+---
+
+**Problem:** Performance issues
+
+**Solution:**
+```bash
+/audit         # Identify performance bottlenecks
+/optimize      # Fix loading and rendering issues
+/harden        # Ensure resilience under load
+```
+
+---
+
+**Problem:** Accessibility failures
+
+**Solution:**
+```bash
+/audit         # Find all accessibility issues
+/harden        # Fix edge cases and resilience
+/polish        # Ensure all states work correctly
+```
+
+---
+
+**Problem:** Interface lacks personality
+
+**Solution:**
+```bash
+/critique      # Understand what's missing
+/colorize      # Add strategic color (if too gray)
+/animate       # Add micro-interactions
+/delight       # Add moments of joy
+/polish        # Refine all the details
+```
+
+---
+
+## Recommended Workflows
+
+### Quality Assurance Workflow
+
+Use this before major releases:
+
+<Steps>
+  <Step title="Comprehensive audit">
+    ```bash
+    /audit
+    ```
+    
+    Review the full report. Prioritize Critical and High severity issues.
+  </Step>
+  
+  <Step title="Fix design system issues">
+    ```bash
+    /normalize
+    ```
+    
+    Address theming and consistency problems first.
+  </Step>
+  
+  <Step title="Harden edge cases">
+    ```bash
+    /harden
+    ```
+    
+    Fix error handling, i18n, and text overflow issues.
+  </Step>
+  
+  <Step title="Optimize performance">
+    ```bash
+    /optimize
+    ```
+    
+    Address any performance bottlenecks identified in audit.
+  </Step>
+  
+  <Step title="Final polish">
+    ```bash
+    /polish
+    ```
+    
+    Sweep for alignment, spacing, states, and micro-issues.
+  </Step>
+  
+  <Step title="Re-audit to verify">
+    ```bash
+    /audit
+    ```
+    
+    Confirm all issues are resolved.
+  </Step>
+</Steps>
+
+**When to use:** Before production deployments, major releases, or quarterly quality reviews.
+
+---
+
+### Design Enhancement Workflow
+
+Use this to improve existing interfaces:
+
+<Steps>
+  <Step title="Get design critique">
+    ```bash
+    /critique
+    ```
+    
+    Understand what's working and what's not from a UX perspective.
+  </Step>
+  
+  <Step title="Simplify if needed">
+    If critique identifies complexity or clutter:
+    ```bash
+    /distill
+    ```
+  </Step>
+  
+  <Step title="Add visual interest">
+    Based on critique findings:
+    ```bash
+    /colorize     # If too monochromatic
+    /bolder       # If too safe/generic
+    /quieter      # If too overwhelming
+    ```
+  </Step>
+  
+  <Step title="Add motion">
+    ```bash
+    /animate
+    ```
+    
+    Enhance with purposeful micro-interactions.
+  </Step>
+  
+  <Step title="Add personality">
+    If brand personality allows:
+    ```bash
+    /delight
+    ```
+  </Step>
+  
+  <Step title="Final refinement">
+    ```bash
+    /polish
+    ```
+  </Step>
+</Steps>
+
+**When to use:** When designs are functionally complete but need elevation, or when user feedback indicates designs are boring or forgettable.
+
+---
+
+### Pre-Launch Workflow
+
+Use this right before shipping:
+
+<Steps>
+  <Step title="Run comprehensive audit">
+    ```bash
+    /audit
+    ```
+    
+    Get complete picture of quality issues.
+  </Step>
+  
+  <Step title="Fix critical issues first">
+    Address all Critical and High severity items from audit report.
+  </Step>
+  
+  <Step title="Harden for production">
+    ```bash
+    /harden
+    ```
+    
+    Ensure resilience with error handling, i18n, edge cases.
+  </Step>
+  
+  <Step title="Optimize performance">
+    ```bash
+    /optimize
+    ```
+    
+    Meet performance targets for launch.
+  </Step>
+  
+  <Step title="Adapt for mobile">
+    If mobile launch:
+    ```bash
+    /adapt
+    ```
+  </Step>
+  
+  <Step title="Final polish pass">
+    ```bash
+    /polish
+    ```
+    
+    Sweep every detail before shipping.
+  </Step>
+  
+  <Step title="Verify with final audit">
+    ```bash
+    /audit
+    ```
+    
+    Confirm everything is ready.
+  </Step>
+</Steps>
+
+**When to use:** 1-2 weeks before launch, after feature complete, before production deployment.
+
+---
+
+### Rapid Iteration Workflow
+
+Use this for quick improvements:
+
+<Steps>
+  <Step title="Quick critique">
+    ```bash
+    /critique specific-component
+    ```
+    
+    Focus on specific area for targeted feedback.
+  </Step>
+  
+  <Step title="Apply relevant command">
+    Based on critique, choose one:
+    ```bash
+    /distill component    # If too complex
+    /clarify component    # If unclear
+    /bolder component     # If too bland
+    /animate component    # If too static
+    ```
+  </Step>
+  
+  <Step title="Quick polish">
+    ```bash
+    /polish component
+    ```
+  </Step>
+</Steps>
+
+**When to use:** During active development, for quick iterations on specific components or features.
+
+---
+
+## Command Pairing Recommendations
+
+### Complementary Pairs
+
+These commands work well together:
+
+<CardGroup cols={2}>
+  <Card title="/audit + /normalize" icon="arrows-spin">
+    **Why:** Audit finds design system inconsistencies, normalize fixes them systematically.
+    
+    **Workflow:**
+    ```bash
+    /audit          # Find theming and consistency issues
+    /normalize      # Fix all design system deviations
+    /audit          # Verify fixes
+    ```
+  </Card>
+  
+  <Card title="/critique + /distill" icon="arrows-spin">
+    **Why:** Critique identifies complexity problems, distill solves them.
+    
+    **Workflow:**
+    ```bash
+    /critique       # "Too many competing actions, unclear hierarchy"
+    /distill        # Strip to essence, clarify hierarchy
+    /critique       # Verify improvement
+    ```
+  </Card>
+  
+  <Card title="/colorize + /animate" icon="arrows-spin">
+    **Why:** Visual enhancement works better with both color and motion.
+    
+    **Workflow:**
+    ```bash
+    /colorize       # Add strategic color
+    /animate        # Add purposeful motion
+    /polish         # Refine both
+    ```
+  </Card>
+  
+  <Card title="/optimize + /harden" icon="arrows-spin">
+    **Why:** Performance and resilience are both production-readiness concerns.
+    
+    **Workflow:**
+    ```bash
+    /optimize       # Fix performance bottlenecks
+    /harden         # Handle edge cases and errors
+    /audit          # Verify both
+    ```
+  </Card>
+</CardGroup>
+
+### Command Sequences
+
+These commands build on each other:
+
+**Simplification sequence:**
+```bash
+/distill        # Remove complexity
+/clarify        # Improve remaining copy
+/polish         # Refine simplified version
+```
+
+**Enhancement sequence:**
+```bash
+/normalize      # Ensure consistency first
+/colorize       # Add color
+/animate        # Add motion
+/delight        # Add personality
+/polish         # Final refinement
+```
+
+**Quality sequence:**
+```bash
+/audit          # Find all issues
+/normalize      # Fix design system issues
+/optimize       # Fix performance issues
+/harden         # Fix resilience issues
+/polish         # Final pass
+/audit          # Verify
+```
+
+---
+
+## Tips for Best Results
+
+### General Best Practices
+
+<AccordionGroup>
+  <Accordion title="Always run /teach-impeccable first">
+    This one-time setup provides context that makes every other command more effective. Don't skip it.
+    
+    **Why it matters:** Without context, commands make generic assumptions based on AI training data. With context, they understand your users, brand, and design principles.
+  </Accordion>
+  
+  <Accordion title="Focus commands on specific areas">
+    Most commands accept an optional argument to focus on a specific component, page, or feature.
+    
+    **Better:**
+    ```bash
+    /audit checkout-flow
+    /polish header-navigation
+    /animate dashboard-cards
+    ```
+    
+    **Less effective:**
+    ```bash
+    /audit
+    /polish
+    /animate
+    ```
+    
+    Focused commands give more detailed, actionable feedback.
+  </Accordion>
+  
+  <Accordion title="Don't skip /audit">
+    Running `/audit` before other commands helps you understand what needs fixing and prevents wasted effort.
+    
+    **Why:** You might polish components that need to be removed, or optimize code that's already fast enough.
+  </Accordion>
+  
+  <Accordion title="Polish last, not first">
+    Don't run `/polish` on incomplete features. It's wasted effort.
+    
+    **Right order:**
+    1. Build functionality
+    2. Run `/critique` or `/audit`
+    3. Fix major issues
+    4. Run `/polish`
+    
+    **Wrong order:**
+    1. Build half the functionality
+    2. Run `/polish` (wastes time)
+    3. Realize you need to change it
+    4. Polish again (more wasted time)
+  </Accordion>
+  
+  <Accordion title="Use /critique before /audit">
+    **`/critique`** evaluates UX and design effectiveness.
+    **`/audit`** checks technical quality.
+    
+    Run critique first to catch fundamental design problems before sweating technical details.
+  </Accordion>
+  
+  <Accordion title="Commit to a direction">
+    When commands ask questions (like `/distill`, `/animate`, `/bolder`), provide clear answers. Don't say "whatever you think is best."
+    
+    **Why:** Impeccable is opinionated, but it needs your context to make the right choices.
+  </Accordion>
+</AccordionGroup>
+
+---
+
+### Command-Specific Tips
+
+<Tabs>
+  <Tab title="/audit">
+    **Best practices:**
+    - Run before major changes to establish baseline
+    - Run after major changes to verify quality
+    - Focus on specific areas for faster iteration
+    - Address Critical and High issues first
+    - Don't ignore Low severity - they compound
+    
+    **Common mistakes:**
+    - Running audit but not fixing issues
+    - Fixing everything at once (triage by severity)
+    - Ignoring systemic issues in favor of one-off fixes
+    
+    **Tip:** Save audit reports to track improvement over time.
+  </Tab>
+  
+  <Tab title="/critique">
+    **Best practices:**
+    - Run on complete designs, not fragments
+    - Be open to honest feedback (it's direct)
+    - Use "What's Working" section to preserve good choices
+    - Prioritize the top 3-5 issues, not everything
+    
+    **Common mistakes:**
+    - Getting defensive about critique feedback
+    - Trying to fix every minor observation
+    - Running critique on unfinished work
+    
+    **Tip:** Critique is from a design director's perspective. It's direct and honest, not sugar-coated.
+  </Tab>
+  
+  <Tab title="/polish">
+    **Best practices:**
+    - Only run when features are functionally complete
+    - Allow time for thorough polish (don't rush)
+    - Test on real devices after polishing
+    - Check every interaction state
+    
+    **Common mistakes:**
+    - Polishing incomplete features
+    - Running polish hours before launch (too late)
+    - Polishing one area while leaving others rough
+    
+    **Tip:** Polish works through a comprehensive checklist. Let it complete all checks.
+  </Tab>
+  
+  <Tab title="/distill">
+    **Best practices:**
+    - Provide clear context about user goals
+    - Be ruthless about removing features
+    - Use progressive disclosure for complexity
+    - Verify with users after simplifying
+    
+    **Common mistakes:**
+    - Keeping features "just in case"
+    - Simplifying without understanding user goals
+    - Removing necessary functionality
+    
+    **Tip:** Distill will ask clarifying questions if context is unclear. Answer honestly.
+  </Tab>
+  
+  <Tab title="/animate">
+    **Best practices:**
+    - Provide brand personality context
+    - Start with one hero animation
+    - Respect reduced motion preferences
+    - Test on lower-end devices
+    
+    **Common mistakes:**
+    - Animating everything (fatigue is real)
+    - Using bounce or elastic easing
+    - Ignoring accessibility
+    - Prioritizing animation over performance
+    
+    **Tip:** One well-orchestrated experience beats scattered animations everywhere.
+  </Tab>
+  
+  <Tab title="/bolder">
+    **Best practices:**
+    - Provide brand personality context
+    - Choose one focal point to amplify
+    - Balance boldness with usability
+    - Test that it doesn't look like AI slop
+    
+    **Common mistakes:**
+    - Making everything bold (defeats purpose)
+    - Defaulting to purple-blue gradients
+    - Adding effects without purpose
+    - Sacrificing readability
+    
+    **Tip:** The command includes AI slop detection. If it looks like every other AI design, it will flag it.
+  </Tab>
+</Tabs>
+
+---
+
+## When NOT to Use Commands
+
+### Don't use /polish too early
+
+<Warning>
+  **Problem:** Polishing incomplete features wastes time.
+  
+  **Instead:** Finish functionality first, then polish.
+</Warning>
+
+### Don't use /bolder on everything
+
+<Warning>
+  **Problem:** Some interfaces need to be calm (dashboards, tools, content platforms).
+  
+  **Instead:** Use `/bolder` selectively on marketing pages, landing pages, or hero sections.
+</Warning>
+
+### Don't use /animate excessively
+
+<Warning>
+  **Problem:** Too much animation causes fatigue and hurts performance.
+  
+  **Instead:** Choose high-impact moments for animation. Not every interaction needs motion.
+</Warning>
+
+### Don't use /distill without context
+
+<Warning>
+  **Problem:** Simplifying without understanding user goals removes necessary features.
+  
+  **Instead:** Run `/teach-impeccable` first or answer context questions honestly.
+</Warning>
+
+### Don't use multiple enhancement commands at once
+
+<Warning>
+  **Problem:** Running `/colorize`, `/animate`, `/bolder`, and `/delight` together can create overwhelming designs.
+  
+  **Instead:** Choose 1-2 enhancement commands based on what's missing. Then polish.
+</Warning>
+
+---
+
+## Measuring Success
+
+### How to Know Commands Are Working
+
+<CardGroup cols={2}>
+  <Card title="Audit scores improve" icon="chart-line">
+    Run `/audit` before and after. Critical and High severity issues should decrease.
+  </Card>
+  
+  <Card title="User feedback changes" icon="comments">
+    Users report clarity, speed, or delight improvements after running commands.
+  </Card>
+  
+  <Card title="Lighthouse scores increase" icon="gauge-high">
+    Performance, accessibility, and best practices scores improve after `/optimize` and `/harden`.
+  </Card>
+  
+  <Card title="Design feels distinctive" icon="sparkles">
+    After `/critique` and enhancement commands, designs no longer look AI-generated.
+  </Card>
+</CardGroup>
+
+### Metrics to Track
+
+**Technical metrics:**
+- Lighthouse scores (Performance, Accessibility, Best Practices, SEO)
+- Core Web Vitals (LCP, FID/INP, CLS)
+- Accessibility audit results (Axe, WAVE)
+- Bundle size and load times
+
+**User metrics:**
+- Task completion rates
+- Time to complete common workflows
+- Error rates and support tickets
+- User satisfaction scores (NPS, CSAT)
+
+**Design metrics:**
+- Design system consistency (% components using tokens)
+- Code quality (linting errors, TypeScript strictness)
+- Time from design to ship
+- Number of polish iterations needed
+
+---
+
+## Common Scenarios
+
+<AccordionGroup>
+  <Accordion title="Scenario: Inherited messy codebase">
+    **Situation:** You've inherited a project with inconsistent designs, hard-coded colors, and no design system.
+    
+    **Workflow:**
+    ```bash
+    /teach-impeccable    # Establish what it should be
+    /audit               # Document everything wrong
+    /normalize           # Fix design system issues
+    /extract             # Pull patterns into components
+    /audit               # Verify improvements
+    /polish              # Final cleanup
+    ```
+  </Accordion>
+  
+  <Accordion title="Scenario: Designs look AI-generated">
+    **Situation:** Your designs have all the AI slop tells: purple gradients, glassmorphism, generic fonts.
+    
+    **Workflow:**
+    ```bash
+    /critique            # Identify specific AI slop patterns
+    /teach-impeccable    # Establish unique brand direction
+    /bolder              # Make more distinctive (or /quieter if too loud)
+    /colorize            # Replace generic color with brand palette
+    /animate             # Add purposeful motion (not generic effects)
+    /critique            # Verify no longer looks AI-generated
+    /polish              # Refine
+    ```
+  </Accordion>
+  
+  <Accordion title="Scenario: Performance is terrible">
+    **Situation:** Lighthouse scores below 50, users complain about slowness.
+    
+    **Workflow:**
+    ```bash
+    /audit               # Identify all performance issues
+    /optimize            # Fix bottlenecks (images, bundles, animations)
+    /harden              # Ensure resilience under load
+    /audit               # Verify improvements
+    ```
+    
+    **Target:** LCP < 2.5s, FID < 100ms, CLS < 0.1
+  </Accordion>
+  
+  <Accordion title="Scenario: Interface is too complex">
+    **Situation:** Users report confusion, too many options, unclear hierarchy.
+    
+    **Workflow:**
+    ```bash
+    /critique            # Understand what's causing complexity
+    /distill             # Remove unnecessary elements
+    /clarify             # Improve unclear copy
+    /normalize           # Ensure remaining elements are consistent
+    /polish              # Refine simplified version
+    ```
+  </Accordion>
+  
+  <Accordion title="Scenario: Mobile experience is broken">
+    **Situation:** Desktop works great, mobile is unusable.
+    
+    **Workflow:**
+    ```bash
+    /audit               # Find responsive and touch target issues
+    /adapt               # Fix mobile layouts and interactions
+    /optimize            # Improve mobile performance
+    /harden              # Handle mobile edge cases (text overflow, etc.)
+    /polish              # Final mobile refinement
+    ```
+  </Accordion>
+  
+  <Accordion title="Scenario: Pre-launch checklist">
+    **Situation:** Launching in 2 weeks, need to ensure quality.
+    
+    **Workflow:**
+    ```bash
+    /audit               # Complete quality audit
+    /harden              # Error handling, i18n, edge cases
+    /optimize            # Meet performance targets
+    /adapt               # Ensure mobile works
+    /polish              # Final pass on all details
+    /audit               # Final verification
+    ```
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Avoiding Common Mistakes
+
+### Mistake: Using commands in isolation
+
+**Problem:** Running `/colorize` without understanding if color is actually what's needed.
+
+**Solution:** Run `/critique` first to understand what's missing, then apply appropriate commands.
+
+---
+
+### Mistake: Ignoring command questions
+
+**Problem:** Commands like `/distill`, `/animate`, and `/bolder` ask context questions, but you say "do whatever."
+
+**Solution:** Provide specific answers. If you don't know, run `/teach-impeccable` first to establish context.
+
+---
+
+### Mistake: Skipping /teach-impeccable
+
+**Problem:** Commands give generic suggestions because they lack project context.
+
+**Solution:** Always run `/teach-impeccable` once at the start of a project.
+
+---
+
+### Mistake: Trying to fix everything at once
+
+**Problem:** Running all 17 commands on the entire codebase simultaneously.
+
+**Solution:** Triage. Focus on specific areas or high-priority issues first.
+
+---
+
+### Mistake: Polishing before functionality is complete
+
+**Problem:** Spending time perfecting alignment and spacing on features that will change.
+
+**Solution:** Polish only when features are functionally stable.
+
+---
+
+## Quick Reference
+
+### Command Priority Matrix
+
+| Stage | Priority | Commands |
+|-------|----------|----------|
+| **Setup** | Highest | `/teach-impeccable` |
+| **Quality** | High | `/audit`, `/critique`, `/normalize` |
+| **Enhancement** | Medium | `/colorize`, `/animate`, `/delight` |
+| **Simplification** | Medium | `/distill`, `/clarify` |
+| **Production** | High | `/harden`, `/optimize`, `/adapt` |
+| **Refinement** | Highest | `/polish` |
+| **Extraction** | Low | `/extract` |
+
+### Time Investment Guide
+
+| Command | Typical Time | When to Use |
+|---------|-------------|-------------|
+| `/teach-impeccable` | 15-30 min | Once per project |
+| `/audit` | 5-10 min | Before major changes |
+| `/critique` | 5-10 min | When designs feel off |
+| `/normalize` | 20-60 min | When inconsistent |
+| `/polish` | 30-90 min | Before shipping |
+| `/distill` | 20-40 min | When too complex |
+| `/clarify` | 10-30 min | When copy is unclear |
+| `/optimize` | 30-90 min | When performance is poor |
+| `/harden` | 30-60 min | Before production |
+| `/animate` | 20-60 min | When too static |
+| `/colorize` | 15-45 min | When too monochrome |
+| `/bolder` | 30-60 min | When too generic |
+| `/quieter` | 20-40 min | When overwhelming |
+| `/delight` | 20-60 min | When too functional |
+| `/extract` | 20-60 min | When patterns repeat |
+| `/adapt` | 30-90 min | Before mobile launch |
+| `/onboard` | 40-90 min | New product/feature |
+
+---
+
+## Learning Path
+
+Recommended order for learning Impeccable commands:
+
+<Steps>
+  <Step title="Week 1: Essentials">
+    Start with the most impactful commands:
+    - `/teach-impeccable` - Setup
+    - `/audit` - Find issues
+    - `/polish` - Fix details
+    
+    Practice these on a small project or component.
+  </Step>
+  
+  <Step title="Week 2: Quality">
+    Add quality-focused commands:
+    - `/critique` - Design feedback
+    - `/normalize` - Consistency
+    - `/harden` - Resilience
+    
+    Use these to improve existing work.
+  </Step>
+  
+  <Step title="Week 3: Enhancement">
+    Learn visual enhancement commands:
+    - `/colorize` - Strategic color
+    - `/animate` - Purposeful motion
+    - `/distill` - Simplification
+    
+    Experiment with different enhancement approaches.
+  </Step>
+  
+  <Step title="Week 4: Advanced">
+    Master specialized commands:
+    - `/optimize` - Performance
+    - `/bolder` / `/quieter` - Visual intensity
+    - `/delight` - Personality
+    - `/extract` - Component patterns
+    - `/adapt` - Responsive design
+    - `/onboard` - User flows
+    
+    Apply to complete projects.
+  </Step>
+</Steps>
+
+---
+
+## Getting Help
+
+If commands aren't giving expected results:
+
+1. **Check you ran /teach-impeccable** - Most issues stem from missing context
+2. **Provide more specific focus** - Use command arguments to target specific areas
+3. **Answer questions honestly** - When commands ask for clarification, provide details
+4. **Review command output** - Commands explain their reasoning and suggestions
+5. **Try command combinations** - Some issues need multiple commands to resolve
+
+<Card title="Need More Help?" icon="question" href="/contributing/overview">
+  Join the community, report issues, or contribute improvements
+</Card>
+
+---
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Commands Overview" icon="list" href="/usage/commands-overview">
+    Complete reference of all 17 commands
+  </Card>
+  <Card title="Customization Guide" icon="wrench" href="/usage/customization">
+    Learn how to customize commands and add project context
+  </Card>
+</CardGroup>

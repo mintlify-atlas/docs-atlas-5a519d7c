@@ -1,0 +1,170 @@
+---
+title: Critique
+description: UX-focused design evaluation assessing visual hierarchy, information architecture, emotional resonance, and overall quality
+---
+
+The **critique** skill conducts a holistic design critique, evaluating whether the interface actually works—not just technically, but as a designed experience. Think of it as getting feedback from a design director.
+
+## When to Use
+
+Use the critique skill when you need to:
+
+- Evaluate design effectiveness from a UX perspective
+- Get honest feedback on whether a design looks AI-generated
+- Assess visual hierarchy and information architecture
+- Understand emotional impact and user perception
+- Identify the highest-priority design improvements
+- Receive actionable design feedback with specific suggestions
+
+## Parameters
+
+<ParamField path="area" type="string" optional>
+  The specific feature or area to critique. If not specified, critiques the entire interface.
+</ParamField>
+
+## Evaluation Dimensions
+
+The critique skill evaluates interfaces across these key areas:
+
+### 1. AI Slop Detection (Critical)
+
+**The most important check.** Does this look like every other AI-generated interface from 2024-2025?
+
+Reviews the design against all **DON'T** guidelines in the frontend-design skill—the fingerprints of AI-generated work. Checks for:
+
+- AI color palette, gradient text, dark mode with glowing accents
+- Glassmorphism, hero metric layouts, identical card grids
+- Generic fonts and other telltale signs
+
+**The test**: If you showed this to someone and said "AI made this," would they believe you immediately? If yes, that's the problem.
+
+### 2. Visual Hierarchy
+
+- Does the eye flow to the most important element first?
+- Is there a clear primary action? Can you spot it in 2 seconds?
+- Do size, color, and position communicate importance correctly?
+- Is there visual competition between elements that should have different weights?
+
+### 3. Information Architecture
+
+- Is the structure intuitive? Would a new user understand the organization?
+- Is related content grouped logically?
+- Are there too many choices at once? (cognitive overload)
+- Is the navigation clear and predictable?
+
+### 4. Emotional Resonance
+
+- What emotion does this interface evoke? Is that intentional?
+- Does it match the brand personality?
+- Does it feel trustworthy, approachable, premium, playful—whatever it should feel?
+- Would the target user feel "this is for me"?
+
+### 5. Discoverability & Affordance
+
+- Are interactive elements obviously interactive?
+- Would a user know what to do without instructions?
+- Are hover/focus states providing useful feedback?
+- Are there hidden features that should be more visible?
+
+### 6. Composition & Balance
+
+- Does the layout feel balanced or uncomfortably weighted?
+- Is whitespace used intentionally or just leftover?
+- Is there visual rhythm in spacing and repetition?
+- Does asymmetry feel designed or accidental?
+
+### 7. Typography as Communication
+
+- Does the type hierarchy clearly signal what to read first, second, third?
+- Is body text comfortable to read? (line length, spacing, size)
+- Do font choices reinforce the brand/tone?
+- Is there enough contrast between heading levels?
+
+### 8. Color with Purpose
+
+- Is color used to communicate, not just decorate?
+- Does the palette feel cohesive?
+- Are accent colors drawing attention to the right things?
+- Does it work for colorblind users? (does meaning still come through?)
+
+### 9. States & Edge Cases
+
+- **Empty states**: Do they guide users toward action, or just say "nothing here"?
+- **Loading states**: Do they reduce perceived wait time?
+- **Error states**: Are they helpful and non-blaming?
+- **Success states**: Do they confirm and guide next steps?
+
+### 10. Microcopy & Voice
+
+- Is the writing clear and concise?
+- Does it sound like a human (the right human for this brand)?
+- Are labels and buttons unambiguous?
+- Does error copy help users fix the problem?
+
+## Critique Report Structure
+
+The critique generates feedback structured as a design director would provide:
+
+<Steps>
+  <Step title="Anti-Patterns Verdict">
+    Pass/fail: Does this look AI-generated? Lists specific tells from the Anti-Patterns section with brutal honesty.
+  </Step>
+  
+  <Step title="Overall Impression">
+    A brief gut reaction—what works, what doesn't, and the single biggest opportunity.
+  </Step>
+  
+  <Step title="What's Working">
+    Highlights 2-3 things done well. Be specific about why they work.
+  </Step>
+  
+  <Step title="Priority Issues">
+    The 3-5 most impactful design problems, ordered by importance. For each issue:
+    - **What**: Name the problem clearly
+    - **Why it matters**: How this hurts users or undermines goals
+    - **Fix**: What to do about it (be concrete)
+    - **Command**: Which command to use for fixing
+  </Step>
+  
+  <Step title="Minor Observations">
+    Quick notes on smaller issues worth addressing.
+  </Step>
+  
+  <Step title="Questions to Consider">
+    Provocative questions that might unlock better solutions, like:
+    - "What if the primary action were more prominent?"
+    - "Does this need to feel this complex?"
+    - "What would a confident version of this look like?"
+  </Step>
+</Steps>
+
+## Usage Example
+
+```bash
+# Critique entire interface
+/critique
+
+# Critique specific feature
+/critique area="dashboard"
+```
+
+## Feedback Principles
+
+The critique skill follows these principles:
+
+- **Be direct**: Vague feedback wastes everyone's time
+- **Be specific**: "The submit button" not "some elements"
+- **Say what's wrong AND why it matters** to users
+- **Give concrete suggestions**, not just "consider exploring..."
+- **Prioritize ruthlessly**: If everything is important, nothing is
+- **Don't soften criticism**: Developers need honest feedback to ship great design
+
+## Important Notes
+
+<Info>
+  The critique skill starts by checking the frontend-design skill for design principles and anti-patterns. Make sure this skill is available for the most comprehensive critique results.
+</Info>
+
+<Tip>
+  Use critique early in the design process to catch fundamental issues before they're built. It's much easier to fix design problems when they're still in code rather than after multiple iterations.
+</Tip>

@@ -1,0 +1,176 @@
+---
+title: Colorize
+description: Add strategic color to features that are too monochromatic or lack visual interest. Makes interfaces more engaging and expressive.
+---
+
+The **colorize** skill strategically introduces color to designs that are too monochromatic, gray, or lacking in visual warmth and personality.
+
+## When to Use
+
+Use this skill when:
+- Designs are pure grayscale or limited to neutrals
+- Interfaces lack visual warmth and personality
+- Color could add semantic meaning or hierarchy
+- User engagement feels flat
+- Designs need emotional tone or wayfinding
+
+## Parameters
+
+<ParamField path="target" type="string" optional>
+  The feature or component to colorize (optional)
+</ParamField>
+
+## How It Works
+
+### 1. Context Gathering (Mandatory)
+
+The skill requires understanding:
+- **Target audience** (critical)
+- **Desired use-cases** (critical)
+- **Brand personality/tone**
+- **Existing brand colors**
+
+<Warning>
+The skill will ask clarifying questions if this context cannot be inferred. Do NOT proceed without answers - guessing leads to generic AI slop colors.
+</Warning>
+
+### 2. Color Opportunity Assessment
+
+Identifies where color adds value:
+
+- **Semantic meaning**: Success, error, warning, info states
+- **Hierarchy**: Drawing attention to important elements
+- **Categorization**: Different sections, types, or states
+- **Emotional tone**: Warmth, energy, trust, creativity
+- **Wayfinding**: Helping users navigate and understand structure
+- **Delight**: Moments of visual interest and personality
+
+<Note>
+More color ≠ better. Strategic color beats rainbow vomit every time. Every color should have a purpose.
+</Note>
+
+### 3. Color Strategy
+
+Creates a purposeful plan using the 60-30-10 rule:
+
+- **Dominant color** (60%): Primary brand or most-used accent
+- **Secondary color** (30%): Supporting color for variety
+- **Accent color** (10%): High contrast for key moments
+- **Neutrals** (remaining): Gray/black/white for structure
+
+## Color Application Categories
+
+<AccordionGroup>
+  <Accordion title="Semantic Color">
+    **State indicators**:
+    - Success: Green tones (emerald, forest, mint)
+    - Error: Red/pink tones (rose, crimson, coral)
+    - Warning: Orange/amber tones
+    - Info: Blue tones (sky, ocean, indigo)
+    - Neutral: Gray/slate for inactive states
+
+    Also includes status badges and progress indicators.
+  </Accordion>
+
+  <Accordion title="Accent Color Application">
+    - Primary action buttons/CTAs
+    - Links (maintaining accessibility)
+    - Key icons for recognition
+    - Section headers or labels
+    - Hover states
+  </Accordion>
+
+  <Accordion title="Background & Surfaces">
+    - Tinted backgrounds with warm/cool neutrals
+    - Colored sections to separate areas
+    - Subtle, intentional gradients
+    - Tinted cards or surfaces
+
+    **Use OKLCH** for perceptually uniform color scales.
+  </Accordion>
+
+  <Accordion title="Data Visualization">
+    - Charts & graphs for categories/values
+    - Heatmaps showing density
+    - Comparison color coding
+  </Accordion>
+
+  <Accordion title="Borders & Accents">
+    - Colored borders on cards/sections
+    - Underlines for emphasis
+    - Subtle colored dividers
+    - Focus indicators matching brand
+  </Accordion>
+
+  <Accordion title="Typography Color">
+    - Colored headings (maintaining contrast)
+    - Highlight text for emphasis
+    - Labels & tags for metadata
+  </Accordion>
+</AccordionGroup>
+
+## Technical Guidelines
+
+### Use OKLCH Color Space
+
+```css
+/* Perceptually uniform - equal steps look equal */
+--warm-neutral: oklch(97% 0.01 60);
+--cool-neutral: oklch(97% 0.01 250);
+```
+
+### Accessibility Requirements
+
+<Warning>
+- **Contrast ratios**: WCAG compliance required
+  - 4.5:1 for text
+  - 3:1 for UI components
+- **Don't rely on color alone**: Use icons, labels, or patterns alongside color
+- **Test for color blindness**: Verify red/green combinations work for all users
+</Warning>
+
+### Color Cohesion
+
+- **Consistent palette**: Use colors from defined palette only
+- **Systematic application**: Same color meanings throughout
+- **Temperature consistency**: Warm palette stays warm, cool stays cool
+
+## Critical Don'ts
+
+<Warning>
+- **NEVER** use every color in the rainbow (choose 2-4 beyond neutrals)
+- **NEVER** apply color randomly without semantic meaning
+- **NEVER** put gray text on colored backgrounds - use darker shade of background color or transparency
+- **NEVER** use pure gray for neutrals - add subtle color tint
+- **NEVER** use pure black (`#000`) or pure white (`#fff`) for large areas
+- **NEVER** violate WCAG contrast requirements
+- **NEVER** use color as the only indicator
+- **NEVER** make everything colorful
+- **NEVER** default to purple-blue gradients (AI slop aesthetic)
+</Warning>
+
+## Quality Verification
+
+The skill verifies that colorization:
+- Improves hierarchy and guides attention
+- Adds clearer meaning for states/categories
+- Makes interface more engaging
+- Meets WCAG accessibility standards
+- Remains balanced and purposeful
+
+## Example Usage
+
+```bash
+# Colorize specific component
+/colorize target="dashboard cards"
+
+# Colorize entire page
+/colorize target="settings page"
+
+# General color review
+/colorize
+```
+
+<Info>
+Remember: Color is emotional and powerful. Use it to create warmth, guide attention, communicate meaning, and express personality. But restraint and strategy matter more than saturation and variety. Be colorful, but be intentional.
+</Info>

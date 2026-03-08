@@ -1,0 +1,185 @@
+---
+title: Introduction
+description: The vocabulary you didn't know you needed. 1 skill, 17 commands, and curated anti-patterns for impeccable frontend design.
+---
+
+## What is Impeccable?
+
+Impeccable is a comprehensive design skill system for AI-powered development tools. It gives your AI assistant the vocabulary, principles, and commands needed to create distinctive, production-grade frontend interfaces that avoid generic "AI slop" aesthetics.
+
+Every LLM learned from the same generic templates. Without guidance, you get the same predictable mistakes: Inter font, purple gradients, cards nested in cards, gray text on colored backgrounds.
+
+Impeccable fights that bias with:
+- **An expanded skill** with 7 domain-specific reference files
+- **17 steering commands** to audit, review, polish, distill, animate, and more
+- **Curated anti-patterns** that explicitly tell the AI what NOT to do
+
+## Why Impeccable?
+
+Anthropic created [frontend-design](https://github.com/anthropics/skills/tree/main/skills/frontend-design), a skill that guides Claude toward better UI design. Impeccable builds on that foundation with deeper expertise and more control.
+
+<CardGroup cols={3}>
+  <Card title="Comprehensive Skill" icon="book">
+    7 domain-specific reference files covering typography, color, spatial design, motion, interaction, responsive design, and UX writing
+  </Card>
+  <Card title="17 Commands" icon="terminal">
+    Purpose-built commands for every stage: audit quality, normalize inconsistencies, polish details, add motion, and more
+  </Card>
+  <Card title="Anti-Patterns" icon="ban">
+    Explicit guidance on what to avoid—the fingerprints of AI-generated work that make interfaces feel generic
+  </Card>
+</CardGroup>
+
+## What's Included
+
+### The Skill: frontend-design
+
+A comprehensive design skill with 7 domain-specific references:
+
+| Reference | Covers |
+|-----------|--------|
+| **typography** | Type systems, font pairing, modular scales, OpenType |
+| **color-and-contrast** | OKLCH, tinted neutrals, dark mode, accessibility |
+| **spatial-design** | Spacing systems, grids, visual hierarchy |
+| **motion-design** | Easing curves, staggering, reduced motion |
+| **interaction-design** | Forms, focus states, loading patterns |
+| **responsive-design** | Mobile-first, fluid design, container queries |
+| **ux-writing** | Button labels, error messages, empty states |
+
+<Note>
+The frontend-design skill builds on [Anthropic's original skill](https://github.com/anthropics/skills/tree/main/skills/frontend-design) with expanded references and curated anti-patterns.
+</Note>
+
+### 17 Commands
+
+All commands are implemented as user-invokable skills that work across supported AI tools:
+
+<Tabs>
+  <Tab title="Quality & Review">
+    | Command | What it does |
+    |---------|--------------|
+    | `/audit` | Run technical quality checks (a11y, performance, responsive) |
+    | `/critique` | UX design review: hierarchy, clarity, emotional resonance |
+    | `/normalize` | Align with design system standards |
+    | `/polish` | Final pass before shipping |
+  </Tab>
+  <Tab title="Refinement">
+    | Command | What it does |
+    |---------|--------------|
+    | `/distill` | Strip to essence |
+    | `/clarify` | Improve unclear UX copy |
+    | `/optimize` | Performance improvements |
+    | `/harden` | Error handling, i18n, edge cases |
+  </Tab>
+  <Tab title="Enhancement">
+    | Command | What it does |
+    |---------|--------------|
+    | `/animate` | Add purposeful motion |
+    | `/colorize` | Introduce strategic color |
+    | `/bolder` | Amplify boring designs |
+    | `/quieter` | Tone down overly bold designs |
+    | `/delight` | Add moments of joy |
+  </Tab>
+  <Tab title="Transformation">
+    | Command | What it does |
+    |---------|--------------|
+    | `/extract` | Pull into reusable components |
+    | `/adapt` | Adapt for different devices |
+    | `/onboard` | Design onboarding flows |
+  </Tab>
+</Tabs>
+
+<Info>
+Most commands accept an optional argument to focus on a specific area. For example: `/audit header` or `/polish checkout-form`
+</Info>
+
+### Anti-Patterns
+
+The skill includes explicit guidance on what to avoid—the common tells of AI-generated interfaces:
+
+<CardGroup cols={2}>
+  <Card title="Typography" icon="font">
+    - Don't use overused fonts (Arial, Inter, system defaults)
+    - Don't use monospace as lazy shorthand for "technical"
+  </Card>
+  <Card title="Color" icon="palette">
+    - Don't use gray text on colored backgrounds
+    - Don't use pure black/gray (always tint)
+    - Avoid cyan-on-dark and purple gradients
+  </Card>
+  <Card title="Layout" icon="grid">
+    - Don't wrap everything in cards
+    - Don't nest cards inside cards
+    - Avoid identical card grids
+  </Card>
+  <Card title="Motion" icon="wand-magic-sparkles">
+    - Don't use bounce/elastic easing (feels dated)
+    - Don't use glassmorphism everywhere
+    - Avoid decorative sparklines
+  </Card>
+</CardGroup>
+
+## The AI Slop Test
+
+**Critical quality check**: If you showed this interface to someone and said "AI made this," would they believe you immediately? If yes, that's the problem.
+
+A distinctive interface should make someone ask "how was this made?" not "which AI made this?"
+
+The anti-patterns in Impeccable are the fingerprints of AI-generated work from 2024-2025. By explicitly teaching your AI to avoid these patterns, you get interfaces that feel genuinely designed.
+
+## How It Works
+
+Impeccable uses the [Agent Skills](https://agentskills.io) standard to inject design expertise directly into your AI assistant's context. When you invoke a command or work on frontend code:
+
+<Steps>
+  <Step title="Skill Activation">
+    Your AI assistant loads the frontend-design skill with all 7 reference files
+  </Step>
+  <Step title="Context Awareness">
+    The skill provides comprehensive design principles, anti-patterns, and implementation guidelines
+  </Step>
+  <Step title="Command Execution">
+    Commands like `/audit` or `/polish` follow structured workflows to analyze and improve your code
+  </Step>
+  <Step title="Quality Output">
+    Your AI produces distinctive, production-grade interfaces that avoid generic aesthetics
+  </Step>
+</Steps>
+
+## Supported Tools
+
+Impeccable works with all major AI-powered development tools:
+
+<CardGroup cols={2}>
+  <Card title="Cursor" icon="cursor" href="https://cursor.com">
+    AI-first code editor with native skills support
+  </Card>
+  <Card title="Claude Code" icon="message-bot" href="https://claude.ai/code">
+    Anthropic's coding assistant in the browser
+  </Card>
+  <Card title="Gemini CLI" icon="terminal" href="https://github.com/google-gemini/gemini-cli">
+    Google's command-line coding assistant
+  </Card>
+  <Card title="Codex CLI" icon="code" href="https://github.com/openai/codex">
+    OpenAI's command-line coding assistant
+  </Card>
+</CardGroup>
+
+<Note>
+Each provider has slightly different capabilities. Impeccable automatically transforms into provider-specific formats to ensure maximum compatibility.
+</Note>
+
+## See It In Action
+
+Visit [impeccable.style](https://impeccable.style#casestudies) to see before/after case studies of real projects transformed with Impeccable commands.
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Quick Start" icon="rocket" href="/quickstart">
+    Get from zero to first command in under 5 minutes
+  </Card>
+  <Card title="Installation" icon="download" href="/installation">
+    Detailed installation for all supported providers
+  </Card>
+</CardGroup>

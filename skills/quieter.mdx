@@ -1,0 +1,141 @@
+---
+title: Quieter
+description: Tone down overly bold or visually aggressive designs. Reduces intensity while maintaining design quality and impact.
+---
+
+The **quieter** skill reduces visual intensity in designs that are too bold, aggressive, or overstimulating, creating a more refined and approachable aesthetic without losing effectiveness.
+
+## When to Use
+
+Use this skill when:
+- Designs feel too intense or overwhelming
+- Too many elements competing for attention
+- Colors are overly saturated or bright
+- Animation feels excessive or fatiguing
+- Interface needs more sophistication and refinement
+
+## Parameters
+
+<ParamField path="target" type="string" optional>
+  The feature or component to make quieter (optional)
+</ParamField>
+
+## How It Works
+
+### 1. Context Gathering (Mandatory)
+
+The skill requires understanding:
+- **Target audience** (critical)
+- **Desired use-cases** (critical)
+- **Brand personality/tone**
+- **Core message to preserve**
+
+<Warning>
+The skill will ask clarifying questions if context cannot be inferred. Do NOT proceed without answers - guessing leads to generic design.
+</Warning>
+
+### 2. Intensity Assessment
+
+Identifies what makes the design feel too intense:
+
+- **Color saturation**: Overly bright or saturated colors
+- **Contrast extremes**: Too much high-contrast juxtaposition
+- **Visual weight**: Too many bold, heavy elements competing
+- **Animation excess**: Too much motion or overly dramatic effects
+- **Complexity**: Too many visual elements, patterns, or decorations
+- **Scale**: Everything is large and loud with no hierarchy
+
+<Note>
+"Quieter" doesn't mean boring or generic. It means refined, sophisticated, and easier on the eyes. Think luxury, not laziness.
+</Note>
+
+### 3. Refinement Strategy
+
+Creates a plan to reduce intensity while maintaining impact:
+
+- **Color approach**: Desaturate or shift to sophisticated tones?
+- **Hierarchy approach**: Which elements stay bold (very few), which recede?
+- **Simplification approach**: What can be removed entirely?
+- **Sophistication approach**: How to signal quality through restraint?
+
+<Info>
+Great quiet design is harder than great bold design. Subtlety requires precision.
+</Info>
+
+## Refinement Techniques
+
+<AccordionGroup>
+  <Accordion title="Color Refinement">
+    - Reduce saturation to 70-85%
+    - Shift to muted, sophisticated tones
+    - Reduce color variety (fewer colors used more thoughtfully)
+    - Let neutrals do more work, use color as accent (10% rule)
+    - Create gentler contrasts
+    - Use tinted grays for sophistication
+    - **Never gray on color**: Use darker shade of background color or transparency instead
+  </Accordion>
+
+  <Accordion title="Visual Weight Reduction">
+    - **Typography**: Reduce font weights (900 → 600, 700 → 500)
+    - Decrease sizes where appropriate
+    - Use weight, size, and space instead of color and boldness
+    - Increase white space and breathing room
+    - Reduce border thickness, decrease opacity, or remove entirely
+  </Accordion>
+
+  <Accordion title="Simplification">
+    - Remove decorative elements without purpose
+    - Simplify shapes and reduce border radius extremes
+    - Flatten visual hierarchy where possible
+    - Clean up effects: reduce/remove blur, glows, multiple shadows
+  </Accordion>
+
+  <Accordion title="Motion Reduction">
+    - Reduce animation intensity: shorter distances (10-20px not 40px)
+    - Remove decorative animations, keep functional motion
+    - Use subtle micro-interactions
+    - Apply refined easing (ease-out-quart, never bounce/elastic)
+    - Remove animations entirely if not serving clear purpose
+  </Accordion>
+
+  <Accordion title="Composition Refinement">
+    - Reduce scale jumps for calmer feeling
+    - Bring rogue elements back into systematic alignment
+    - Replace extreme spacing variations with consistent rhythm
+  </Accordion>
+</AccordionGroup>
+
+## Critical Don'ts
+
+<Warning>
+- **NEVER** make everything the same size/weight (hierarchy still matters)
+- **NEVER** remove all color (quiet ≠ grayscale)
+- **NEVER** eliminate all personality (maintain character through refinement)
+- **NEVER** sacrifice usability for aesthetics
+- **NEVER** make everything small and light (some anchors needed)
+</Warning>
+
+## Quality Verification
+
+The skill verifies that refinement:
+- **Still functional**: Users can accomplish tasks easily
+- **Still distinctive**: Has character, not generic
+- **Better reading**: Text easier to read for extended periods
+- **Sophistication**: Feels more refined and premium
+
+## Example Usage
+
+```bash
+# Make specific component quieter
+/quieter target="hero section"
+
+# Tone down entire page
+/quieter target="landing page"
+
+# General refinement review
+/quieter
+```
+
+<Info>
+Remember: Quiet design is confident design. It doesn't need to shout. Less is more, but less is also harder. Refine with precision and maintain intentionality.
+</Info>

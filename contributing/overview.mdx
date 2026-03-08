@@ -1,0 +1,187 @@
+---
+title: "Contributing Overview"
+description: "How to contribute to the Impeccable project"
+---
+
+## Welcome Contributors
+
+Impeccable is an open-source project that provides design-focused skills and commands for AI-powered development tools. We welcome contributions that help improve design fluency across Cursor, Claude Code, Gemini CLI, and Codex CLI.
+
+## Quick Start
+
+### Prerequisites
+
+- **Bun**: Fast JavaScript runtime and package manager
+- No external dependencies required
+
+### Get the Code
+
+```bash
+git clone https://github.com/yourusername/impeccable.git
+cd impeccable
+```
+
+### Build the Project
+
+```bash
+# Build all provider formats
+bun run build
+
+# Clean dist folder
+bun run clean
+
+# Rebuild from scratch
+bun run rebuild
+```
+
+### Test Locally
+
+```bash
+# Start development server
+bun run dev
+
+# Run tests
+bun run test
+```
+
+## Project Structure
+
+Impeccable uses a **feature-rich source format** that transforms into provider-specific formats:
+
+- **Source files** (`source/`): Single source of truth with full metadata
+- **Build system** (`scripts/`): Transforms source to provider-specific formats
+- **Distribution** (`dist/`): Generated output files for 4 providers (committed for users)
+
+### Key Directories
+
+```
+impeccable/
+├── source/              # EDIT THESE! Source of truth
+│   ├── commands/        # Command definitions
+│   └── skills/          # Skill definitions
+├── dist/                # Generated (committed for users)
+│   ├── cursor/
+│   ├── claude-code/
+│   ├── gemini/
+│   └── codex/
+├── scripts/             # Build system (Bun)
+│   ├── build.js
+│   └── lib/
+├── public/              # Website (impeccable.style)
+└── api/                 # Vercel Functions
+```
+
+## Types of Contributions
+
+### Adding Skills
+
+Skills are reusable instruction sets for the AI. See [Adding Content](/contributing/adding-content) for details.
+
+### Adding Commands
+
+Commands are quick prompts users can invoke. See [Adding Content](/contributing/adding-content) for details.
+
+### Improving Documentation
+
+Documentation improvements are always welcome, whether fixing typos or adding examples.
+
+### Bug Fixes
+
+Found a bug? Submit a PR with:
+- Description of the issue
+- Steps to reproduce
+- Your fix with tests if applicable
+
+### Website Improvements
+
+The [impeccable.style](https://impeccable.style) website uses vanilla JavaScript and modern CSS. Improvements to design, performance, or functionality are welcome.
+
+## Development Workflow
+
+### 1. Create a Branch
+
+```bash
+git checkout -b feature/your-feature-name
+```
+
+### 2. Make Changes
+
+Edit files in `source/` directory only. Never edit `dist/` directly.
+
+### 3. Build and Test
+
+```bash
+bun run build
+# Test with your provider of choice
+```
+
+### 4. Commit Both Source and Dist
+
+The `dist/` directory is committed intentionally so end users can use files without building:
+
+```bash
+git add source/ dist/
+git commit -m "Add: your feature description"
+```
+
+### 5. Submit a Pull Request
+
+Push your branch and open a PR with:
+- Clear description of changes
+- Rationale for the change
+- Testing you've done
+
+## Best Practices
+
+### Command Writing
+
+1. **Clear descriptions**: Make purpose obvious
+2. **Meaningful argument names**: Use descriptive names
+3. **Flexible prompts**: Write prompts that work even without argument substitution (for Cursor compatibility)
+4. **Test across providers**: Verify it works in multiple contexts
+
+### Skill Writing
+
+1. **Focused scope**: One clear domain per skill
+2. **Clear instructions**: LLM should understand exactly what to do
+3. **Include examples**: Where they clarify intent
+4. **State constraints**: What NOT to do as clearly as what to do
+
+## Code Quality
+
+- Keep transformer functions focused (30-85 lines each)
+- Use descriptive variable names
+- Add comments for complex logic
+- Follow existing code style
+
+## Testing
+
+Test your changes with at least one provider:
+
+1. Build the project
+2. Copy the relevant `dist/` output to your test project
+3. Verify the skill/command works as expected
+4. Check edge cases (missing arguments, unusual inputs)
+
+## Getting Help
+
+Need help? Here's where to go:
+
+- **Architecture questions**: See [Architecture](/contributing/architecture)
+- **Build system questions**: See [Build System](/contributing/build-system)
+- **Adding content**: See [Adding Content](/contributing/adding-content)
+- **General questions**: Open an issue on GitHub
+
+## Code of Conduct
+
+Be respectful, inclusive, and constructive. We're all here to make better tools for designers and developers.
+
+## License
+
+By contributing, you agree that your contributions will be licensed under the same license as the project.
+
+## Related Documentation
+
+- [Architecture](/contributing/architecture) - System architecture details
+- [Adding Content](/contributing/adding-content) - How to add skills and commands
+- [Build System](/contributing/build-system) - Build system internals

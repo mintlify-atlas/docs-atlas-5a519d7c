@@ -1,0 +1,347 @@
+---
+title: Anti-Patterns
+description: Design patterns to avoid from the frontend-design skill
+---
+
+The frontend-design skill includes explicit guidance on what **not** to do. These are the fingerprints of generic AI-generated work from 2024-2025. Avoiding these patterns is critical for creating distinctive interfaces.
+
+## The AI Slop Test
+
+<Warning>
+**Critical quality check**: If you showed this interface to someone and said "AI made this," would they believe you immediately? If yes, that's the problem.
+</Warning>
+
+A distinctive interface should make someone ask "how was this made?" not "which AI made this?"
+
+Every DON'T guideline below represents a pattern that AI models default to without guidance. They're not always wrong in every context—but they're overused to the point of being generic markers of AI output.
+
+## Typography Anti-Patterns
+
+### Overused Fonts
+
+<Warning>
+**DON'T** use overused fonts: Inter, Roboto, Arial, Open Sans, system defaults. These fonts are everywhere, making designs feel generic.
+</Warning>
+
+These fonts became the AI default because they're safe and widely available. But safety creates invisibility.
+
+### Monospace as Shorthand
+
+<Warning>
+**DON'T** use monospace typography as lazy shorthand for "technical/developer" vibes.
+</Warning>
+
+Monospace fonts signal "code" or "tech" but don't create meaningful differentiation. Unless you're showing actual code, choose a more distinctive path.
+
+### Icon Headers Everywhere
+
+<Warning>
+**DON'T** put large icons with rounded corners above every heading. They rarely add value and make sites look templated.
+</Warning>
+
+```html
+<!-- Generic AI pattern -->
+<div class="feature">
+  <div class="icon-wrapper">
+    <svg>...</svg>
+  </div>
+  <h3>Feature Name</h3>
+  <p>Description...</p>
+</div>
+```
+
+This pattern appears in nearly every AI-generated feature section. Break it.
+
+## Color Anti-Patterns
+
+### The AI Color Palette
+
+<Warning>
+**DON'T** use the AI color palette:
+- Cyan-on-dark backgrounds
+- Purple-to-blue gradients
+- Neon accents on dark backgrounds
+</Warning>
+
+This specific palette combination has become the signature of AI-generated interfaces. It's recognizable at a glance.
+
+### Gradient Text for Impact
+
+<Warning>
+**DON'T** use gradient text for "impact"—especially on metrics or headings. It's decorative rather than meaningful.
+</Warning>
+
+```css
+/* Avoid this common AI pattern */
+.hero-title {
+  background: linear-gradient(to right, #a855f7, #3b82f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+```
+
+Gradient text is hard to read, fails accessibility checks, and screams "AI made this."
+
+### Dark Mode by Default
+
+<Warning>
+**DON'T** default to dark mode with glowing accents—it looks "cool" without requiring actual design decisions.
+</Warning>
+
+Dark mode is easier for AI to make look interesting (glows, neon, contrast effects). But it's become a crutch that avoids real design thinking.
+
+### Gray on Color
+
+<Warning>
+**DON'T** use gray text on colored backgrounds—it looks washed out. Use a shade of the background color instead.
+</Warning>
+
+```css
+/* Bad: gray on blue looks lifeless */
+.card-on-blue {
+  background: oklch(50% 0.15 250);
+  color: oklch(70% 0 0); /* gray */
+}
+
+/* Good: darker blue on blue looks intentional */
+.card-on-blue {
+  background: oklch(50% 0.15 250);
+  color: oklch(20% 0.10 250); /* tinted with blue */
+}
+```
+
+### Pure Black and White
+
+<Warning>
+**DON'T** use pure black (#000) or pure white (#fff). Always tint—pure black/white never appears in nature.
+</Warning>
+
+## Layout Anti-Patterns
+
+### Cards Everywhere
+
+<Warning>
+**DON'T** wrap everything in cards. Not everything needs a container.
+</Warning>
+
+AI defaults to card-based layouts because they're easy to structure. But overuse creates visual noise.
+
+### Nested Cards
+
+<Warning>
+**DON'T** nest cards inside cards—it creates visual noise and flattens hierarchy.
+</Warning>
+
+```html
+<!-- AI loves this pattern, but it's wrong -->
+<div class="card">
+  <div class="card"> <!-- Nested card -->
+    <div class="card"> <!-- Triple nested -->
+      Content
+    </div>
+  </div>
+</div>
+```
+
+Use spacing, typography, and subtle dividers instead.
+
+### Identical Card Grids
+
+<Warning>
+**DON'T** use identical card grids—same-sized cards with icon + heading + text, repeated endlessly.
+</Warning>
+
+This is the most common AI layout pattern:
+
+```html
+<!-- Generic AI grid -->
+<div class="grid grid-cols-3">
+  <div class="card"><Icon /><h3>Feature 1</h3><p>Text</p></div>
+  <div class="card"><Icon /><h3>Feature 2</h3><p>Text</p></div>
+  <div class="card"><Icon /><h3>Feature 3</h3><p>Text</p></div>
+</div>
+```
+
+Every card looks identical. Break the pattern—vary sizes, remove some containers, use asymmetry.
+
+### Hero Metric Layout
+
+<Warning>
+**DON'T** use the hero metric layout template: big number, small label, supporting stats, gradient accent.
+</Warning>
+
+This specific pattern appears constantly in AI-generated dashboards and landing pages.
+
+### Center Everything
+
+<Warning>
+**DON'T** center everything. Left-aligned text with asymmetric layouts feels more designed.
+</Warning>
+
+Centering is safe. Safety is forgettable.
+
+### Uniform Spacing
+
+<Warning>
+**DON'T** use the same spacing everywhere. Without rhythm, layouts feel monotonous.
+</Warning>
+
+## Visual Details Anti-Patterns
+
+### Glassmorphism Everywhere
+
+<Warning>
+**DON'T** use glassmorphism everywhere—blur effects, glass cards, glow borders used decoratively rather than purposefully.
+</Warning>
+
+Glassmorphism was trendy in 2021-2022 and became an AI crutch. Use it sparingly and intentionally, or avoid it entirely.
+
+### Lazy Border Accents
+
+<Warning>
+**DON'T** use rounded elements with thick colored border on one side—a lazy accent that almost never looks intentional.
+</Warning>
+
+```css
+/* This pattern is everywhere in AI output */
+.card {
+  border-radius: 12px;
+  border-left: 4px solid var(--accent);
+}
+```
+
+### Decorative Sparklines
+
+<Warning>
+**DON'T** use sparklines as decoration—tiny charts that look sophisticated but convey nothing meaningful.
+</Warning>
+
+If the chart doesn't communicate real data, don't include it.
+
+### Generic Shadows
+
+<Warning>
+**DON'T** use rounded rectangles with generic drop shadows—safe, forgettable, could be any AI output.
+</Warning>
+
+```css
+/* AI default shadow */
+.card {
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+```
+
+This exact shadow appears on millions of AI-generated cards.
+
+### Modal Overuse
+
+<Warning>
+**DON'T** use modals unless there's truly no better alternative. Modals are lazy.
+</Warning>
+
+AI defaults to modals because they're easy to implement. But they interrupt flow and hide context. Consider inline expansion, slide-out panels, or page transitions instead.
+
+## Motion Anti-Patterns
+
+### Animate Layout Properties
+
+<Warning>
+**DON'T** animate layout properties (width, height, padding, margin). Use transform and opacity only.
+</Warning>
+
+Layout animations cause performance issues. AI often generates them because they're intuitive but wrong.
+
+### Bounce and Elastic Easing
+
+<Warning>
+**DON'T** use bounce or elastic easing—they feel dated and tacky. Real objects decelerate smoothly.
+</Warning>
+
+```css
+/* Avoid these AI-common easings */
+transition: transform 300ms cubic-bezier(0.68, -0.55, 0.265, 1.55); /* bounce */
+transition: transform 300ms cubic-bezier(0.175, 0.885, 0.32, 1.275); /* elastic */
+```
+
+These were trendy in 2015 but now feel amateurish.
+
+## Interaction Anti-Patterns
+
+### Information Repetition
+
+<Warning>
+**DON'T** repeat the same information—redundant headers, intros that restate the heading.
+</Warning>
+
+```html
+<!-- AI loves redundancy -->
+<section>
+  <h2>Our Features</h2>
+  <p>Here are our features:</p> <!-- Redundant -->
+  <div class="features">...</div>
+</section>
+```
+
+### All Primary Buttons
+
+<Warning>
+**DON'T** make every button primary. Use ghost buttons, text links, secondary styles—hierarchy matters.
+</Warning>
+
+AI defaults to making everything equally prominent, which destroys hierarchy.
+
+## Responsive Anti-Patterns
+
+### Hide Critical Functionality
+
+<Warning>
+**DON'T** hide critical functionality on mobile. Adapt the interface, don't amputate it.
+</Warning>
+
+AI often solves responsive design by removing features on mobile. That's not responsive design—it's abandonment.
+
+## Why These Patterns Persist
+
+Every LLM learned from the same training data—millions of similar templates, tutorials, and codebases. Without explicit guidance to avoid these patterns, AI naturally converges on:
+
+- **Familiarity**: Patterns seen thousands of times
+- **Safety**: Choices that work but lack distinction
+- **Ease**: Solutions that are easy to code but generic
+
+<Info>
+**The solution**: Explicit anti-patterns + design principles + diverse reference material. That's what the frontend-design skill provides.
+</Info>
+
+## Breaking the Patterns
+
+Avoiding these anti-patterns isn't enough. You must replace them with intentional choices:
+
+<Steps>
+  <Step title="Choose a distinctive aesthetic direction">
+    Commit to a bold tone that avoids generic neutrality
+  </Step>
+  <Step title="Use unexpected fonts and colors">
+    Avoid defaults and AI-common palettes
+  </Step>
+  <Step title="Vary layouts and compositions">
+    Break grids, use asymmetry, embrace white space
+  </Step>
+  <Step title="Apply motion purposefully">
+    Focus on one high-impact moment rather than scattered animations
+  </Step>
+  <Step title="Run the AI Slop Test">
+    If it looks AI-generated, iterate until it doesn't
+  </Step>
+</Steps>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Design Principles" icon="compass" href="/concepts/design-principles">
+    Learn the positive design principles that replace these anti-patterns
+  </Card>
+  <Card title="Skill System" icon="puzzle" href="/concepts/skill-system">
+    Understand how the skill system delivers this guidance
+  </Card>
+</CardGroup>

@@ -1,122 +1,137 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "mint",
-  "name": "Mint Starter Kit",
+  "name": "Impeccable",
+  "theme": "willow",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#848483",
+    "light": "#1e1e1e",
+    "dark": "#b8b7b5"
   },
-  "favicon": "/favicon.svg",
+  "favicon": "/favicon.png",
+  "logo": {
+    "light": "/logo.png",
+    "dark": "/logo.png"
+  },
+  "navbar": {
+    "primary": {
+      "type": "github",
+      "href": "https://github.com/pbakaus/impeccable"
+    }
+  },
+  "footer": {
+    "socials": {
+      "github": "https://github.com/pbakaus/impeccable"
+    }
+  },
   "navigation": {
     "tabs": [
       {
-        "tab": "Guides",
+        "tab": "Documentation",
         "groups": [
           {
-            "group": "Getting started",
+            "group": "Get Started",
             "pages": [
-              "index",
+              "introduction",
               "quickstart",
-              "development"
+              "installation"
             ]
           },
           {
-            "group": "Customization",
+            "group": "Core Concepts",
             "pages": [
-              "essentials/settings",
-              "essentials/navigation"
+              "concepts/design-principles",
+              "concepts/anti-patterns",
+              "concepts/skill-system"
             ]
           },
           {
-            "group": "Writing content",
+            "group": "Integration Guides",
             "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets"
+              "guides/cursor",
+              "guides/claude-code",
+              "guides/gemini-cli",
+              "guides/codex-cli"
             ]
           },
           {
-            "group": "AI tools",
+            "group": "Usage",
             "pages": [
-              "ai-tools/cursor",
-              "ai-tools/claude-code",
-              "ai-tools/windsurf"
+              "usage/commands-overview",
+              "usage/customization",
+              "usage/best-practices"
             ]
           }
         ]
       },
       {
-        "tab": "API reference",
+        "tab": "Skills Reference",
         "groups": [
           {
-            "group": "API documentation",
+            "group": "Frontend Design",
             "pages": [
-              "api-reference/introduction"
+              "skills/frontend-design/overview",
+              "skills/frontend-design/typography",
+              "skills/frontend-design/color-and-contrast",
+              "skills/frontend-design/spatial-design",
+              "skills/frontend-design/motion-design",
+              "skills/frontend-design/interaction-design",
+              "skills/frontend-design/responsive-design",
+              "skills/frontend-design/ux-writing"
             ]
           },
           {
-            "group": "Endpoint examples",
+            "group": "Quality & Refinement",
             "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
+              "skills/audit",
+              "skills/critique",
+              "skills/normalize",
+              "skills/polish",
+              "skills/optimize",
+              "skills/harden"
+            ]
+          },
+          {
+            "group": "Enhancement",
+            "pages": [
+              "skills/animate",
+              "skills/colorize",
+              "skills/bolder",
+              "skills/quieter",
+              "skills/delight"
+            ]
+          },
+          {
+            "group": "Structure & Flow",
+            "pages": [
+              "skills/distill",
+              "skills/clarify",
+              "skills/extract",
+              "skills/adapt",
+              "skills/onboard"
+            ]
+          },
+          {
+            "group": "Setup",
+            "pages": [
+              "skills/teach-impeccable"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Contributing",
+        "groups": [
+          {
+            "group": "Development",
+            "pages": [
+              "contributing/overview",
+              "contributing/architecture",
+              "contributing/adding-content",
+              "contributing/build-system"
             ]
           }
         ]
       }
-    ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
-        },
-        {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
-        }
-      ]
-    }
-  },
-  "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
-  },
-  "navbar": {
-    "links": [
-      {
-        "label": "Support",
-        "href": "mailto:hi@mintlify.com"
-      }
-    ],
-    "primary": {
-      "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
-    }
-  },
-  "contextual": {
-    "options": [
-     "copy",
-     "view",
-     "chatgpt",
-     "claude",
-     "perplexity",
-     "mcp",
-     "cursor",
-     "vscode"
-   ]
-  },
-  "footer": {
-    "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
-    }
+    ]
   }
 }

@@ -1,0 +1,177 @@
+---
+title: Normalize
+description: Align design with your design system and ensure consistency across components, patterns, and styles
+---
+
+The **normalize** skill analyzes and redesigns features to perfectly match design system standards, aesthetics, and established patterns. It ensures consistency across your entire interface.
+
+## When to Use
+
+Use the normalize skill when you need to:
+
+- Align a feature with your design system standards
+- Eliminate design inconsistencies and one-off implementations
+- Replace hard-coded values with design tokens
+- Ensure components match established patterns
+- Bring legacy code up to current design standards
+- Standardize spacing, typography, colors, and interactions
+
+## Parameters
+
+<ParamField path="feature" type="string" optional>
+  The specific page, route, or feature to normalize. If not specified, normalizes the entire codebase.
+</ParamField>
+
+## Workflow
+
+The normalize skill follows a systematic three-phase approach:
+
+<Steps>
+  <Step title="Plan: Understand Context">
+    Before making changes, deeply understand the context:
+    
+    **Discover the design system**:
+    - Search for design system documentation, UI guidelines, component libraries, or style guides
+    - Study thoroughly to understand:
+      - Core design principles and aesthetic direction
+      - Target audience and personas
+      - Component patterns and conventions
+      - Design tokens (colors, typography, spacing)
+    
+    <Warning>
+      If something isn't clear, ask. Don't guess at design system principles.
+    </Warning>
+    
+    **Analyze the current feature**:
+    - Where does it deviate from design system patterns?
+    - Which inconsistencies are cosmetic vs. functional?
+    - What's the root cause—missing tokens, one-off implementations, or conceptual misalignment?
+    
+    **Create a normalization plan**:
+    - Which components can be replaced with design system equivalents?
+    - Which styles need to use design tokens instead of hard-coded values?
+    - How can UX patterns match established user flows?
+    
+    <Info>
+      Great design is effective design. Prioritize UX consistency and usability over visual polish alone. Think through the best possible experience for your use case and personas first.
+    </Info>
+  </Step>
+  
+  <Step title="Execute: Address Inconsistencies">
+    Systematically address all inconsistencies across these dimensions:
+    
+    - **Typography**: Use design system fonts, sizes, weights, and line heights. Replace hard-coded values with typographic tokens or classes.
+    - **Color & Theme**: Apply design system color tokens. Remove one-off color choices that break the palette.
+    - **Spacing & Layout**: Use spacing tokens (margins, padding, gaps). Align with grid systems and layout patterns used elsewhere.
+    - **Components**: Replace custom implementations with design system components. Ensure props and variants match established patterns.
+    - **Motion & Interaction**: Match animation timing, easing, and interaction patterns to other features.
+    - **Responsive Behavior**: Ensure breakpoints and responsive patterns align with design system standards.
+    - **Accessibility**: Verify contrast ratios, focus states, ARIA labels match design system requirements.
+    - **Progressive Disclosure**: Match information hierarchy and complexity management to established patterns.
+  </Step>
+  
+  <Step title="Clean Up: Ensure Quality">
+    After normalization, ensure code quality:
+    
+    - **Consolidate reusable components**: If you created new components that should be shared, move them to the design system or shared UI component path.
+    - **Remove orphaned code**: Delete unused implementations, styles, or files made obsolete by normalization.
+    - **Verify quality**: Lint, type-check, and test according to repository guidelines. Ensure normalization didn't introduce regressions.
+    - **Ensure DRYness**: Look for duplication introduced during refactoring and consolidate.
+  </Step>
+</Steps>
+
+## Usage Example
+
+```bash
+# Normalize entire codebase
+/normalize
+
+# Normalize specific feature
+/normalize feature="user profile page"
+
+# Normalize a route
+/normalize feature="/dashboard"
+```
+
+## Normalization Dimensions
+
+Here's what the normalize skill addresses across different areas:
+
+### Typography
+
+```css
+/* Before: Hard-coded values */
+.heading {
+  font-family: 'Arial';
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+/* After: Design tokens */
+.heading {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: var(--font-bold);
+  line-height: var(--leading-tight);
+}
+```
+
+### Color & Theme
+
+```css
+/* Before: Hard-coded colors */
+.button {
+  background: #3b82f6;
+  color: #ffffff;
+}
+
+/* After: Design tokens */
+.button {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+```
+
+### Spacing & Layout
+
+```css
+/* Before: Random spacing values */
+.card {
+  margin: 17px;
+  padding: 13px 19px;
+  gap: 11px;
+}
+
+/* After: Spacing tokens */
+.card {
+  margin: var(--space-4);
+  padding: var(--space-3) var(--space-5);
+  gap: var(--space-3);
+}
+```
+
+## Best Practices
+
+**DO**:
+- Study the design system thoroughly before making changes
+- Replace custom components with design system equivalents
+- Use design tokens for all values (colors, spacing, typography)
+- Match established patterns for UX consistency
+- Test thoroughly to ensure no regressions
+
+**NEVER**:
+- Create new one-off components when design system equivalents exist
+- Hard-code values that should use design tokens
+- Introduce new patterns that diverge from the design system
+- Compromise accessibility for visual consistency
+
+## Important Notes
+
+<Tip>
+  The normalize skill is brilliant at both UX and UI. It has impeccable taste and world-class attention to detail. Trust it to make thoughtful decisions about the end-to-end user experience.
+</Tip>
+
+<Info>
+  Normalization is not just about visual consistency—it's about creating a cohesive, predictable user experience. Think through user flows and interactions, not just styling.
+</Info>

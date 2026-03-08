@@ -1,0 +1,99 @@
+---
+title: "teach-impeccable"
+description: "One-time setup skill that gathers design context for your project"
+---
+
+## Overview
+
+The `teach-impeccable` skill is a one-time setup command that gathers design context for your project and saves it to your AI config file. Run this once to establish persistent design guidelines that will guide all future AI interactions.
+
+## Purpose
+
+This skill helps you:
+- Document your project's design principles and brand personality
+- Capture aesthetic preferences and accessibility requirements
+- Store user context and emotional goals
+- Create a persistent reference for consistent design decisions
+
+## How It Works
+
+The skill follows a three-step process:
+
+### Step 1: Explore the Codebase
+
+Before asking questions, the AI thoroughly scans your project to discover:
+
+- **README and docs**: Project purpose, target audience, stated goals
+- **Package.json / config files**: Tech stack, dependencies, design libraries
+- **Existing components**: Current design patterns, spacing, typography
+- **Brand assets**: Logos, favicons, color values already defined
+- **Design tokens / CSS variables**: Existing color palettes, font stacks, spacing scales
+- **Style guides or brand documentation**: Any existing design guidelines
+
+The AI notes what it learns and what remains unclear.
+
+### Step 2: Ask UX-Focused Questions
+
+The AI asks focused questions only about what couldn't be inferred from the codebase:
+
+**Users & Purpose**
+- Who uses this? What's their context when using it?
+- What job are they trying to get done?
+- What emotions should the interface evoke?
+
+**Brand & Personality**
+- How would you describe the brand personality in 3 words?
+- Any reference sites or apps that capture the right feel?
+- What should this explicitly NOT look like?
+
+**Aesthetic Preferences**
+- Any strong preferences for visual direction?
+- Light mode, dark mode, or both?
+- Any colors that must be used or avoided?
+
+**Accessibility & Inclusion**
+- Specific accessibility requirements (WCAG level, known user needs)?
+- Considerations for reduced motion, color blindness, or other accommodations?
+
+### Step 3: Write Design Context
+
+The AI synthesizes findings and your answers into a `## Design Context` section:
+
+```markdown
+## Design Context
+
+### Users
+[Who they are, their context, the job to be done]
+
+### Brand Personality
+[Voice, tone, 3-word personality, emotional goals]
+
+### Aesthetic Direction
+[Visual tone, references, anti-references, theme]
+
+### Design Principles
+[3-5 principles derived from the conversation that should guide all design decisions]
+```
+
+This section is written to your config file in the project root. If the file exists, the Design Context section is appended or updated.
+
+## Usage
+
+Invoke this skill once per project:
+
+**Cursor**: Available as a slash command (requires Cursor nightly channel)
+
+**Claude Code**: Run the skill from the skills menu
+
+**Gemini CLI**: Import via `GEMINI.md` file
+
+**Codex CLI**: Available as a skill command
+
+## Output
+
+The skill confirms completion and summarizes the key design principles that will now guide all future work in your project.
+
+## Related
+
+- [Contributing Overview](/contributing/overview) - Learn how to contribute to Impeccable
+- [Architecture](/contributing/architecture) - Understand the system architecture
